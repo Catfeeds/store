@@ -6,7 +6,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\JsonResponse;
 
-class RegisterPost extends FormRequest
+class CommodityPost extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,21 +27,30 @@ class RegisterPost extends FormRequest
     {
         return [
             //
-            'username'=>'required|unique:users|max:255',
-            'password'=>'required',
-            'phone'=>'required|unique:users',
-            'code'=>'required'
+            'id'=>'nullable|integer',
+            'title'=>'required|',
+            'price'=>'required|numeric',
+            'description'=>'nullable',
+            'phone'=>'required|',
         ];
+//        $table->increments('id');
+//        $table->string('title');
+//        $table->tinyInteger('area_id');
+//        $table->float('price')->default(0);
+//        $table->text('description');
+//        $table->tinyInteger('category_id');
+//        $table->tinyInteger('state');
+//        $table->text('detail');
+//        $table->string('phone');
+//        $table->string('QQ');
+//        $table->string('WeChat');
     }
     public function messages()
     {
         return [
-            'username.required'=>'用户名不能为空！',
-            'username.unique'=>'该用户名已存在！',
-            'password.required'=>'密码不能为空！',
-            'phone.required'=>'手机号不能为空',
-            'phone.unique'=>'该手机号已被绑定！',
-            'code.required'=>'验证码不能为空！'
+            'title.required'=>'标题不能为空！',
+            'price.required'=>'价格不能为空！',
+            'phone.required'=>'手机号不能为空'
         ];
     }
     protected function formatErrors(Validator $validator)
@@ -56,5 +65,4 @@ class RegisterPost extends FormRequest
             'return_code'=>'FAIL'
         ], 422);
     }
-
 }

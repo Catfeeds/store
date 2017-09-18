@@ -13,7 +13,11 @@ use Illuminate\Http\Request;
 |
 */
 
-
 Route::group(['prefix'=>'v1','middleware'=>'cross'],function (){
-    Route::any('register','API\V1\UserController@register');
+    Route::post('register','API\V1\UserController@register');
+    Route::post('login','API\V1\UserController@login');
+    Route::get('token','API\V1\UserController@getToken');
+    Route::get('commodities','API\V1\CommodityController@getCommodities');
+    Route::get('types','API\V1\CommodityController@getCommodityTypes');
+    Route::post('commodity','API\V1\CommodityController@addCommodity');
 });
