@@ -30,27 +30,27 @@ class CommodityPost extends FormRequest
             'id'=>'nullable|integer',
             'title'=>'required|',
             'price'=>'required|numeric',
-            'description'=>'nullable',
-            'phone'=>'required|',
+            'description'=>'required',
+            'detail'=>'required|min:50|max:300',
+            'phone'=>'required',
+            'latitude'=>'required|numeric',
+            'longitude'=>'required|numeric'
         ];
-//        $table->increments('id');
-//        $table->string('title');
-//        $table->tinyInteger('area_id');
-//        $table->float('price')->default(0);
-//        $table->text('description');
-//        $table->tinyInteger('category_id');
-//        $table->tinyInteger('state');
-//        $table->text('detail');
-//        $table->string('phone');
-//        $table->string('QQ');
-//        $table->string('WeChat');
     }
     public function messages()
     {
         return [
             'title.required'=>'标题不能为空！',
             'price.required'=>'价格不能为空！',
-            'phone.required'=>'手机号不能为空'
+            'phone.required'=>'手机号不能为空',
+            'description.required'=>'基本详情不能为空！',
+            'detail.required'=>'更多详情不能为空！',
+            'detail.min'=>'更多详情最少50个字符！',
+            'detail.mix'=>'更多详情最多不能超过300个字符！',
+            'latitude.required'=>'位置信息不能为空！',
+            'latitude.numeric'=>'位置信息格式不正确！',
+            'longitude.required'=>'位置信息不能为空！',
+            'longitude.numeric'=>'位置信息格式不正确！'
         ];
     }
     protected function formatErrors(Validator $validator)

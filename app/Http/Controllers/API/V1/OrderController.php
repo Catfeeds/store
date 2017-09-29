@@ -8,4 +8,17 @@ use App\Http\Controllers\Controller;
 class OrderController extends Controller
 {
     //
+    public function buyCommodityPicture()
+    {
+
+    }
+    public function buyCommodityPhone()
+    {
+
+    }
+    public function makeOrder()
+    {
+
+    }
+    public function doPay(){}
 }

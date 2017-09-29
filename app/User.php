@@ -26,4 +26,12 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+    public function score()
+    {
+        return $this->hasOne('App\Models\Score','user_id','id')->pluck('score')->first();
+    }
+    public function commodities()
+    {
+        return $this->hasMany('App\Models\Commodity','user_id','id');
+    }
 }

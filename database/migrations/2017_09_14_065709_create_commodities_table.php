@@ -16,17 +16,18 @@ class CreateCommoditiesTable extends Migration
         Schema::create('commodities', function (Blueprint $table) {
             $table->increments('id');
             $table->string('title');
-            $table->tinyInteger('area_id');
+            $table->unsignedInteger('user_id');
             $table->float('price')->default(0);
             $table->text('description');
-            $table->tinyInteger('category_id');
-            $table->tinyInteger('state');
+            $table->tinyInteger('state')->defalut(0);
             $table->text('detail');
             $table->string('phone');
-            $table->string('QQ');
-            $table->string('WeChat');
+            $table->string('QQ')->nullable();
+            $table->string('WeChat')->nullable();
             $table->float('latitude')->default(0)->commit('纬度');
             $table->float('longitude')->default(0)->commit('经度');
+            $table->tinyInteger('enable')->default(0);
+            $table->tinyInteger('pass')->default(0);
             $table->timestamps();
         });
     }

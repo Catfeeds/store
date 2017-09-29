@@ -20,4 +20,12 @@ Route::group(['prefix'=>'v1','middleware'=>'cross'],function (){
     Route::get('commodities','API\V1\CommodityController@getCommodities');
     Route::get('types','API\V1\CommodityController@getCommodityTypes');
     Route::post('commodity','API\V1\CommodityController@addCommodity');
+    Route::get('commodity/{id}','API\V1\CommodityController@getCommodity');
+    Route::delete('commodity/{id}','API\V1\CommodityController@deleteCommodity');
+    Route::any('upload','API\V1\UploadController@uploadImage');
+    Route::get('sign','API\V1\UserController@sign');
+    Route::get('signs','API\V1\UserController@signRecord');
+    Route::get('user','API\V1\UserController@UserInfo');
+    Route::get('my/commodities','API\V1\UserController@getMyCommodities');
+    Route::post('report','API\V1\CommodityController@addReport');
 });

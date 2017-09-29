@@ -27,3 +27,10 @@ if (!function_exists('getUserToken')) {
         return $uid;
     }
 }
+
+if (!function_exists('getCountSql')) {
+    function getCountSql($user_id,$start,$end)
+    {
+        return "SELECT DATE_FORMAT(`created_at`,'%d') as date FROM signs WHERE `user_id` ="." $user_id"." AND `created_at` BETWEEN '".$start."' AND '".$end."'";
+    }
+}

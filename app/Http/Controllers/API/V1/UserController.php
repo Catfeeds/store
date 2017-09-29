@@ -2,13 +2,19 @@
 
 namespace App\Http\Controllers\API\V1;
 
+use App\Http\Requests\LoginPost;
 use App\Http\Requests\RegisterPost;
 use App\Http\Requests\ResetPasswordPost;
+use App\Models\Commodity;
+use App\Models\Score;
+use App\Models\Sign;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
+use League\Flysystem\Config;
 use Symfony\Component\CssSelector\Parser\Token;
 
 class UserController extends Controller
@@ -22,22 +28,30 @@ class UserController extends Controller
         $user->phone = $request->get('phone');
         $code = $request->get('code');
         if($user->save()){
+            $score = new Score();
+            $score->user_id = $user->id;
+            $score->save();
             return response()->json([
                 'return_code'=>'SUCCESS'
             ]);
         }
     }
-    public function login()
+    public function login(LoginPost $loginPost)
     {
-        $username = Input::get('username');
-        $password = Input::get('password');
+        $username = $loginPost->get('username');
+        $password = $loginPost->get('password');
         if (Auth::attempt(['username'=>$username,'password'=>$password],true)){
             $key = createNonceStr();
             setUserToken($key,Auth::id());
             return response()->json([
                 'return_code'=>"SUCCESS",
-                'data'=>$key
+                'token'=>$key
             ]);
+        }else{
+            return response()->json([
+                'return_code'=>"FAIL",
+                'message'=>'用户不存在或密码错误！'
+            ],422);
         }
     }
     public function resetPassword(ResetPasswordPost $request)
@@ -54,7 +68,6 @@ class UserController extends Controller
     }
     public function myPublish()
     {
-
     }
     public function delPublish()
     {
@@ -74,5 +87,82 @@ class UserController extends Controller
         $uid = getUserToken($token);
         dd($uid);
     }
-
+    public function sign()
+    {
+        $uid = getUserToken(Input::get('token'));
+        $sign = Sign::where('user_id','=',$uid)->whereDate('created_at', date('Y-m-d',time()))->first();
+        if (!empty($sign)){
+            return response()->json([
+                'return_code'=>"ERROR",
+                'message'=>'今天已签到!'
+            ]);
+        }else{
+            $sign = new Sign();
+        }
+        $sign->user_id = $uid;
+        $sign->save();
+        return response()->json([
+            'return_code'=>"SUCCESS"
+        ]);
+    }
+    public function signRecord()
+    {
+        $uid = getUserToken(Input::get('token'));
+        $time = Input::get('date',date('Y-m-d',time()));
+        $start = date('Y-m-01 0:0:0',strtotime($time));
+        $end = date('Y-m-d 23:59:59', strtotime("$start +1 month -1 day"));
+        $sql = getCountSql($uid,$start,$end);
+        $data = DB::select($sql);
+        return response()->json([
+            'return_code'=>'SUCCESS',
+            'data'=>$data
+        ]);
+    }
+    public function UserInfo()
+    {
+        $uid = getUserToken(Input::get('token'));
+        $user = User::find($uid);
+        $user->score = $user->score();
+        $user->commodities = $user->commodities()->count();
+        return response()->json([
+            'return_code'=>'SUCCESS',
+            'data'=>$user
+        ]);
+    }
+    public function getMyCommodities()
+    {
+//        $uid = getUserToken(Input::get('token'));
+        $uid = 1;
+        $limit = Input::get('limit',10);
+        $page = Input::get('page',1);
+        $case = Input::get('case');
+        switch ($case){
+            case 1:
+                $commodities = Commodity::where('user_id','=',$uid)->where('pass','!=','0')
+                ->limit($limit)->offset(($page-1)*$limit)->get();
+                break;
+            case 2:
+                $commodities = Commodity::where('user_id','=',$uid)->where('pass','=','0')
+                    ->limit($limit)->offset(($page-1)*$limit)->get();
+                break;
+            case 3:
+                $commodities = Commodity::where([
+                    'user_id'=>$uid,
+                    'pass'=>1,
+                    'enable'=>1
+                ])->limit($limit)->offset(($page-1)*$limit)->get();
+                break;
+            case 4:
+                $commodities = Commodity::where([
+                    'user_id'=>$uid,
+                    'pass'=>1,
+                    'enable'=>0
+                ])->limit($limit)->offset(($page-1)*$limit)->get();
+                break;
+        };
+        return response()->json([
+            'return_code'=>'SUCCESS',
+            'data'=>$commodities
+        ]);
+    }
 }

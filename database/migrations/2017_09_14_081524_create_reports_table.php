@@ -21,6 +21,7 @@ class CreateReportsTable extends Migration
             $table->string('phone',11);
             $table->string('contact',15);
             $table->string('description');
+            $table->tinyInteger('state')->default(0);
             $table->timestamps();
         });
     }
