@@ -4,13 +4,16 @@ namespace App\Http\Controllers\API\V1;
 
 use App\Http\Requests\CommodityPost;
 use App\Http\Requests\FilterPost;
+use App\Http\Requests\RejectPost;
 use App\Http\Requests\ReportPost;
 use App\Models\Commodity;
 use App\Models\CommodityPicture;
 use App\Models\CommodityType;
+use App\Models\Reject;
 use App\Models\Report;
 use App\Models\TypeList;
 use App\Models\UserBuy;
+use function GuzzleHttp\Psr7\uri_for;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
@@ -178,6 +181,18 @@ class CommodityController extends Controller
         }
     }
 
+    public function addReportReject(RejectPost $rejectPost)
+    {
+        $reject = new Reject();
+        $reject->report_id = $rejectPost->get('report_id');
+        $reject->detail = $rejectPost->get('detail');
+        $reject->phone = $rejectPost->get('phone');
+        if ($reject->save()){
+            return response()->json([
+                'return_code'=>'SUCCESS'
+            ]);
+        }
+    }
 
 
 }

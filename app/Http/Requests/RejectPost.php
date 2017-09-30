@@ -6,7 +6,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\JsonResponse;
 
-class RegisterPost extends FormRequest
+class RejectPost extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,21 +27,18 @@ class RegisterPost extends FormRequest
     {
         return [
             //
-            'username'=>'required|unique:users|max:255',
-            'password'=>'required',
-            'phone'=>'required|unique:users',
-            'code'=>'required'
+            'report_id'=>'required',
+            'detail'=>'required|max:255',
+            'phone'=>'required',
         ];
     }
     public function messages()
     {
         return [
-            'username.required'=>'用户名不能为空！',
-            'username.unique'=>'该用户名已存在！',
-            'password.required'=>'密码不能为空！',
-            'phone.required'=>'手机号不能为空',
-            'phone.unique'=>'该手机号已被绑定！',
-            'code.required'=>'验证码不能为空！'
+            'report_id.required'=>'参数不能为空！',
+            'detail.required'=>'描述不能为空！',
+            'phone.required'=>'手机号不能为空！',
+            'detail.max'=>'描述不能超过255个字符'
         ];
     }
     protected function formatErrors(Validator $validator)
