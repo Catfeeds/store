@@ -54,6 +54,7 @@ class UserController extends Controller
     {
         $username = $loginPost->get('username');
         $password = $loginPost->get('password');
+        echo $username.bcrypt($password);
         $user = User::where([
             'username'=>$username,
             'password'=>bcrypt($password)
