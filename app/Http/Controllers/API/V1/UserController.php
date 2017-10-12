@@ -54,17 +54,8 @@ class UserController extends Controller
     {
         $username = $loginPost->get('username');
         $password = $loginPost->get('password');
-        echo $username.bcrypt($password);
-        $user = User::where([
-            'username'=>$username,
-            'password'=>bcrypt($password)
-        ])->first();
-        if (empty($user)){
-            return response()->json([
-                'return_code'=>"FAIL",
-                'message'=>'用户不存在或密码错误！'
-            ],422);
-        }else{
+        if (Auth::attempt(['name'=>$username,'password'=>$password],true)){
+            $user = Auth::user();
             if ($user->state!=1){
                 return response()->json([
                     'return_code'=>"FAIL",
@@ -77,7 +68,13 @@ class UserController extends Controller
                 'return_code'=>"SUCCESS",
                 'token'=>$key
             ]);
+        }else{
+            return response()->json([
+                'return_code'=>"FAIL",
+                'message'=>'用户不存在或密码错误！'
+            ],422);
         }
+
     }
     public function resetPassword(ResetPasswordPost $request)
     {
