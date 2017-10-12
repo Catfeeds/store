@@ -23,10 +23,6 @@ class UserController extends Controller
     //
     public function register(RegisterPost $request)
     {
-        $user = new User();
-        $user->username = $request->get('username');
-        $user->password = bcrypt($request->get('password'));
-        $user->phone = $request->get('phone');
         $code = $request->get('code');
         $data = getCode($request->get('phone'));
         if (empty($data)||$data['type']!='register'){
@@ -41,20 +37,21 @@ class UserController extends Controller
                 'message'=>'验证码错误！'
             ],422);
         }
-        if($user->save()){
-            $score = new Score();
-            $score->user_id = $user->id;
-            $score->save();
-            return response()->json([
-                'return_code'=>'SUCCESS'
-            ]);
-        }
+        User::create([
+            'username' =>  $request->get('username'),
+            'phone' => $request->get('phone'),
+            'password' => bcrypt($request->get('password')),
+        ]);
+        return response()->json([
+            'return_code'=>'SUCCESS'
+        ]);
+
     }
     public function login(LoginPost $loginPost)
     {
         $username = $loginPost->get('username');
         $password = $loginPost->get('password');
-        if (Auth::attempt(['name'=>$username,'password'=>$password],true)){
+        if (Auth::attempt(['username'=>$username,'password'=>$password],true)){
             $user = Auth::user();
             if ($user->state!=1){
                 return response()->json([
@@ -69,10 +66,26 @@ class UserController extends Controller
                 'token'=>$key
             ]);
         }else{
-            return response()->json([
-                'return_code'=>"FAIL",
-                'message'=>'用户不存在或密码错误！'
-            ],422);
+            if (Auth::attempt(['phone'=>$username,'password'=>$password],true)){
+                $user = Auth::user();
+                if ($user->state!=1){
+                    return response()->json([
+                        'return_code'=>"FAIL",
+                        'message'=>'账号已被封禁！'
+                    ],422);
+                }
+                $key = createNonceStr();
+                setUserToken($key,$user->id);
+                return response()->json([
+                    'return_code'=>"SUCCESS",
+                    'token'=>$key
+                ]);
+            }else{
+                return response()->json([
+                    'return_code'=>"FAIL",
+                    'message'=>'用户不存在或密码错误！'
+                ],422);
+            }
         }
 
     }
