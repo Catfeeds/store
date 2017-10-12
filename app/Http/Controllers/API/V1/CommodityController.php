@@ -9,8 +9,10 @@ use App\Http\Requests\ReportPost;
 use App\Models\Commodity;
 use App\Models\CommodityPicture;
 use App\Models\CommodityType;
+use App\Models\Member;
 use App\Models\Reject;
 use App\Models\Report;
+use App\Models\SysConfig;
 use App\Models\TypeList;
 use App\Models\UserBuy;
 use function GuzzleHttp\Psr7\uri_for;
@@ -47,20 +49,25 @@ class CommodityController extends Controller
                 'return_msg'=>'没找到该消息!'
             ],404);
         }
-        $needPay = \config('store.needPay');
-        if ($needPay){
+        $needPay = SysConfig::first();
+        if ($needPay->need_pay){
             $uid = getUserToken(Input::get('token'));
             if (!$uid){
                 $commodity->phone = '***********';
             }else{
-                $record = UserBuy::where('user_id','=',$uid)->where('commodity_id','=',$id)->first();
-                if (empty($record)){
-                    $commodity->phone = '***********';
-                }else{
-                    $commodity->phone = ($record->phone==1)?$commodity->phone:'***********';
-                    if ($record->pic==1){
-                        $commodity->pictures = $commodity->pictures()->pluck('thumb_url');
+                $member = Member::where('user_id','=',$uid)->first();
+                if (empty($member)||$member->end_time<time()){
+                    $record = UserBuy::where('user_id','=',$uid)->where('commodity_id','=',$id)->first();
+                    if (empty($record)){
+                        $commodity->phone = '***********';
+                    }else{
+                        $commodity->phone = ($record->phone==1)?$commodity->phone:'***********';
+                        if ($record->pic==1){
+                            $commodity->pictures = $commodity->pictures()->pluck('thumb_url');
+                        }
                     }
+                }else{
+                    $commodity->pictures = $commodity->pictures()->pluck('thumb_url');
                 }
             }
 
@@ -193,6 +200,4 @@ class CommodityController extends Controller
             ]);
         }
     }
-
-
 }

@@ -6,6 +6,7 @@ use App\Http\Requests\LoginPost;
 use App\Http\Requests\RegisterPost;
 use App\Http\Requests\ResetPasswordPost;
 use App\Models\Commodity;
+use App\Models\MemberLevel;
 use App\Models\Score;
 use App\Models\Sign;
 use App\User;
@@ -27,6 +28,19 @@ class UserController extends Controller
         $user->password = bcrypt($request->get('password'));
         $user->phone = $request->get('phone');
         $code = $request->get('code');
+        $data = getCode($request->get('phone'));
+        if (empty($data)||$data['type']!='register'){
+            return response()->json([
+                'return_code'=>"FAIL",
+                'message'=>'验证码已失效！'
+            ],422);
+        }
+        if ($data['code']!=$code){
+            return response()->json([
+                'return_code'=>"FAIL",
+                'message'=>'验证码错误！'
+            ],422);
+        }
         if($user->save()){
             $score = new Score();
             $score->user_id = $user->id;
@@ -40,18 +54,28 @@ class UserController extends Controller
     {
         $username = $loginPost->get('username');
         $password = $loginPost->get('password');
-        if (Auth::attempt(['username'=>$username,'password'=>$password],true)){
-            $key = createNonceStr();
-            setUserToken($key,Auth::id());
-            return response()->json([
-                'return_code'=>"SUCCESS",
-                'token'=>$key
-            ]);
-        }else{
+        $user = User::where([
+            'username'=>$username,
+            'password'=>bcrypt($password)
+        ])->first();
+        if (empty($user)){
             return response()->json([
                 'return_code'=>"FAIL",
                 'message'=>'用户不存在或密码错误！'
             ],422);
+        }else{
+            if ($user->state!=1){
+                return response()->json([
+                    'return_code'=>"FAIL",
+                    'message'=>'账号已被封禁！'
+                ],422);
+            }
+            $key = createNonceStr();
+            setUserToken($key,$user->id);
+            return response()->json([
+                'return_code'=>"SUCCESS",
+                'token'=>$key
+            ]);
         }
     }
     public function resetPassword(ResetPasswordPost $request)
@@ -163,6 +187,14 @@ class UserController extends Controller
         return response()->json([
             'return_code'=>'SUCCESS',
             'data'=>$commodities
+        ]);
+    }
+    public function getLevels()
+    {
+        $levels = MemberLevel::orderBy('level','DESC')->get();
+        return response()->json([
+            'return_code'=>'SUCCESS',
+            'data'=>$levels
         ]);
     }
 }

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateOrdersTable extends Migration
+class CreateMemberLevelsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,13 @@ class CreateOrdersTable extends Migration
      */
     public function up()
     {
-        Schema::create('orders', function (Blueprint $table) {
+        Schema::create('member_levels', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('title');
-            $table->float('price');
-            $table->unsignedInteger('user_id');
-            $table->tinyInteger('type');
-            $table->tinyInteger('state');
-            $table->tinyInteger('pay_type');
+            $table->tinyInteger('level')->unique();
+            $table->float('price')->default(0);
+            $table->integer('time')->default(0);
+            $table->unsignedInteger('send_daily')->default(0);
+            $table->unsignedInteger('send_max')->default(0);
             $table->timestamps();
         });
     }
@@ -32,6 +31,6 @@ class CreateOrdersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('orders');
+        Schema::dropIfExists('member_levels');
     }
 }

@@ -34,3 +34,20 @@ if (!function_exists('getCountSql')) {
         return "SELECT DATE_FORMAT(`created_at`,'%d') as date FROM signs WHERE `user_id` ="." $user_id"." AND `created_at` BETWEEN '".$start."' AND '".$end."'";
     }
 }
+if (!function_exists('setCode')){
+    function setCode($key,$value)
+    {
+        \Illuminate\Support\Facades\Redis::set($key,$value);
+
+    }
+}
+if (!function_exists('getCode')) {
+    function getCode($phone)
+    {
+        $code = \Illuminate\Support\Facades\Redis::get($phone);
+        if (!isset($code)){
+            return false;
+        }
+        return unserialize($code);
+    }
+}

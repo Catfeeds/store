@@ -34,5 +34,4 @@ class StoreController extends Controller
             'data'=>$store
         ]);
     }
-
 }

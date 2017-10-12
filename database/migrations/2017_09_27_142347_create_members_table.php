@@ -17,7 +17,7 @@ class CreateMembersTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('user_id')->unique();
             $table->tinyInteger('level');
-            $table->integer('time');
+            $table->integer('end_time');
             $table->timestamps();
         });
     }

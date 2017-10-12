@@ -19,6 +19,8 @@ class CreateUsersTable extends Migration
             $table->string('phone')->unique();
             $table->string('name')->unique()->nullable();
             $table->string('avatar')->nullable();
+            $table->tinyInteger('state')->default(1);
+            $table->float('score')->default(0);
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
