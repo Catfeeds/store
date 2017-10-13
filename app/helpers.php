@@ -38,6 +38,7 @@ if (!function_exists('setCode')){
     function setCode($key,$value)
     {
         \Illuminate\Support\Facades\Redis::set($key,$value);
+        \Illuminate\Support\Facades\Redis::expire($key,300);
 
     }
 }

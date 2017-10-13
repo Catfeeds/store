@@ -24,6 +24,7 @@
             "App\\": "app/"
         },
         "files": [
+            "app/Libraries/Wxxcx.php",
             "app/helpers.php"
         ]
     },

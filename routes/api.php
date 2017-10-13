@@ -31,4 +31,5 @@ Route::group(['prefix'=>'v1','middleware'=>'cross'],function (){
     Route::post('reject','API\V1\CommodityController@addReportReject');
     Route::get('levels','API\V1\UserController@getLevels');
     Route::get('sms','API\V1\SmsController@send');
+    Route::post('member','API\V1\OrderController@addMember');
 });
