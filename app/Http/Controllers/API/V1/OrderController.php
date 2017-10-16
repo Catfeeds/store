@@ -30,12 +30,13 @@ class OrderController extends Controller
             $buy->save();
             $number = self::makePaySn($uid);
             $title = Commodity::find($commodity_id)->title;
+            $title = '即时查看-'.$title.'-图片';
             switch ($type){
                 case 1:
-                    $data = $this->scorePay();
+                    $data = $this->scorePay($uid,$number,$title,3);
                     break;
                 case 2:
-                    $data = $this->wxPay($number,'即时查看-'.$title.'-图片',0.3*100);
+                    $data = $this->wxPay($number,$title,0.3*100);
                     $order = new Order();
                     $order->number = $number;
                     break;
@@ -52,9 +53,20 @@ class OrderController extends Controller
     public function buyCommodityPhone()
     {
     }
-    public function makeOrder()
+    public function makeOrder($uid,$number,$price,$title,$type,$pay_type,$state=0)
     {
-
+        $order = new Order();
+        $order->user_id = $uid;
+        $order->price = $price;
+        $order->number = $number;
+        $order->title = $title;
+        $order->type = $type;
+        $order->pay_type = $pay_type;
+        $order->state = $state;
+        if ($order->save()){
+            return true;
+        }
+        return false;
     }
     public function doPay()
     {
@@ -69,16 +81,23 @@ class OrderController extends Controller
     {
 
     }
-    public function scorePay($uid,$bid)
+    public function scorePay($uid,$number,$title,$price)
     {
         $user = User::find($uid);
-        if ($user->score<1){
+        if ($user->score<$price){
             return response()->json([
                 'return_code'=>"FAIL",
                 'return_msg'=>'积分余额不足！'
             ]);
         }else{
-            $order = new Order();
+            if ($this->makeOrder($uid,$number,$price,$title,2,1,1)){
+                $user->score -= $price;
+                $user->save();
+                return response()->json([
+                    'return_code'=>"SUCCESS",
+                    'data'=>[]
+                ]);
+            }
         }
     }
     public function addMember(Request $request)

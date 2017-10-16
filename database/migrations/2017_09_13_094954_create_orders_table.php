@@ -20,8 +20,10 @@ class CreateOrdersTable extends Migration
             $table->float('price');
             $table->unsignedInteger('user_id');
             $table->tinyInteger('type');
+            //1->充值,2->支付,3->退款
             $table->tinyInteger('state')->default(0);
             $table->tinyInteger('pay_type');
+            //1->积分,2->支付宝,3->微信
             $table->timestamps();
         });
     }

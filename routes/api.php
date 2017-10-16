@@ -32,4 +32,6 @@ Route::group(['prefix'=>'v1','middleware'=>'cross'],function (){
     Route::get('levels','API\V1\UserController@getLevels');
     Route::get('sms','API\V1\SmsController@send');
     Route::post('member','API\V1\OrderController@addMember');
+    Route::get('launchImage','API\V1\LaunchImageController@getLaunchImage');
+
 });
