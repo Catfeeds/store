@@ -16,6 +16,10 @@ class CreateSysConfigsTable extends Migration
         Schema::create('sys_configs', function (Blueprint $table) {
             $table->increments('id');
             $table->tinyInteger('need_pay')->default(0);
+            $table->unsignedInteger('pic_score')->default(1);
+            $table->unsignedInteger('phone_score')->default(1);
+            $table->float('pic_price')->default(1);
+            $table->float('phone_price')->default(1);
             $table->timestamps();
         });
     }

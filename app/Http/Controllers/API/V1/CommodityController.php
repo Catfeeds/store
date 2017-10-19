@@ -55,6 +55,7 @@ class CommodityController extends Controller
             if (!$uid){
                 $commodity->phone = '***********';
             }else{
+
                 $member = Member::where('user_id','=',$uid)->first();
                 if (empty($member)||$member->end_time<time()){
                     $record = UserBuy::where('user_id','=',$uid)->where('commodity_id','=',$id)->first();
@@ -70,7 +71,6 @@ class CommodityController extends Controller
                     $commodity->pictures = $commodity->pictures()->pluck('thumb_url');
                 }
             }
-
         }else{
             $commodity->pictures = $commodity->pictures()->pluck('thumb_url');
         }

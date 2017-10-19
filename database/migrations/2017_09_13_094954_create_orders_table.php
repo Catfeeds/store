@@ -19,6 +19,7 @@ class CreateOrdersTable extends Migration
             $table->string('number');
             $table->float('price');
             $table->unsignedInteger('user_id');
+            $table->unsignedInteger('content');
             $table->tinyInteger('type');
             //1->充值,2->支付,3->退款
             $table->tinyInteger('state')->default(0);

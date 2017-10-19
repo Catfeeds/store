@@ -28,13 +28,13 @@ class UserController extends Controller
         if (empty($data)||$data['type']!='register'){
             return response()->json([
                 'return_code'=>"FAIL",
-                'message'=>'验证码已失效！'
+                'return_msg'=>'验证码已失效！'
             ],422);
         }
         if ($data['code']!=$code){
             return response()->json([
                 'return_code'=>"FAIL",
-                'message'=>'验证码错误！'
+                'return_msg'=>'验证码错误！'
             ],422);
         }
         User::create([
@@ -56,7 +56,7 @@ class UserController extends Controller
             if ($user->state!=1){
                 return response()->json([
                     'return_code'=>"FAIL",
-                    'message'=>'账号已被封禁！'
+                    'return_msg'=>'账号已被封禁！'
                 ],422);
             }
             $key = createNonceStr();
@@ -71,19 +71,21 @@ class UserController extends Controller
                 if ($user->state!=1){
                     return response()->json([
                         'return_code'=>"FAIL",
-                        'message'=>'账号已被封禁！'
+                        'return_msg'=>'账号已被封禁！'
                     ],422);
                 }
                 $key = createNonceStr();
                 setUserToken($key,$user->id);
                 return response()->json([
                     'return_code'=>"SUCCESS",
-                    'token'=>$key
+                    'data'=>[
+                        'token'=>$key
+                    ]
                 ]);
             }else{
                 return response()->json([
                     'return_code'=>"FAIL",
-                    'message'=>'用户不存在或密码错误！'
+                    'return_msg'=>'用户不存在或密码错误！'
                 ],422);
             }
         }
@@ -129,7 +131,7 @@ class UserController extends Controller
         if (!empty($sign)){
             return response()->json([
                 'return_code'=>"ERROR",
-                'message'=>'今天已签到!'
+                'return_msg'=>'今天已签到!'
             ]);
         }else{
             $sign = new Sign();
