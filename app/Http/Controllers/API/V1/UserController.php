@@ -210,4 +210,9 @@ class UserController extends Controller
             'data'=>$levels
         ]);
     }
+    public function addLevel()
+    {
+        $level = new MemberLevel();
+//        $level->
+    }
 }

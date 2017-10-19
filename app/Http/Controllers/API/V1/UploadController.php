@@ -16,15 +16,15 @@ class UploadController extends Controller
         $name = explode('.',$name);
         if (count($name)!=2){
             return response()->json([
-                'code'=>'ERROR',
-                'msg'=>'非法文件名'
+                'return_code'=>'ERROR',
+                'return_msg'=>'非法文件名'
             ]);
         }
         $allow = \Config::get('fileAllow');
         if (!in_array($name[1],$allow)){
             return response()->json([
-                'code'=>'ERROR',
-                'msg'=>'不支持的文件格式'
+                'return_code'=>'ERROR',
+                'return_msg'=>'不支持的文件格式'
             ]);
         }
         $md5 = md5_file($file);
@@ -32,8 +32,8 @@ class UploadController extends Controller
         $name = $md5.'.'.$name;
         if (!$file){
             return response()->json([
-                'code'=>'ERROR',
-                'msg'=>'空文件'
+                'return_code'=>'ERROR',
+                'return_msg'=>'空文件'
             ]);
         }
         if ($file->isValid()){
@@ -43,7 +43,7 @@ class UploadController extends Controller
             $file->move($destinationPath,$name);
             $thumb->save($destinationPath.'/thumb_'.$name);
             return response()->json([
-                'code'=>'OK',
+                'return_code'=>'OK',
                 'base_url'=>$destinationPath.'/'.$name,
                 'thumb_url'=>$destinationPath.'/thumb_'.$name
             ]);

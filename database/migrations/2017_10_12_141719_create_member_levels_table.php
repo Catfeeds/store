@@ -16,6 +16,7 @@ class CreateMemberLevelsTable extends Migration
         Schema::create('member_levels', function (Blueprint $table) {
             $table->increments('id');
             $table->tinyInteger('level')->unique();
+            $table->string('title')->nullable();
             $table->float('price')->default(0);
             $table->integer('time')->default(0);
             $table->unsignedInteger('send_daily')->default(0);

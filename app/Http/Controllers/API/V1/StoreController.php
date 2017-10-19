@@ -18,6 +18,10 @@ class StoreController extends Controller
             'data'=>$types
         ]);
     }
+    public function addType()
+    {
+
+    }
     public function getStores()
     {
         $stores = Store::where(['state'=>'1'])->get();
