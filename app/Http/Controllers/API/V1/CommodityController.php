@@ -47,7 +47,7 @@ class CommodityController extends Controller
             return response()->json([
                 'return_code'=>"FAIL",
                 'return_msg'=>'没找到该消息!'
-            ],404);
+            ]);
         }
         $needPay = SysConfig::first();
         if ($needPay->need_pay){
@@ -112,13 +112,13 @@ class CommodityController extends Controller
                 return response()->json([
                     'return_code'=>"FAIL",
                     'return_msg'=>'没找到该消息!'
-                ],404);
+                ]);
             }else{
                 if ($commodity->user_id !=$uid){
                     return response()->json([
                         'return_code'=>"FAIL",
                         'return_msg'=>'无权修改该信息!'
-                    ],403);
+                    ]);
                 }
                 $commodity->title = $commodityPost->get('title');
                 $commodity->price = $commodityPost->get('price');
@@ -173,13 +173,13 @@ class CommodityController extends Controller
             return response()->json([
                 'return_code'=>"FAIL",
                 'return_msg'=>'没找到该消息!'
-            ],404);
+            ]);
         }
         if ($commodity->user_id !=$uid){
             return response()->json([
                 'return_code'=>"FAIL",
                 'return_msg'=>'无权修改该信息!'
-            ],403);
+            ]);
         }
         if ($commodity->delete()){
             return response()->json([

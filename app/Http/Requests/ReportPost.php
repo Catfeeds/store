@@ -53,6 +53,6 @@ class ReportPost extends FormRequest
         return new JsonResponse([
             'return_msg'=>$errors[0],
             'return_code'=>'FAIL'
-        ], 422);
+        ]);
     }
 }

@@ -29,13 +29,13 @@ class UserController extends Controller
             return response()->json([
                 'return_code'=>"FAIL",
                 'return_msg'=>'验证码已失效！'
-            ],422);
+            ]);
         }
         if ($data['code']!=$code){
             return response()->json([
                 'return_code'=>"FAIL",
                 'return_msg'=>'验证码错误！'
-            ],422);
+            ]);
         }
         User::create([
             'username' =>  $request->get('username'),
@@ -57,7 +57,7 @@ class UserController extends Controller
                 return response()->json([
                     'return_code'=>"FAIL",
                     'return_msg'=>'账号已被封禁！'
-                ],422);
+                ]);
             }
             $key = createNonceStr();
             setUserToken($key,$user->id);
@@ -72,7 +72,7 @@ class UserController extends Controller
                     return response()->json([
                         'return_code'=>"FAIL",
                         'return_msg'=>'账号已被封禁！'
-                    ],422);
+                    ]);
                 }
                 $key = createNonceStr();
                 setUserToken($key,$user->id);
@@ -86,7 +86,7 @@ class UserController extends Controller
                 return response()->json([
                     'return_code'=>"FAIL",
                     'return_msg'=>'用户不存在或密码错误！'
-                ],422);
+                ]);
             }
         }
 
