@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use League\Flysystem\Config;
 use Symfony\Component\CssSelector\Parser\Token;
+use Zzl\Umeng\Facades\Umeng;
 
 class UserController extends Controller
 {
@@ -112,7 +113,7 @@ class UserController extends Controller
     }
     public function addReport()
     {
-
+        $push = new Umeng();
     }
     public function addReason()
     {
@@ -168,7 +169,6 @@ class UserController extends Controller
     }
     public function getMyCommodities()
     {
-//        $uid = getUserToken(Input::get('token'));
         $uid = 1;
         $limit = Input::get('limit',10);
         $page = Input::get('page',1);

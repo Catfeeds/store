@@ -52,3 +52,9 @@ if (!function_exists('getCode')) {
         return unserialize($code);
     }
 }
+if (!function_exists('Push')) {
+    function Push()
+    {
+        \Zzl\Umeng\Facades\Umeng::ios()->push();
+    }
+}
