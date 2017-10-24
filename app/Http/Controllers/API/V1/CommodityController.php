@@ -81,12 +81,17 @@ class CommodityController extends Controller
 
     public function getCommodities(FilterPost $filterPost)
     {
-        $page = $filterPost->get('page',1);
-        $limit = $filterPost->get('limit',10);
+        $latitude = $filterPost->get('latitude');
+        $longitude = $filterPost->get('longitude');
+        $radius = $filterPost->get('radius');
+        $fixdata = getAround($latitude,$longitude,$radius);
         $type = $filterPost->get('type');
         if (isset($type)){
-            $category_id = TypeList::where('type_id','=',$type)->limit($limit)->offset(($page)-1)->pluck('commodity_id');
-            $commodities = Commodity::whereIn('id',$category_id)->get();
+            $category_id = TypeList::where('type_id','=',$type)->pluck('commodity_id');
+            $commodities = Commodity::whereIn('id',$category_id)->where([
+                'pass'=>1,
+                'enable'=>1
+            ])->whereBetween('latitude',[$fixdata['minLat'],$fixdata['maxLat']])->whereBetween('longitude',[$fixdata['minLng'],$fixdata['maxLng']])->get();
         }else{
             $commodities = [];
         }

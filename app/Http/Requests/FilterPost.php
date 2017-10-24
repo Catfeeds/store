@@ -27,17 +27,20 @@ class FilterPost extends FormRequest
     {
         return [
             //
-            'page'=>'nullable|integer',
-            'limit'=>'nullable|integer',
-            'type'=>'nullable|integer',
+            'latitude'=>'required|numeric',
+            'longitude'=>'required|numeric',
+            'radius'=>'required|numeric',
         ];
     }
     public function messages()
     {
         return [
-            'page.integer'=>'参数格式必须为整形！',
-            'limit.integer'=>'参数格式必须为整形！',
-            'type.integer'=>'参数格式必须为整形！'
+            'latitude.numeric'=>'位置信息不能为空！',
+            'latitude.required'=>'位置信息格式错误！',
+            'longitude.numeric'=>'位置信息不能为空！',
+            'longitude.required'=>'位置信息格式错误！',
+            'radius.numeric'=>'距离不能为空！',
+            'radius.required'=>'距离格式错误！'
         ];
     }
     protected function formatErrors(Validator $validator)

@@ -22,3 +22,7 @@ Route::post('store/type','API\V1\StoreController@addType');
 Route::get('modify/store/type/{id}','API\V1\StoreController@modifyType');
 Route::post('member/level','API\V1\SystemController@addMemberLevel');
 Route::post('role','API\V1\SystemController@addRole');
+Route::get('test',function (){
+    $a = getAround(23.1200491,113.30764968,0.5);
+    dd($a);
+});
