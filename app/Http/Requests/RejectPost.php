@@ -27,7 +27,7 @@ class RejectPost extends FormRequest
     {
         return [
             //
-            'report_id'=>'required',
+            'commodity_id'=>'required',
             'detail'=>'required|max:255',
             'phone'=>'required',
         ];
@@ -35,7 +35,7 @@ class RejectPost extends FormRequest
     public function messages()
     {
         return [
-            'report_id.required'=>'参数不能为空！',
+            'commodity_id.required'=>'参数不能为空！',
             'detail.required'=>'描述不能为空！',
             'phone.required'=>'手机号不能为空！',
             'detail.max'=>'描述不能超过255个字符'

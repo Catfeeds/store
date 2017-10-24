@@ -33,4 +33,6 @@ Route::group(['prefix'=>'v1','middleware'=>'cross'],function (){
     Route::get('sms','API\V1\SmsController@send');
     Route::post('member','API\V1\OrderController@addMember');
     Route::get('launchImage','API\V1\LaunchImageController@getLaunchImage');
+    Route::post('buy/picture','API\V1\OrderController@buyCommodityPicture');
+    Route::get('buy/contact','API\V1\OrderController@buyCommodityPhone');
 });

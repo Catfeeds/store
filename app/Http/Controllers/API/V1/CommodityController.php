@@ -192,7 +192,7 @@ class CommodityController extends Controller
     public function addReportReject(RejectPost $rejectPost)
     {
         $reject = new Reject();
-        $reject->report_id = $rejectPost->get('report_id');
+        $reject->commodity_id = $rejectPost->get('commodity_id');
         $reject->detail = $rejectPost->get('detail');
         $reject->phone = $rejectPost->get('phone');
         if ($reject->save()){

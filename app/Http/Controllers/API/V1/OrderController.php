@@ -157,7 +157,7 @@ class OrderController extends Controller
         $order->pay_type = $pay_type;
         $order->price = $level->price;
         $ip = $request->getClientIp();
-        $data = $this->wxPay($order->number,$order->title,$order->price,$ip);
+        $data = $this->wxPay($order->number,$order->title,$order->price*100,$ip);
         return response()->json([
             'return_code'=>'SUCCESS',
             'data'=>$data
