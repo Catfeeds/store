@@ -58,3 +58,9 @@ if (!function_exists('Push')) {
         \Zzl\Umeng\Facades\Umeng::ios()->push();
     }
 }
+if (!function_exists('formatUrl')) {
+    function formatUrl($url)
+    {
+        return env('APP_URL').$url;
+    }
+}

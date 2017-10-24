@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use League\Flysystem\Config;
 use Symfony\Component\CssSelector\Parser\Token;
+use Zizaco\Entrust\EntrustRole;
 use Zzl\Umeng\Facades\Umeng;
 
 class UserController extends Controller
@@ -214,5 +215,34 @@ class UserController extends Controller
     {
         $level = new MemberLevel();
 //        $level->
+    }
+    public function adminLogin()
+    {
+        $username = Input::get('username');
+        $password = Input::get('password');
+        if (Auth::attempt(['username'=>$username,'password'=>$password],true)){
+            return response()->json([
+                'return_code'=>"SUCCESS"
+            ]);
+        }else{
+            return response()->json([
+                'return_code'=>"FAIL",
+                'return_msg'=>'用户不存在或密码错误！'
+            ]);
+        }
+    }
+    public function getPermissions()
+    {
+        $user = Auth::user();
+        $role = $user->roles();
+        $permissions = $role->permission();
+        return response()->json([
+            'return_code'=>"SUCCESS",
+            'data'=>$permissions
+        ]);
+    }
+    public function addRole()
+    {
+        $role = new EntrustRole();
     }
 }

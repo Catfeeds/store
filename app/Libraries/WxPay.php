@@ -44,7 +44,6 @@ class WxPay
             'out_trade_no' => $out_trade_no,
             'total_fee' => $total_fee,
             'notify_url' => config('wxxcx.notify_url'),
-            'openid' => $this->openid,
             'trade_type' => 'APP',
             'spbill_create_ip' =>$ip
         ];

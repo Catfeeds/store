@@ -55,7 +55,6 @@ class CommodityController extends Controller
             if (!$uid){
                 $commodity->phone = '***********';
             }else{
-
                 $member = Member::where('user_id','=',$uid)->first();
                 if (empty($member)||$member->end_time<time()){
                     $record = UserBuy::where('user_id','=',$uid)->where('commodity_id','=',$id)->first();
@@ -88,6 +87,8 @@ class CommodityController extends Controller
         if (isset($type)){
             $category_id = TypeList::where('type_id','=',$type)->limit($limit)->offset(($page)-1)->pluck('commodity_id');
             $commodities = Commodity::whereIn('id',$category_id)->get();
+        }else{
+            $commodities = [];
         }
         return response()->json([
             'return_code'=>'SUCCESS',

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateLaunchImagesTable extends Migration
+class CreateAreasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,12 @@ class CreateLaunchImagesTable extends Migration
      */
     public function up()
     {
-        Schema::create('launch_images', function (Blueprint $table) {
+        Schema::create('areas', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('title');
-            $table->string('url');
-            $table->string('link_url');
-            $table->tinyInteger('state')->default(0);
+            $table->unsignedInteger('pid');
+            $table->string('name');
+            $table->float('latitude')->default(0);
+            $table->float('longitude')->default(0);
             $table->timestamps();
         });
     }
@@ -30,6 +30,6 @@ class CreateLaunchImagesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('launch_images');
+        Schema::dropIfExists('areas');
     }
 }

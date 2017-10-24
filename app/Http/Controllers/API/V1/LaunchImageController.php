@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\V1;
 use App\Models\LaunchImage;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Input;
 
 class LaunchImageController extends Controller
 {
@@ -17,6 +18,38 @@ class LaunchImageController extends Controller
         return response()->json([
             'return_code'=>'SUCCESS',
             'data'=>$image
+        ]);
+    }
+    public function addLaunchImage()
+    {
+        $image = new LaunchImage();
+        $image->title = Input::get('title');
+        $image->url = Input::get('url');
+        $image->link_url = Input::get('link_url');
+        if ($image->save()){
+            return response()->json([
+                'return_code'=>"SUCCESS"
+            ]);
+        }
+    }
+    public function getLaunchImages()
+    {
+        $images = LaunchImage::all();
+        return response()->json([
+            'return_code'=>"SUCCESS",
+            'data'=>$images
+        ]);
+    }
+    public function enableLauncherImage($id)
+    {
+        LaunchImage::where('state','=',1)->update([
+            'state'=>'0'
+        ]);
+        $image = LaunchImage::find($id);
+        $image->state = 1;
+        $image->save();
+        return response()->json([
+            'return_code'=>"SUCCESS"
         ]);
     }
 }
