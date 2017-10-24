@@ -51,7 +51,7 @@ class UploadController extends Controller
             $thumb->save($destinationPath.'/thumb_'.$name);
             $pic = new CommodityPicture();
             $pic->base_url = $destinationPath.'/'.$name;
-            $pic->thumb_url = $destinationPath.'/thumb_'.$name;
+            $pic->thumb_url = formatUrl($destinationPath.'/thumb_'.$name);
             $pic->url = formatUrl($destinationPath.'/'.$name);
             $pic->save();
             return response()->json([
