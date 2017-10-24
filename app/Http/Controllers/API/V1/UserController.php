@@ -235,7 +235,7 @@ class UserController extends Controller
     {
         $user = Auth::user();
         $role = $user->roles();
-        $permissions = $role->permission();
+        $permissions = $role->prns();
         return response()->json([
             'return_code'=>"SUCCESS",
             'data'=>$permissions
