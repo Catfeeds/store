@@ -10,6 +10,7 @@ use App\Models\CommodityType;
 use App\Models\MemberLevel;
 use App\Models\Score;
 use App\Models\Sign;
+use App\Models\TypeList;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -202,8 +203,9 @@ class UserController extends Controller
         if (!empty($commodities)){
             $length = count($commodities);
             for ($i=0;$i<$length;$i++){
-                $type = CommodityType::find($commodities[$i]->type);
-                $commodities[$i]->type = empty($type)?'':$type->title;
+                $type = TypeList::where('commodity_id','=',$commodities[$i]->id)->pluck('type_id');
+                $title = CommodityType::whereIn('id',$type)->pluck('title');
+                $commodities[$i]->type = empty($title)?'':$title;
             }
         }
         return response()->json([

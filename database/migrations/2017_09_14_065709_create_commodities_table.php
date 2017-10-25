@@ -20,7 +20,6 @@ class CreateCommoditiesTable extends Migration
             $table->float('price')->default(0);
             $table->text('description');
             $table->tinyInteger('state')->defalut(0);
-            $table->unsignedInteger('type')->default(0);
             $table->text('detail');
             $table->string('phone');
             $table->string('QQ')->nullable();

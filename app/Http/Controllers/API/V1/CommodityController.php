@@ -87,10 +87,10 @@ class CommodityController extends Controller
         $fixdata = getAround($latitude,$longitude,$radius*1000);
         $type = $filterPost->get('type');
         if (isset($type)){
-            $commodities = Commodity::where([
+            $category_id = TypeList::where('type_id','=',$type)->pluck('commodity_id');
+            $commodities = Commodity::whereIn('id',$category_id)->where([
                 'pass'=>1,
-                'enable'=>1,
-                'type'=>$type
+                'enable'=>1
             ])->whereBetween('latitude',[$fixdata['minLat'],$fixdata['maxLat']])->whereBetween('longitude',[$fixdata['minLng'],$fixdata['maxLng']])->get();
         }else{
             $commodities = [];
@@ -152,6 +152,15 @@ class CommodityController extends Controller
             $commodity->type = $commodityPost->get('type');
         }
         if ($commodity->save()){
+            $type = $commodityPost->get('type');
+            if (!empty($type)){
+                for($i=0;$i<count($type);$i++){
+                    $list = new TypeList();
+                    $list->commodity_id = $commodity->id;
+                    $list->type_id = $type[$i];
+                    $list->save();
+                }
+            }
             $pic = $commodityPost->get('pic');
             if(!empty($pic)){
                 CommodityPicture::whereIn('id',$pic)->update([
