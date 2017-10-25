@@ -214,7 +214,7 @@ class UserController extends Controller
     public function addLevel()
     {
         $level = new MemberLevel();
-//        $level->
+
     }
     public function adminLogin()
     {
@@ -244,5 +244,6 @@ class UserController extends Controller
     public function addRole()
     {
         $role = new EntrustRole();
+        $role->users();
     }
 }
