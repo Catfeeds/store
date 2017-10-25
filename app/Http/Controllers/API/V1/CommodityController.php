@@ -84,7 +84,7 @@ class CommodityController extends Controller
         $latitude = $filterPost->get('latitude');
         $longitude = $filterPost->get('longitude');
         $radius = $filterPost->get('radius');
-        $fixdata = getAround($latitude,$longitude,$radius);
+        $fixdata = getAround($latitude,$longitude,$radius*1000);
         $type = $filterPost->get('type');
         if (isset($type)){
             $category_id = TypeList::where('type_id','=',$type)->pluck('commodity_id');
