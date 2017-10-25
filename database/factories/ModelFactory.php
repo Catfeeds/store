@@ -39,3 +39,9 @@ $factory->define(App\Models\Commodity::class,function (Faker\Generator $faker){
        'enable'=>1
    ];
 });
+$factory->define(App\Models\TypeList::class,function (Faker\Generator $faker){
+    return [
+        'type_id'=>mt_rand(1,2),
+        'commodity_id'=>mt_rand(1,200),
+    ];
+});

@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
         // $this->call(UsersTableSeeder::class);
         \Illuminate\Database\Eloquent\Model::unguard();
         $this->call('CommoditySeeder');
+        $this->call('TypeSeeder');
     }
 }
 class CommoditySeeder extends Seeder
@@ -22,5 +23,13 @@ class CommoditySeeder extends Seeder
     {
         \App\Models\Commodity::truncate();
         factory(\App\Models\Commodity::class, 200)->create();
+    }
+}
+class TypeSeeder extends Seeder
+{
+    public function run()
+    {
+        \App\Models\TypeList::truncate();
+        factory(\App\Models\TypeList::class, 200)->create();
     }
 }
