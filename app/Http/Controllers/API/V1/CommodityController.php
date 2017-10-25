@@ -98,6 +98,14 @@ class CommodityController extends Controller
         }else{
             $commodities = [];
         }
+        if (!empty($commodities)){
+            $length = count($commodities);
+            for ($i=0;$i<$length;$i++){
+                $type = TypeList::where('commodity_id','=',$commodities[$i]->id)->pluck('type_id');
+                $title = CommodityType::whereIn('id',$type)->pluck('title');
+                $commodities[$i]->type = empty($title)?'':$title;
+            }
+        }
         return response()->json([
             'return_code'=>'SUCCESS',
             'data'=>$commodities
