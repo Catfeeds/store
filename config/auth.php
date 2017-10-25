@@ -98,5 +98,5 @@ return [
             'expire' => 60,
         ],
     ],
-
+    'model'=>'App\User'
 ];

@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\API\V1;
 
 use App\Models\MemberLevel;
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
 use Zizaco\Entrust\Entrust;
+use Zizaco\Entrust\EntrustPermission;
 use Zizaco\Entrust\EntrustRole;
 
 class SystemController extends Controller
@@ -47,17 +49,55 @@ class SystemController extends Controller
             'data'=>$roles
         ]);
     }
-    public function getPermissions($id)
+    public function getRole($id)
     {
-        $role = EntrustRole::find($id);
-        $permissions = $role->perms();
+        $roles = EntrustRole::find($id);
+        $permission = $roles->perms()->get();
+        $user = $roles->users()->get();
+        return response()->json([
+            'return_code'=>'SUCCESS',
+            'data'=>[
+                'role'=>$roles,
+                'permission'=>$permission,
+                'user'=>$user
+            ]
+        ]);
+    }
+    public function getPermissions()
+    {
+        $permissions = EntrustPermission::all();
         return response()->json([
             'return_code'=>'SUCCESS',
             'data'=>$permissions
         ]);
     }
+    public function addPermission()
+    {
+        $permission = new EntrustPermission();
+        $permission->name = Input::get('name');
+        $permission->display_name = Input::get('display_name');
+        $permission->description = Input::get('description');
+        if ($permission->save()){
+            return response()->json([
+                'return_code'=>'SUCCESS'
+            ]);
+        }
+    }
     public function attachPermission()
     {
-        
+        $role = EntrustRole::find(Input::get('role'));
+        $permission = EntrustPermission::find(Input::get('permission'));
+        $role->attachPermission($permission);
+        return response()->json([
+            'return_code'=>'SUCCESS'
+        ]);
+    }
+    public function test()
+    {
+        $user = User::find(7);
+        if ($user->can('addRole')){
+            return "YES";
+        }
+        return "NO";
     }
 }

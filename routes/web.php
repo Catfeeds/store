@@ -22,7 +22,9 @@ Route::post('store/type','API\V1\StoreController@addType');
 Route::get('modify/store/type/{id}','API\V1\StoreController@modifyType');
 Route::post('member/level','API\V1\SystemController@addMemberLevel');
 Route::post('role','API\V1\SystemController@addRole');
-Route::get('test',function (){
-    $a = getAround(23.1200491,113.30764968,0.5);
-    dd($a);
-});
+Route::get('roles','API\V1\SystemController@getRoles');
+Route::get('role/{id}','API\V1\SystemController@getRole');
+Route::get('permissions','API\V1\SystemController@getPermissions');
+Route::post('permission','API\V1\SystemController@addPermission');
+Route::post('attach/permission','API\V1\SystemController@attachPermission');
+Route::get('test','API\V1\SystemController@test');
