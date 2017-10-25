@@ -73,6 +73,9 @@ class CommodityController extends Controller
         }else{
             $commodity->pictures = $commodity->pictures()->pluck('thumb_url');
         }
+        $type = TypeList::where('commodity_id','=',$commodity->id)->pluck('type_id');
+        $title = CommodityType::whereIn('id',$type)->pluck('title');
+        $commodity->type = empty($title)?'':$title;
         return response()->json([
             'return_code'=>'SUCCESS',
             'data'=>$commodity
