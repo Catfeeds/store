@@ -87,10 +87,10 @@ class CommodityController extends Controller
         $fixdata = getAround($latitude,$longitude,$radius*1000);
         $type = $filterPost->get('type');
         if (isset($type)){
-            $category_id = TypeList::where('type_id','=',$type)->pluck('commodity_id');
-            $commodities = Commodity::whereIn('id',$category_id)->where([
+            $commodities = Commodity::where([
                 'pass'=>1,
-                'enable'=>1
+                'enable'=>1,
+                'type'=>$type
             ])->whereBetween('latitude',[$fixdata['minLat'],$fixdata['maxLat']])->whereBetween('longitude',[$fixdata['minLng'],$fixdata['maxLng']])->get();
         }else{
             $commodities = [];
@@ -126,6 +126,7 @@ class CommodityController extends Controller
                         'return_msg'=>'无权修改该信息!'
                     ]);
                 }
+                $commodity->type = $commodityPost->get('type');
                 $commodity->title = $commodityPost->get('title');
                 $commodity->price = $commodityPost->get('price');
                 $commodity->description = $commodityPost->get('description');
@@ -148,17 +149,9 @@ class CommodityController extends Controller
             $commodity->latitude = $commodityPost->get('latitude');
             $commodity->longitude = $commodityPost->get('longitude');
             $commodity->user_id = $uid;
+            $commodity->type = $commodityPost->get('type');
         }
         if ($commodity->save()){
-            $type = $commodityPost->get('type');
-            if (!empty($type)){
-                for($i=0;$i<count($type);$i++){
-                    $list = new TypeList();
-                    $list->commodity_id = $commodity->id;
-                    $list->type_id = $type[$i];
-                    $list->save();
-                }
-            }
             $pic = $commodityPost->get('pic');
             if(!empty($pic)){
                 CommodityPicture::whereIn('id',$pic)->update([

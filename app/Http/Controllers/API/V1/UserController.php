@@ -6,6 +6,7 @@ use App\Http\Requests\LoginPost;
 use App\Http\Requests\RegisterPost;
 use App\Http\Requests\ResetPasswordPost;
 use App\Models\Commodity;
+use App\Models\CommodityType;
 use App\Models\MemberLevel;
 use App\Models\Score;
 use App\Models\Sign;
@@ -198,6 +199,13 @@ class UserController extends Controller
                 ])->limit($limit)->offset(($page-1)*$limit)->get();
                 break;
         };
+        if (!empty($commodities)){
+            $length = count($commodities);
+            for ($i=0;$i<$length;$i++){
+                $type = CommodityType::find($commodities[$i]->type);
+                $commodities[$i]->type = empty($type)?'':$type->title;
+            }
+        }
         return response()->json([
             'return_code'=>'SUCCESS',
             'data'=>$commodities
