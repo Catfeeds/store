@@ -28,6 +28,7 @@ class CreateCommoditiesTable extends Migration
             $table->float('longitude')->default(0)->commit('经度');
             $table->tinyInteger('enable')->default(0);
             $table->tinyInteger('pass')->default(0);
+            $table->unsignedInteger('read')->default(0);
             $table->timestamps();
         });
     }

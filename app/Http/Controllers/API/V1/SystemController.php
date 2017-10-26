@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\V1;
 
+use App\Models\City;
 use App\Models\MemberLevel;
 use App\User;
 use Illuminate\Http\Request;
@@ -99,5 +100,13 @@ class SystemController extends Controller
             return "YES";
         }
         return "NO";
+    }
+    public function getCities()
+    {
+        $cities = City::all();
+        return response()->json([
+            'return_code'=>'SUCCESS',
+            'data'=>$cities
+        ]);
     }
 }

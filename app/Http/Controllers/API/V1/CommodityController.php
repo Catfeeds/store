@@ -49,6 +49,7 @@ class CommodityController extends Controller
                 'return_msg'=>'没找到该消息!'
             ]);
         }
+        $commodity->read();
         $needPay = SysConfig::first();
         if ($needPay->need_pay){
             $uid = getUserToken(Input::get('token'));
@@ -218,5 +219,25 @@ class CommodityController extends Controller
                 'return_code'=>'SUCCESS'
             ]);
         }
+    }
+    public function addPicture(Request $request)
+    {
+        $destinationPath = 'uploads';
+        $file_name = $request->get('file_name');
+        $pic = new CommodityPicture();
+        $pic->title = $request->get('title');
+        $pic->base_url = $destinationPath.'/'.$file_name;
+        $pic->thumb_url = formatUrl($destinationPath.'/thumb_'.$file_name);
+        $pic->url = formatUrl($destinationPath.'/'.$file_name);
+        if ($pic->save()){
+            return response()->json([
+                'return_code'=>'SUCCESS',
+                'data'=>$pic
+            ]);
+        }
+    }
+    public function delPicture()
+    {
+
     }
 }

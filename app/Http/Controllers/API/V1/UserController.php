@@ -163,7 +163,6 @@ class UserController extends Controller
     {
         $uid = getUserToken(Input::get('token'));
         $user = User::find($uid);
-        $user->score = $user->score();
         $user->commodities = $user->commodities()->count();
         return response()->json([
             'return_code'=>'SUCCESS',
@@ -256,4 +255,19 @@ class UserController extends Controller
         $role = new EntrustRole();
         $role->users();
     }
+    public function setUserInfo()
+    {
+        $uid = getUserToken(Input::get('token'));
+        $user = User::find($uid);
+        $name = Input::get('name');
+        $avatar = Input::get('avatar');
+        $user->name = empty($name)?$user->name:$name;
+        $user->avatar = empty($avatar)?$user->avatar:$avatar;
+        if ($user->save()){
+            return response()->json([
+                'return_code'=>'SUCCESS'
+            ]);
+        }
+    }
+
 }

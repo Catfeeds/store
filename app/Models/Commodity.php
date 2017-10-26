@@ -11,4 +11,9 @@ class Commodity extends Model
     {
         return $this->hasMany('App\Models\CommodityPicture','commodity_id','id');
     }
+    public function read()
+    {
+        $this->read_number += 1;
+        $this->save();
+    }
 }
