@@ -249,5 +249,15 @@ class CommodityController extends Controller
         $uid = getUserToken($partTimePost->get('token'));
         $partTime = new PartTime();
         $partTime->user_id = $uid;
+        $partTime->name = $partTimePost->get('name');
+        $partTime->sex = $partTimePost->get('sex');
+        $partTime->area = $partTimePost->get('area');
+        $partTime->time = $partTimePost->get('time');
+        $partTime->number = $partTimePost->get('number');
+        if ($partTime->save()){
+            return response()->json([
+                'return_code'=>'SUCCESS'
+            ]);
+        }
     }
 }
