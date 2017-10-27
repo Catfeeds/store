@@ -4,12 +4,14 @@ namespace App\Http\Controllers\API\V1;
 
 use App\Http\Requests\CommodityPost;
 use App\Http\Requests\FilterPost;
+use App\Http\Requests\PartTimePost;
 use App\Http\Requests\RejectPost;
 use App\Http\Requests\ReportPost;
 use App\Models\Commodity;
 use App\Models\CommodityPicture;
 use App\Models\CommodityType;
 use App\Models\Member;
+use App\Models\PartTime;
 use App\Models\Reject;
 use App\Models\Report;
 use App\Models\SysConfig;
@@ -148,6 +150,7 @@ class CommodityController extends Controller
                 $commodity->WeChat = $commodityPost->get('wechat',null);
                 $commodity->latitude = $commodityPost->get('latitude');
                 $commodity->longitude = $commodityPost->get('longitude');
+                $commodity->address = $commodityPost->get('address');
             }
         }else{
             $commodity = new Commodity();
@@ -160,6 +163,7 @@ class CommodityController extends Controller
             $commodity->WeChat = $commodityPost->get('wechat',null);
             $commodity->latitude = $commodityPost->get('latitude');
             $commodity->longitude = $commodityPost->get('longitude');
+            $commodity->address = $commodityPost->get('address');
             $commodity->user_id = $uid;
             $commodity->type = $commodityPost->get('type');
         }
@@ -239,5 +243,11 @@ class CommodityController extends Controller
     public function delPicture()
     {
 
+    }
+    public function addPartTime(PartTimePost $partTimePost)
+    {
+        $uid = getUserToken($partTimePost->get('token'));
+        $partTime = new PartTime();
+        $partTime->user_id = $uid;
     }
 }

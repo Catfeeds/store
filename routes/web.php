@@ -27,4 +27,6 @@ Route::get('role/{id}','API\V1\SystemController@getRole');
 Route::get('permissions','API\V1\SystemController@getPermissions');
 Route::post('permission','API\V1\SystemController@addPermission');
 Route::post('attach/permission','API\V1\SystemController@attachPermission');
-Route::get('test','API\V1\SystemController@test');
+Route::get('test',function (){
+    return md5(md5('123456').'gsdgfsdgs@#$%%%%');
+});

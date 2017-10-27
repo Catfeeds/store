@@ -22,6 +22,7 @@ class CreateCommoditiesTable extends Migration
             $table->tinyInteger('state')->defalut(0);
             $table->text('detail');
             $table->string('phone');
+            $table->string('address');
             $table->string('QQ')->nullable();
             $table->string('WeChat')->nullable();
             $table->float('latitude')->default(0)->commit('纬度');

@@ -33,6 +33,7 @@ class CommodityPost extends FormRequest
             'description'=>'required',
             'detail'=>'required|min:50|max:300',
             'phone'=>'required',
+            'address'=>'required',
             'latitude'=>'required|numeric',
             'longitude'=>'required|numeric',
             'type'=>'required|integer'
@@ -44,6 +45,7 @@ class CommodityPost extends FormRequest
             'title.required'=>'标题不能为空！',
             'price.required'=>'价格不能为空！',
             'phone.required'=>'手机号不能为空',
+            'address.required'=>'地址不能为空',
             'description.required'=>'基本详情不能为空！',
             'detail.required'=>'更多详情不能为空！',
             'detail.min'=>'更多详情最少50个字符！',
