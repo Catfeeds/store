@@ -19,6 +19,8 @@ class UploadController extends Controller
             ]);
         }
         $file = $request->file('image');
+        $type = $request->get('type',0);
+        $title = $request->get('title');
         $name = $file->getClientOriginalName();
         $name = explode('.',$name);
         if (count($name)!=2){
@@ -49,6 +51,24 @@ class UploadController extends Controller
             $thumb = Image::make($file)->resize($size[0]*0.3,$size[1]*0.3);
             $file->move($destinationPath,$name);
             $thumb->save($destinationPath.'/thumb_'.$name);
+            if($type==1){
+                $pic = new CommodityPicture();
+                $pic->title = $request->get('title');
+                $pic->base_url = $destinationPath.'/'.$name;
+                $pic->thumb_url = formatUrl($destinationPath.'/thumb_'.$name);
+                $pic->url = formatUrl($destinationPath.'/'.$name);
+                if ($pic->save()){
+                    return response()->json([
+                        'return_code'=>'SUCCESS',
+                        'data'=>[
+                            'file_name'=>$name,
+                            'base_url'=>formatUrl($destinationPath.'/'.$name),
+                            'thumb_url'=>formatUrl($destinationPath.'/thumb_'.$name),
+                            'id'=>$pic->id
+                        ]
+                    ]);
+                }
+            }
             return response()->json([
                 'return_code'=>'SUCCESS',
                 'data'=>[
