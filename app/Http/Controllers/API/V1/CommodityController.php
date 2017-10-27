@@ -165,7 +165,7 @@ class CommodityController extends Controller
             $commodity->longitude = $commodityPost->get('longitude');
             $commodity->address = $commodityPost->get('address');
             $commodity->user_id = $uid;
-            $commodity->type = $commodityPost->get('type');
+//            $commodity->type = $commodityPost->get('type');
         }
         if ($commodity->save()){
             $type = $commodityPost->get('type');
