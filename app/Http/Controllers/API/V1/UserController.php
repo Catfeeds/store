@@ -269,5 +269,33 @@ class UserController extends Controller
             ]);
         }
     }
+    public function addAttention()
+    {
 
+    }
+    public function delAttention()
+    {
+
+    }
+    public function getAttentions()
+    {
+
+    }
+    public function push()
+    {
+        $uid = Input::get('uid');
+        $alias_type = Input::get('alias_type');
+        $predefined = [
+            'ticker' => 'android ticker',
+            'title' => 'Test Push',
+            'text' => 'Test Text',
+            'play_vibrate' => 'true',
+            'play_lights' => 'true',
+            'play_sound' => 'true',
+            'after_open' => '1'
+        ];
+        $customField = array(); //oth
+        Umeng::android()->sendCustomizedcast($uid,$alias_type,$predefined,$customField);
+//        Umeng::ios()->sendCustomizedcast($uid,$alias_type,$predefined,$customField);
+    }
 }

@@ -7,6 +7,7 @@ use App\Http\Requests\FilterPost;
 use App\Http\Requests\PartTimePost;
 use App\Http\Requests\RejectPost;
 use App\Http\Requests\ReportPost;
+use App\Models\Collect;
 use App\Models\Commodity;
 use App\Models\CommodityPicture;
 use App\Models\CommodityType;
@@ -269,5 +270,38 @@ class CommodityController extends Controller
                 'return_code'=>'SUCCESS'
             ]);
         }
+    }
+    public function addCollect()
+    {
+        $uid = getUserToken(Input::get('token'));
+        $commodity_id = Input::get('commodity_id');
+        $collect = new Collect();
+        $collect->user_id = $uid;
+        $collect->commodity_id = $commodity_id;
+        if ($collect->save()){
+            return response()->json([
+                'return_code'=>'SUCCESS'
+            ]);
+        }
+    }
+    public function delCollect($id)
+    {
+        $collect = Collect::find($id);
+        if ($collect->delete()){
+            return response()->json([
+                'return_code'=>'SUCCESS'
+            ]);
+        }
+    }
+    public function getCollects()
+    {
+        $uid = getUserToken(Input::get('token'));
+        $limit = Input::get('limit');
+        $page = Input::get('page');
+        $collects = Collect::where('user_id','=',$uid)->limit($limit)->offset(($page-1)*$limit)->get();
+        return response()->json([
+            'return_code'=>"SUCCESS",
+            'data'=>$collects
+        ]);
     }
 }
