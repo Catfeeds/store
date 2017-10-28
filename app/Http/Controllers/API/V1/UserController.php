@@ -292,7 +292,8 @@ class UserController extends Controller
             'play_vibrate' => 'true',
             'play_lights' => 'true',
             'play_sound' => 'true',
-            'after_open' => '1'
+            'after_open' => 'go_activity',
+            'activity' => 'UserMyMessageActivity'
         ];
         $customField = array(); //oth
         $data =Umeng::android()->sendCustomizedcast($uid,$alias_type,$predefined,$customField);
