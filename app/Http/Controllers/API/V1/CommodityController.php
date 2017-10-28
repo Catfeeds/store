@@ -58,6 +58,15 @@ class CommodityController extends Controller
             if (!$uid){
                 $commodity->phone = '***********';
             }else{
+                if ($commodity->user_id == $uid){
+                    $list = TypeList::where('commodity_id','=',$commodity->id)->pluck('type_id');
+                    $commodity->type = CommodityType::whereIn('id',$list)->get();
+                    $commodity->pictures = $commodity->pictures()->get();
+                    return response()->json([
+                        'return_code'=>'SUCCESS',
+                        'data'=>$commodity
+                    ]);
+                }
                 $member = Member::where('user_id','=',$uid)->first();
                 if (empty($member)||$member->end_time<time()){
                     $record = UserBuy::where('user_id','=',$uid)->where('commodity_id','=',$id)->first();
@@ -66,19 +75,18 @@ class CommodityController extends Controller
                     }else{
                         $commodity->phone = ($record->phone==1)?$commodity->phone:'***********';
                         if ($record->pic==1){
-                            $commodity->pictures = $commodity->pictures()->pluck('thumb_url');
+                            $commodity->pictures = $commodity->pictures()->get();
                         }
                     }
                 }else{
-                    $commodity->pictures = $commodity->pictures()->pluck('thumb_url');
+                    $commodity->pictures = $commodity->pictures()->get();
                 }
             }
         }else{
             $commodity->pictures = $commodity->pictures()->pluck('thumb_url');
         }
-        $type = TypeList::where('commodity_id','=',$commodity->id)->pluck('type_id');
-        $title = CommodityType::whereIn('id',$type)->pluck('title');
-        $commodity->type = empty($title)?'':$title;
+        $list = TypeList::where('commodity_id','=',$commodity->id)->pluck('type_id');
+        $commodity->type = CommodityType::whereIn('id',$list)->get();
         return response()->json([
             'return_code'=>'SUCCESS',
             'data'=>$commodity
@@ -151,6 +159,7 @@ class CommodityController extends Controller
                 $commodity->latitude = $commodityPost->get('latitude');
                 $commodity->longitude = $commodityPost->get('longitude');
                 $commodity->address = $commodityPost->get('address');
+                $commodity->pass = 0;
             }
         }else{
             $commodity = new Commodity();
@@ -170,6 +179,7 @@ class CommodityController extends Controller
         if ($commodity->save()){
             $type = $commodityPost->get('type');
             if (!empty($type)){
+                TypeList::where('commodity_id','=',$commodity->id)->delete();
                 for($i=0;$i<count($type);$i++){
                     $list = new TypeList();
                     $list->commodity_id = $commodity->id;
