@@ -295,7 +295,8 @@ class UserController extends Controller
             'after_open' => '1'
         ];
         $customField = array(); //oth
-        Umeng::android()->sendCustomizedcast($uid,$alias_type,$predefined,$customField);
+        $data =Umeng::android()->sendCustomizedcast($uid,$alias_type,$predefined,$customField);
+        dd($data);
 //        Umeng::ios()->sendCustomizedcast($uid,$alias_type,$predefined,$customField);
     }
 }
