@@ -11,7 +11,8 @@
         "laravel/tinker": "~1.0",
         "predis/predis": "~1.1@dev",
         "zzl/umeng":"1.0.*",
-        "zizaco/entrust": "5.2.x-dev"
+        "zizaco/entrust": "5.2.x-dev",
+        "latrell/alipay":"1.2"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

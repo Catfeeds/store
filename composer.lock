@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "7522b5d201244997fa7b46a59aa42533",
-    "content-hash": "8535bef259332817ad3e41850c91f8d5",
+    "hash": "75650fb40619250c83441a4a25b5a111",
+    "content-hash": "03d81d0c955495939c2669f33f433d5c",
     "packages": [
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -562,6 +562,52 @@
                 "psysh"
             ],
             "time": "2017-07-13 13:11:05"
+        },
+        {
+            "name": "latrell/alipay",
+            "version": "1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/latrell/Alipay.git",
+                "reference": "d395f4f7490ab56a50df71f01e06c266aa329034"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://files.phpcomposer.com/files/latrell/Alipay/d395f4f7490ab56a50df71f01e06c266aa329034.zip",
+                "reference": "d395f4f7490ab56a50df71f01e06c266aa329034",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/config": "5.*",
+                "illuminate/events": "5.*",
+                "illuminate/support": "5.*",
+                "php": ">=5.4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Latrell\\Alipay\\": "src/Latrell/Alipay/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Latrell Chan",
+                    "email": "i@latrell.me"
+                }
+            ],
+            "description": "支付宝SDK在Laravel5封装包。",
+            "keywords": [
+                "Alipay SDK",
+                "alipay",
+                "l5",
+                "laravel",
+                "laravel 5"
+            ],
+            "time": "2016-07-04 02:54:50"
         },
         {
             "name": "league/flysystem",

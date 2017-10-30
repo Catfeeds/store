@@ -163,6 +163,7 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
 
+
         /*
          * Package Service Providers...
          */
@@ -179,6 +180,7 @@ return [
         Intervention\Image\ImageServiceProvider::class,
         Zzl\Umeng\UmengServiceProvider::class,
         Zizaco\Entrust\EntrustServiceProvider::class,
+        Latrell\Alipay\AlipayServiceProvider::class,
     ],
 
     /*

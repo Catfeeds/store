@@ -10,6 +10,7 @@ use App\Models\UserBuy;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Latrell\Alipay\Facades\AlipayMobile;
 
 class OrderController extends Controller
 {
@@ -109,9 +110,16 @@ class OrderController extends Controller
         $payment = new WxPay(config('wxxcx.app_id'),config('wxxcx.mch_id'),config('wxxcx.api_key'));
         return $payment->pay($number,$title,$price,$ip);
     }
-    public function aliPay()
+    public function aliPay($number,$title,$price)
     {
+        $alipay = new AlipayMobile();
+        $alipay->setOutTradeNo($number);
+        $alipay->setTotalFee($price);
+        $alipay->setSubject($title);
+        $alipay->setBody($title);
 
+        // 返回签名后的支付参数给支付宝移动端的SDK。
+        return $alipay->getPayPara();
     }
     public function scorePay($uid,$number,$title,$price,$type,$content)
     {
@@ -145,19 +153,25 @@ class OrderController extends Controller
     }
     public function addMember(Request $request)
     {
+        $type = $request->get('pay_type');
         $uid = getUserToken($request->get('token'));
         $level_id = $request->get('level');
-        $pay_type = $request->get('pay_type');
         $level = MemberLevel::find($level_id);
-        $order = new Order();
-        $order->user_id = $uid;
-        $order->number = self::makePaySn($uid);
-        $order->title = '升级会员';
-        $order->type = 2;
-        $order->pay_type = $pay_type;
-        $order->price = $level->price;
-        $ip = $request->getClientIp();
-        $data = $this->wxPay($order->number,$order->title,$order->price*100,$ip);
+        $number = self::makeOrder($uid);
+        switch ($type){
+            case 2:
+                if ($this->makeOrder($uid,$number,$level->price,'升级会员',3,2,$level->level)){
+                    $data = $this->aliPay($number,'升级会员',0.3);
+                }
+                break;
+            case 3:
+                $ip = $request->getClientIp();
+                if ($this->makeOrder($uid,$number,$level->price*100,'升级会员',3,3,$level->level)){
+                    $data = $this->wxPay($number,'升级会员',$level->pcire*100,$ip);
+                }
+        }
+
+
         return response()->json([
             'return_code'=>'SUCCESS',
             'data'=>$data
