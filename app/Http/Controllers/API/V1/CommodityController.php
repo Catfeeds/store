@@ -304,6 +304,7 @@ class CommodityController extends Controller
         $page = Input::get('page',1);
         $collects = Collect::where('user_id','=',$uid)->pluck('commodity_id')->toArray();
         $commodities = Commodity::whereIn('id',$collects)->limit($limit)->offset(($page-1)*$limit)->get();
+        dd($commodities);
         $this->formatCollects($commodities);
         return response()->json([
             'return_code'=>"SUCCESS",
