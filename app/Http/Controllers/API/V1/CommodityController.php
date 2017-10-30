@@ -302,9 +302,9 @@ class CommodityController extends Controller
         $uid = getUserToken(Input::get('token'));
         $limit = Input::get('limit',10);
         $page = Input::get('page',1);
-        $collects = Collect::where('user_id','=',$uid)->pluck('commodity_id')->toArray();
+        $collects = Collect::where('user_id','=',$uid)->pluck('commodity_id');
         $commodities = Commodity::whereIn('id',$collects)->limit($limit)->offset(($page-1)*$limit)->get();
-        dd($commodities);
+        //dd($commodities);
         $this->formatCollects($commodities);
         return response()->json([
             'return_code'=>"SUCCESS",
