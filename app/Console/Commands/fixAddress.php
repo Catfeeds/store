@@ -48,29 +48,15 @@ class fixAddress extends Command
         $cities = $data['result'][1];
         $dist = $data['result'][2];
         for ($i=0;$i<count($provinces);$i++){
-            $city = new City();
-            $city->id = $provinces[$i]['id'];
-            $city->name = $provinces[$i]['fullname'];
-            $city->latitude = $provinces[$i]['location']['lat'];
-            $city->longitude = $provinces[$i]['location']['lng'];
-            echo "finish".$city->name."\n";
-            $city->save();
+
             if (isset($provinces[$i]['cidx'])){
                 echo $provinces[$i]['cidx'][0]."==".$provinces[$i]['cidx'][1]."\n";
                 $ci = array_slice($cities,$provinces[$i]['cidx'][0],$provinces[$i]['cidx'][1]);
                 for ($j=0;$j<count($ci);$j++){
-                    $city1 = new City();
-                    $city1->id = $ci[$j]['id'];
-                    $city1->pid = $provinces[$i]['id'];
-                    $city1->latitude = $ci[$j]['location']['lat'];
-                    $city1->longitude = $ci[$j]['location']['lng'];
-                    $city1->name = $ci[$j]['fullname'];
-                    echo "finish".$city1->name."\n";
-                    $city1->save();
+
                     if (isset($ci[$i]['cidx'])){
                         echo $ci[$i]['cidx'][0]."==".$ci[$i]['cidx'][1]."\n";
                         $ix = array_slice($dist,$ci[$i]['cidx'][0],$ci[$i]['cidx'][1]);
-                        dd($ix);
                         for ($k = 0;$k<count($ix);$k++){
                             $city2 = new City();
                             $city2->id = $ix[$k]['id'];
@@ -82,9 +68,26 @@ class fixAddress extends Command
                             $city2->save();
                         }
                     }
+                    $city1 = new City();
+                    $city1->id = $ci[$j]['id'];
+                    $city1->pid = $provinces[$i]['id'];
+                    $city1->latitude = $ci[$j]['location']['lat'];
+                    $city1->longitude = $ci[$j]['location']['lng'];
+                    $city1->name = $ci[$j]['fullname'];
+                    echo "finish".$city1->name."\n";
+                    $city1->save();
+
                 }
             }
+            $city = new City();
+            $city->id = $provinces[$i]['id'];
+            $city->name = $provinces[$i]['fullname'];
+            $city->latitude = $provinces[$i]['location']['lat'];
+            $city->longitude = $provinces[$i]['location']['lng'];
+            echo "finish".$city->name."\n";
+            $city->save();
         }
+
     }
     public function getCityInfo($url)
     {
