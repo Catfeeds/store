@@ -43,7 +43,7 @@ class fixAddress extends Command
     }
     public function setCity()
     {
-        $cities = City::where('pid','!=',0)->get();
+        $cities = City::where('pid','=',0)->get();
         for ($i=0;$i<count($cities);$i++){
             $url = 'http://api.map.baidu.com/geocoder/v2/?address='.$cities[$i]->name.'&output=json&ak=ghjW6DPclbHFsGSxdkwp3GWczKSmjT3f';
             $data = $this->getCityInfo($url);
