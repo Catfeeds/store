@@ -386,6 +386,12 @@ class CommodityController extends Controller
     public function getStore($id)
     {
         $user = User::find($id);
+        if (empty($user)){
+            return response()->json([
+                'return_code'=>'FAIL',
+                'return_msg'=>'未找到该用户！'
+            ]);
+        }
         $member = Member::where('user_id','=',$id)->orderBy('id','DESC')->first();
         if (empty($member)){
             $level = 0;
