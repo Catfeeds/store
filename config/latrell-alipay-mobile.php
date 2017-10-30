@@ -2,7 +2,7 @@
 return [
 
 	// 安全检验码，以数字和字母组成的32位字符。
-	'key' => 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+	'key' => '63ndriYCEMDEoImmC2BWWw==',
 
 	// 签名方式
 	'sign_type' => 'RSA',
