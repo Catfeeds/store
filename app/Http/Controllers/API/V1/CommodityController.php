@@ -88,7 +88,7 @@ class CommodityController extends Controller
                 }
             }
         }else{
-            $commodity->pictures = $commodity->pictures()->pluck('thumb_url');
+            $commodity->pictures = $commodity->pictures()->get();
         }
         $list = TypeList::where('commodity_id','=',$commodity->id)->pluck('type_id');
         $commodity->type = CommodityType::whereIn('id',$list)->get();
