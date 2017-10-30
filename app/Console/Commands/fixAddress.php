@@ -53,9 +53,10 @@ class fixAddress extends Command
             $city->name = $provinces[$i]['fullname'];
             $city->latitude = $provinces[$i]['location']['lat'];
             $city->longitude = $provinces[$i]['location']['lng'];
-            echo "finish".$city->name.'\n';
+            echo "finish".$city->name."\n";
             $city->save();
             if (isset($provinces[$i]['cidx'])){
+                echo $provinces[$i]['cidx'][0]."==".$provinces[$i]['cidx'][1];
                 $ci = array_slice($cities,$provinces[$i]['cidx'][0],$provinces[$i]['cidx'][1]);
                 for ($j=0;$j<count($ci);$j++){
                     $city1 = new City();
@@ -64,9 +65,10 @@ class fixAddress extends Command
                     $city1->latitude = $ci[$j]['location']['lat'];
                     $city1->longitude = $ci[$j]['location']['lng'];
                     $city1->name = $ci[$j]['fullname'];
-                    echo "finish".$city1->name.'\n';
+                    echo "finish".$city1->name."\n";
                     $city1->save();
                     if (isset($ci[$i]['cidx'])){
+                        echo $ci[$i]['cidx'][0]."==".$ci[$i]['cidx'][1];
                         $ix = array_slice($dist,$ci[$i]['cidx'][0],$ci[$i]['cidx'][1]);
                         for ($k = 0;$k<count($ix);$k++){
                             $city2 = new City();
@@ -75,7 +77,7 @@ class fixAddress extends Command
                             $city2->latitude = $ix[$k]['location']['lat'];
                             $city2->longitude = $ix[$k]['location']['lng'];
                             $city2->name = $ix[$k]['fullname'];
-                            echo "finish".$city2->name.'\n';
+                            echo "finish".$city2->name."\n";
                             $city2->save();
                         }
                     }
