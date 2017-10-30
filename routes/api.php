@@ -45,4 +45,5 @@ Route::group(['prefix'=>'v1','middleware'=>'cross'],function (){
     Route::post('attention','API\V1\CommodityController@addAttention');
     Route::get('del/attention/{id}','API\V1\CommodityController@delAttention');
     Route::get('attentions','API\V1\CommodityController@getAttentions');
+    Route::get('city','API\V1\SystemController@setCity');
 });

@@ -109,4 +109,27 @@ class SystemController extends Controller
             'data'=>$cities
         ]);
     }
+    public function setCity()
+    {
+        $cities = City::where('pid','!=',0)->get();
+        for ($i=0;$i<count($cities);$i++){
+            $url = 'http://api.map.baidu.com/geocoder/v2/?address='.$cities[$i]->name.'&output=json&ak=ghjW6DPclbHFsGSxdkwp3GWczKSmjT3f';
+            $data = $this->getCityInfo($url);
+            dd($data);
+        }
+    }
+    public function getCityInfo($url)
+    {
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        $output = curl_exec($curl);
+        if($output === FALSE ){
+            return false;
+        }
+        curl_close($curl);
+        return json_decode($output,JSON_UNESCAPED_UNICODE);
+    }
 }
