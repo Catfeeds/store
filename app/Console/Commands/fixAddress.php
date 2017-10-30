@@ -43,23 +43,45 @@ class fixAddress extends Command
     }
     public function setCity()
     {
-        $id = City::where([
-            'pid'=>0,
-            'city'=>1
-        ])->pluck('id');
-        $cities = City::whereIn('pid',$id)->get();
-        for ($i=0;$i<count($cities);$i++){
-            $url = 'http://api.map.baidu.com/geocoder/v2/?address='.$cities[$i]->name.'&output=json&ak=ghjW6DPclbHFsGSxdkwp3GWczKSmjT3f';
-            $data = $this->getCityInfo($url);
-            if ($data['status']==0){
-                $result = $data['result']['location'];
-                $cities[$i]->latitude = $result['lat'];
-                $cities[$i]->longitude = $result['lng'];
-                $cities[$i]->save();
+        $data = $this->getCityInfo('http://apis.map.qq.com/ws/district/v1/list?key=FF2BZ-H34WP-GQPDC-VFKIS-P7DDH-BCFNG');
+        $provinces = $data['result'][0];
+        $cities = $data['result'][1];
+        $dist = $data['result'][2];
+        for ($i=0;$i<count($provinces);$i++){
+            $city = new City();
+            $city->id = $provinces[$i]['id'];
+            $city->name = $provinces[$i]['fullname'];
+            $city->latitude = $provinces[$i]['location']['lat'];
+            $city->longitude = $provinces[$i]['location']['lng'];
+            echo "finish".$city->name.'\n';
+            $city->save();
+            if (isset($provinces[$i]['cidx'])){
+                $ci = array_slice($cities,$provinces[$i]['cidx'][0],$provinces[$i]['cidx'][1]);
+                for ($j=0;$j<count($ci);$j++){
+                    $city1 = new City();
+                    $city1->id = $ci[$j]['id'];
+                    $city1->pid = $city->id;
+                    $city1->latitude = $ci[$j]['location']['lat'];
+                    $city1->longitude = $ci[$j]['location']['lng'];
+                    $city1->name = $ci[$j]['fullname'];
+                    echo "finish".$city1->name.'\n';
+                    $city1->save();
+                    if (isset($ci[$i]['cidx'])){
+                        $ix = array_slice($dist,$ci[$i]['cidx'][0],$ci[$i]['cidx'][1]);
+                        for ($k = 0;$k<count($ix);$k++){
+                            $city2 = new City();
+                            $city2->id = $ix[$k]['id'];
+                            $city2->pid = $city1->id;
+                            $city2->latitude = $ix[$k]['location']['lat'];
+                            $city2->longitude = $ix[$k]['location']['lng'];
+                            $city2->name = $ix[$k]['fullname'];
+                            echo "finish".$city2->name.'\n';
+                            $city2->save();
+                        }
+                    }
+                }
             }
-            echo 'FINISH'.$i;
         }
-        return "SUCCESS";
     }
     public function getCityInfo($url)
     {
