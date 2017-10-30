@@ -112,7 +112,7 @@ class OrderController extends Controller
     }
     public function aliPay($number,$title,$price)
     {
-        $alipay = new AlipayMobile();
+        $alipay = app('alipay.mobile');
         $alipay->setOutTradeNo($number);
         $alipay->setTotalFee($price);
         $alipay->setSubject($title);
