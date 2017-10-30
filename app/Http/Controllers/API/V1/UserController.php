@@ -8,6 +8,7 @@ use App\Http\Requests\ResetPasswordPost;
 use App\Models\Attention;
 use App\Models\Commodity;
 use App\Models\CommodityType;
+use App\Models\Member;
 use App\Models\MemberLevel;
 use App\Models\Score;
 use App\Models\Sign;
@@ -164,6 +165,17 @@ class UserController extends Controller
     {
         $uid = getUserToken(Input::get('token'));
         $user = User::find($uid);
+        $member = Member::where('user_id','=',$user->id)->orderBy('id','DESC')->first();
+        if (empty($member)){
+            $level = 0;
+        }else{
+            if ($member->end_time>=time()){
+                $level = $member->level;
+            }else{
+                $level = 0;
+            }
+        }
+        $user->level = $level;
         $user->commodities = $user->commodities()->count();
         return response()->json([
             'return_code'=>'SUCCESS',
