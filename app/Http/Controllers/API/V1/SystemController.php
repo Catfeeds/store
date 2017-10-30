@@ -115,8 +115,12 @@ class SystemController extends Controller
         for ($i=0;$i<count($cities);$i++){
             $url = 'http://api.map.baidu.com/geocoder/v2/?address='.$cities[$i]->name.'&output=json&ak=ghjW6DPclbHFsGSxdkwp3GWczKSmjT3f';
             $data = $this->getCityInfo($url);
-            dd($data);
+            $result = $data['result']['location'];
+            $cities[$i]->latitude = $result['lat'];
+            $cities[$i]->longitude = $result['lng'];
+            $cities[$i]->save();
         }
+        return "SUCCESS";
     }
     public function getCityInfo($url)
     {
