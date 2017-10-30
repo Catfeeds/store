@@ -306,7 +306,7 @@ class UserController extends Controller
     {
         $uid = Input::get('uid');
         $alias_type = Input::get('alias_type');
-        $predefined = [
+        $android_predefined = [
             'ticker' => 'android ticker',
             'title' => 'Test Push',
             'text' => 'Test Text',
@@ -317,7 +317,7 @@ class UserController extends Controller
             'activity' => 'com.sennki.flybrid.main.user.UserMyMessageActivity'
         ];
         $customField = array(); //oth
-        $data =Umeng::android()->sendCustomizedcast($uid,$alias_type,$predefined,$customField);
+        $data =Umeng::android()->sendCustomizedcast($uid,$alias_type,$android_predefined,$customField);
         dd($data);
 //        Umeng::ios()->sendCustomizedcast($uid,$alias_type,$predefined,$customField);
     }

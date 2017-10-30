@@ -73,6 +73,7 @@ class CommodityController extends Controller
                     $record = UserBuy::where('user_id','=',$uid)->where('commodity_id','=',$id)->first();
                     if (empty($record)){
                         $commodity->phone = '***********';
+                        $commodity->pictures =[];
                     }else{
                         $commodity->phone = ($record->phone==1)?$commodity->phone:'***********';
                         if ($record->pic==1){
