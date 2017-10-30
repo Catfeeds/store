@@ -7,6 +7,7 @@ use App\Http\Requests\FilterPost;
 use App\Http\Requests\PartTimePost;
 use App\Http\Requests\RejectPost;
 use App\Http\Requests\ReportPost;
+use App\Models\Attention;
 use App\Models\Collect;
 use App\Models\Commodity;
 use App\Models\CommodityPicture;
@@ -18,6 +19,7 @@ use App\Models\Report;
 use App\Models\SysConfig;
 use App\Models\TypeList;
 use App\Models\UserBuy;
+use App\User;
 use function GuzzleHttp\Psr7\uri_for;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -300,10 +302,115 @@ class CommodityController extends Controller
         $uid = getUserToken(Input::get('token'));
         $limit = Input::get('limit');
         $page = Input::get('page');
-        $collects = Collect::where('user_id','=',$uid)->limit($limit)->offset(($page-1)*$limit)->get();
+        $collects = Collect::where('user_id','=',$uid)->pluck('commodity_id');
+        $commodities = Commodity::whereIn('id',$collects)->limit($limit)->offset(($page-1)*$limit)->get();
+        $this->formatCollects($commodities);
         return response()->json([
             'return_code'=>"SUCCESS",
-            'data'=>$collects
+            'data'=>$commodities
+        ]);
+    }
+    public function formatCollects(&$collects)
+    {
+        $length = count($collects);
+        if ($length==0){
+            return [];
+        }
+        for ($i=0;$i<$length;$i++){
+            $type = TypeList::where('commodity_id','=',$commodities[$i]->id)->pluck('type_id');
+            $title = CommodityType::whereIn('id',$type)->pluck('title');
+            $commodities[$i]->type = empty($title)?'':$title;
+            $picture = $commodities[$i]->pictures()->pluck('thumb_url')->first();
+            $commodities[$i]->picture = empty($picture)?'':$picture;
+        }
+
+    }
+    public function addAttention()
+    {
+        $uid = getUserToken(Input::get('token'));
+        $attention = new Attention();
+        $attention->user_id = $uid;
+        $attention->attention_id = Input::get('attention_id');
+        if ($attention->save()){
+            return response()->json([
+                'return_code'=>'SUCCESS'
+            ]);
+        }
+    }
+    public function delAttention($id)
+    {
+        $attention = Attention::find($id);
+        if ($attention->delete()){
+            return response()->json([
+                'return_code'=>'SUCCESS'
+            ]);
+        }
+    }
+    public function getAttentions()
+    {
+        $uid = getUserToken(Input::get('token'));
+        $limit = Input::get('limit');
+        $page = Input::get('page');
+        $attentions = Attention::where('user_id','=',$uid)->limit($limit)->offset(($page-1)*$limit)->get();
+        $this->formatAttentions($attentions);
+        return response()->json([
+            'return_code'=>"SUCCESS",
+            'data'=>$attentions
+        ]);
+    }
+    public function formatAttentions(&$attentions)
+    {
+        $length = count($attentions);
+        if ($length==0){
+            return [];
+        }
+        for ($i=0;$i<$length;$i++){
+            $user = User::find($attentions[$i]->attention_id);
+            $attentions[$i]->name = $user->name;
+            $attentions[$i]->create_time = date('Y-m-d',strtotime($user->created_at));
+            $attentions[$i]->avatar = $user->avatar;
+            $member = Member::where('user_id','=',$user->id)->orderBy('id','DESC')->first();
+            if (empty($member)){
+                $attentions[$i]->level = 0;
+            }else{
+                if ($member->end_time>=time()){
+                    $attentions[$i]->level = $member->level;
+                }else{
+                    $attentions[$i]->level = 0;
+                }
+            }
+        }
+
+    }
+    public function getStore($id)
+    {
+        $user = User::find($id);
+        $member = Member::where('user_id','=',$id)->orderBy('id','DESC')->first();
+        if (empty($member)){
+            $level = 0;
+        }else{
+            if ($member->end_time>=time()){
+                $level = $member->level;
+            }else{
+                $level = 0;
+            }
+        }
+        $page = Input::get('page',1);
+        $limit = Input::get('limit',10);
+        $commodity = Commodity::where([
+            'user_id'=>$id,
+            'enable'=>1,
+            'pass'=>1
+        ])->limit($limit)->offset(($page-1)*$limit)->get();
+        return response()->json([
+            'return_code'=>'SUCCESS',
+            'data'=>[
+                'name'=>$user->name,
+                'create_time'=>date('Y-m-d',strtotime($user->created_at)),
+                'avatar'=>$user->avatar,
+                'level'=>$level,
+                'commodities'=>$commodity
+            ]
         ]);
     }
 }

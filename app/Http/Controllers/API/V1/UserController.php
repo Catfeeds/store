@@ -272,38 +272,7 @@ class UserController extends Controller
             ]);
         }
     }
-    public function addAttention()
-    {
-        $uid = getUserToken(Input::get('token'));
-        $attention = new Attention();
-        $attention->user_id = $uid;
-        $attention->attention_id = Input::get('attention_id');
-        if ($attention->save()){
-            return response()->json([
-                'return_code'=>'SUCCESS'
-            ]);
-        }
-    }
-    public function delAttention($id)
-    {
-        $attention = Attention::find($id);
-        if ($attention->delete()){
-            return response()->json([
-                'return_code'=>'SUCCESS'
-            ]);
-        }
-    }
-    public function getAttentions()
-    {
-        $uid = getUserToken(Input::get('token'));
-        $limit = Input::get('limit');
-        $page = Input::get('page');
-        $attentions = Attention::where('user_id','=',$uid)->limit($limit)->offset(($page-1)*$limit)->get();
-        return response()->json([
-            'return_code'=>"SUCCESS",
-            'data'=>$attentions
-        ]);
-    }
+
     public function push()
     {
         $uid = Input::get('uid');

@@ -38,4 +38,11 @@ Route::group(['prefix'=>'v1','middleware'=>'cross'],function (){
     Route::post('picture','API\V1\CommodityController@addPicture');
     Route::post('user','API\V1\UserController@setUserInfo');
     Route::get('cities','API\V1\SystemController@getCities');
+    Route::get('store/{id}','API\V1\CommodityController@getStore');
+    Route::post('collect','API\V1\CommodityController@addCollect');
+    Route::get('del/collect/{id}','API\V1\CommodityController@delCollect');
+    Route::get('collects','API\V1\CommodityController@getCollects');
+    Route::post('attention','API\V1\CommodityController@addAttention');
+    Route::get('del/attention/{id}','API\V1\CommodityController@delAttention');
+    Route::get('attentions','API\V1\CommodityController@getAttentions');
 });

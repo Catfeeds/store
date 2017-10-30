@@ -36,10 +36,16 @@ class OrderController extends Controller
                 case 1:
                     $this->scorePay($uid,$number,$title,3,2,$buy->id);
                     break;
+                case 2:
+                    if ($this->makeOrder($uid,$number,0.3,$title,2,2)){
+                        $data = $this->aliPay($number,$title,0.3);
+                    }
+                    break;
                 case 3:
-                    if ($this->makeOrder($uid,$number,0.3*100,$title,2,3)){
+                    if ($this->makeOrder($uid,$number,0.3,$title,2,3)){
                         $data = $this->wxPay($number,$title,0.3*100);
                     }
+                    break;
             }
         }else{
             $data =[];
@@ -71,10 +77,16 @@ class OrderController extends Controller
                 case 1:
                     $this->scorePay($uid,$number,$title,3,3,$buy->id);
                     break;
+                case 2:
+                    if ($this->makeOrder($uid,$number,0.3,$title,2,2)){
+                        $data = $this->aliPay($number,$title,0.3);
+                    }
+                    break;
                 case 3:
-                    if ($this->makeOrder($uid,$number,0.3*100,$title,3,3,$buy->id)){
+                    if ($this->makeOrder($uid,$number,0.3,$title,3,3,$buy->id)){
                         $data = $this->wxPay($number,$title,0.3*100);
                     }
+                    break;
             }
         }else{
             $data =[];
@@ -161,12 +173,12 @@ class OrderController extends Controller
         switch ($type){
             case 2:
                 if ($this->makeOrder($uid,$number,$level->price,'升级会员',3,2,$level->level)){
-                    $data = $this->aliPay($number,'升级会员',0.3);
+                    $data = $this->aliPay($number,'升级会员',$level->price);
                 }
                 break;
             case 3:
                 $ip = $request->getClientIp();
-                if ($this->makeOrder($uid,$number,$level->price*100,'升级会员',3,3,$level->level)){
+                if ($this->makeOrder($uid,$number,$level->price,'升级会员',3,3,$level->level)){
                     $data = $this->wxPay($number,'升级会员',$level->pcire*100,$ip);
                 }
         }
