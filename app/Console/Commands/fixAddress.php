@@ -56,7 +56,7 @@ class fixAddress extends Command
             echo "finish".$city->name."\n";
             $city->save();
             if (isset($provinces[$i]['cidx'])){
-                echo $provinces[$i]['cidx'][0]."==".$provinces[$i]['cidx'][1];
+                echo $provinces[$i]['cidx'][0]."==".$provinces[$i]['cidx'][1]."\n";
                 $ci = array_slice($cities,$provinces[$i]['cidx'][0],$provinces[$i]['cidx'][1]);
                 for ($j=0;$j<count($ci);$j++){
                     $city1 = new City();
@@ -68,8 +68,8 @@ class fixAddress extends Command
                     echo "finish".$city1->name."\n";
                     $city1->save();
                     if (isset($ci[$i]['cidx'])){
-                        echo $ci[$i]['cidx'][0]."==".$ci[$i]['cidx'][1];
-                        $ix = array_slice($dist,$ci[$i]['cidx'][0],$ci[$i]['cidx'][1]);
+                        echo $ci[$i]['cidx'][0]."==".$ci[$i]['cidx'][1]."\n";
+                        $ix = array_slice($dist,$dist[$i]['cidx'][0],$dist[$i]['cidx'][1]);
                         for ($k = 0;$k<count($ix);$k++){
                             $city2 = new City();
                             $city2->id = $ix[$k]['id'];
