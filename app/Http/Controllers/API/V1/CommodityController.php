@@ -310,9 +310,9 @@ class CommodityController extends Controller
             'data'=>$commodities
         ]);
     }
-    public function formatCollects(&$collects)
+    public function formatCollects(&$commodities)
     {
-        $length = count($collects);
+        $length = count($commodities);
         if ($length==0){
             return [];
         }
