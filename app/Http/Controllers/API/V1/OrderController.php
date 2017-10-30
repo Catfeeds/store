@@ -157,7 +157,7 @@ class OrderController extends Controller
         $uid = getUserToken($request->get('token'));
         $level_id = $request->get('level');
         $level = MemberLevel::find($level_id);
-        $number = self::makeOrder($uid);
+        $number = self::makePaySn($uid);
         switch ($type){
             case 2:
                 if ($this->makeOrder($uid,$number,$level->price,'升级会员',3,2,$level->level)){
