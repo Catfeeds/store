@@ -58,6 +58,7 @@ class CommodityController extends Controller
             $uid = getUserToken(Input::get('token'));
             if (!$uid){
                 $commodity->phone = '***********';
+                $commodity->pictures =[];
             }else{
                 if ($commodity->user_id == $uid){
                     $list = TypeList::where('commodity_id','=',$commodity->id)->pluck('type_id');
