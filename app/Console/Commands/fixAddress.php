@@ -56,12 +56,11 @@ class fixAddress extends Command
             echo "finish".$city->name.'\n';
             $city->save();
             if (isset($provinces[$i]['cidx'])){
-                dd($city);
                 $ci = array_slice($cities,$provinces[$i]['cidx'][0],$provinces[$i]['cidx'][1]);
                 for ($j=0;$j<count($ci);$j++){
                     $city1 = new City();
                     $city1->id = $ci[$j]['id'];
-                    $city1->pid = $city->id;
+                    $city1->pid = $provinces[$i]['id'];
                     $city1->latitude = $ci[$j]['location']['lat'];
                     $city1->longitude = $ci[$j]['location']['lng'];
                     $city1->name = $ci[$j]['fullname'];
@@ -72,7 +71,7 @@ class fixAddress extends Command
                         for ($k = 0;$k<count($ix);$k++){
                             $city2 = new City();
                             $city2->id = $ix[$k]['id'];
-                            $city2->pid = $city1->id;
+                            $city2->pid = $ci[$i]['id'];
                             $city2->latitude = $ix[$k]['location']['lat'];
                             $city2->longitude = $ix[$k]['location']['lng'];
                             $city2->name = $ix[$k]['fullname'];
