@@ -111,19 +111,23 @@ class SystemController extends Controller
     }
     public function setCity()
     {
-        $cities = City::where('pid','!=',0)->get();
+        $cities = City::where('pid','=',0)->select([
+            'name',
+            'pid',
+            'id',
+            'latitude',
+            'longitude'
+        ])->orderBy('city','DESC')->get();
         for ($i=0;$i<count($cities);$i++){
-            $url = 'http://api.map.baidu.com/geocoder/v2/?address='.$cities[$i]->name.'&output=json&ak=ghjW6DPclbHFsGSxdkwp3GWczKSmjT3f';
-            $data = $this->getCityInfo($url);
-            if ($data['status']==0){
-                $result = $data['result']['location'];
-                $cities[$i]->latitude = $result['lat'];
-                $cities[$i]->longitude = $result['lng'];
-                $cities[$i]->save();
-            }
-            echo 'FINISH'.$i;
+            $cities[$i]->cities = City::where('pid','=',$cities[$i]->id)->select([
+                'name',
+                'pid',
+                'id',
+                'latitude',
+                'longitude'
+            ])->get();
         }
-        return "SUCCESS";
+        return response()->json($cities);
     }
     public function getCityInfo($url)
     {
