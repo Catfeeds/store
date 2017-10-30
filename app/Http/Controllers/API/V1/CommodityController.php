@@ -300,8 +300,8 @@ class CommodityController extends Controller
     public function getCollects()
     {
         $uid = getUserToken(Input::get('token'));
-        $limit = Input::get('limit');
-        $page = Input::get('page');
+        $limit = Input::get('limit',10);
+        $page = Input::get('page',1);
         $collects = Collect::where('user_id','=',$uid)->pluck('commodity_id');
         $commodities = Commodity::whereIn('id',$collects)->limit($limit)->offset(($page-1)*$limit)->get();
         $this->formatCollects($commodities);
@@ -349,8 +349,8 @@ class CommodityController extends Controller
     public function getAttentions()
     {
         $uid = getUserToken(Input::get('token'));
-        $limit = Input::get('limit');
-        $page = Input::get('page');
+        $limit = Input::get('limit',10);
+        $page = Input::get('page',1);
         $attentions = Attention::where('user_id','=',$uid)->limit($limit)->offset(($page-1)*$limit)->get();
         $this->formatAttentions($attentions);
         return response()->json([
