@@ -184,7 +184,7 @@ class UserController extends Controller
     }
     public function getMyCommodities()
     {
-        $uid = 1;
+        $uid = getUserToken(Input::get('token'));
         $limit = Input::get('limit',10);
         $page = Input::get('page',1);
         $case = Input::get('case');
