@@ -56,8 +56,8 @@ class fixAddress extends Command
                 $mix = $province['cidx'][0];
                 $max = $province['cidx'][1];
                 echo $mix."__".$max;
-                $province_cities = array_slice($cities,$mix,$max);
-                var_dump($province_cities);
+                $province_cities = array_splice($cities,$mix,$max);
+                echo count($province_cities);
 //                for ($j=0;$j<count($province_cities);$j++){
 //                    $city = new City();
 //                    $city->id = $province_cities[$j]['id'];
