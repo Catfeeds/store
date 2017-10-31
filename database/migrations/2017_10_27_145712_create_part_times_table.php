@@ -21,6 +21,8 @@ class CreatePartTimesTable extends Migration
             $table->string('area');
             $table->string('time');
             $table->string('number');
+            $table->string('front',1000);
+            $table->string('back',1000);
             $table->tinyInteger('state')->default(0);
             $table->timestamps();
         });

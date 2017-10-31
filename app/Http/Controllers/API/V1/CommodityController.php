@@ -71,7 +71,7 @@ class CommodityController extends Controller
                 if ($commodity->user_id == $uid){
 
 //                    $list = TypeList::where('commodity_id','=',$commodity->id)->pluck('type_id');
-                    $commodity->type = CommodityType::find($commodity->type);
+//                    $commodity->type = CommodityType::find($commodity->type);
                     $commodity->pictures = $commodity->pictures()->get();
                     return response()->json([
                         'return_code'=>'SUCCESS',
@@ -296,6 +296,8 @@ class CommodityController extends Controller
         $partTime->area = $partTimePost->get('area');
         $partTime->time = $partTimePost->get('time');
         $partTime->number = $partTimePost->get('number');
+        $partTime->front = $partTimePost->get('front');
+        $partTime->back = $partTimePost->get('back');
         if ($partTime->save()){
             return response()->json([
                 'return_code'=>'SUCCESS'

@@ -10,6 +10,7 @@ use App\Models\UserBuy;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Input;
 use Latrell\Alipay\Facades\AlipayMobile;
 
 class OrderController extends Controller
@@ -18,7 +19,17 @@ class OrderController extends Controller
 
     public function getOrders()
     {
-
+        $uid = getUserToken(Input::get('token'));
+        $page = Input::get('page',1);
+        $limit = Input::get('limit',10);
+        $orders = Order::where([
+            'state'=>'1',
+            'user_id'=>$uid
+        ])->limit($limit)->offset(($page-1)*$limit)->orderBy('id','DESC')->get();
+        return response()->json([
+            'return_code'=>'SUCCESS',
+            'data'=>$orders
+        ]);
     }
 
     public function buyCommodityPicture(Request $request)
