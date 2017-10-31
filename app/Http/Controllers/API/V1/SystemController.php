@@ -132,7 +132,7 @@ class SystemController extends Controller
         curl_close($curl);
         return json_decode($output,JSON_UNESCAPED_UNICODE);
     }
-    public function getMessage()
+    public function getMessages()
     {
         $uid = getUserToken(Input::get('token'));
         $limit = Input::get('limit',10);
@@ -142,5 +142,32 @@ class SystemController extends Controller
             'return_code'=>'SUCCESS',
             'data'=>$messages
         ]);
+    }
+    public function getMessage($id)
+    {
+        $message = Message::find($id);
+        $message->read = 1;
+        return response()->json([
+            'return_code'=>'SUCCESS',
+            'data'=>$message
+        ]);
+    }
+    public function readMessage($id)
+    {
+        $message = Message::find($id);
+        $message->read = 1;
+        return response()->json([
+            'return_code'=>'SUCCESS',
+            'data'=>$message
+        ]);
+    }
+    public function delMessage($id)
+    {
+        $message = Message::find($id);
+        if ($message->delete()){
+            return response()->json([
+                'return_code'=>'SUCCESS'
+            ]);
+        }
     }
 }
