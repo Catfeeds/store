@@ -9,7 +9,7 @@ class Commodity extends Model
     //
     public function pictures()
     {
-        return $this->hasMany('App\Models\CommodityPicture','user_id','id');
+        return $this->hasMany('App\Models\CommodityPicture','commodity_id','id');
     }
     public function read()
     {
