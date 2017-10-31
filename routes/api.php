@@ -36,6 +36,7 @@ Route::group(['prefix'=>'v1','middleware'=>'cross'],function (){
     Route::post('buy/picture','API\V1\OrderController@buyCommodityPicture');
     Route::get('buy/contact','API\V1\OrderController@buyCommodityPhone');
     Route::post('picture/{id}','API\V1\CommodityController@addPicture');
+    Route::get('del/picture/{id}','API\V1\CommodityController@delPicture');
     Route::post('user','API\V1\UserController@setUserInfo');
     Route::get('cities','API\V1\SystemController@getCities');
     Route::get('store/{id}','API\V1\CommodityController@getStore');

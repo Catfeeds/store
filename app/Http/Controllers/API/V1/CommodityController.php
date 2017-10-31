@@ -257,9 +257,14 @@ class CommodityController extends Controller
             ]);
         }
     }
-    public function delPicture()
+    public function delPicture($id)
     {
-
+        $pic = CommodityPicture::find($id);
+        if ($pic->delete()){
+            return response()->json([
+                'return_code'=>'SUCCESS'
+            ]);
+        }
     }
     public function addPartTime(PartTimePost $partTimePost)
     {
