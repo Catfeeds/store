@@ -47,8 +47,8 @@ class fixAddress extends Command
         $provinces = $data['result'][0];
         $cities = $data['result'][1];
         $dist = $data['result'][2];
-        echo count($provinces);
-        echo count($cities);
+        echo count($provinces)."provinces";
+        echo count($cities)."cities";
         echo count($dist);
         for ($i=0;$i<count($provinces);$i++){
 //            $province = new City();
