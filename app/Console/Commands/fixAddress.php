@@ -58,7 +58,7 @@ class fixAddress extends Command
 //            $province ->latitude = $provinces[$i]['location']['lat'];
 //            $province ->longitude = $provinces[$i]['location']['lng'];
 //            $province->save();
-//            echo "FINISH I".$i."\n";
+            echo "FINISH I".$i."\n";
             if (isset($provinces[$i]['cidx'])){
                 $province_cities = array_slice($cities,$provinces[$i]['cidx'][0],$provinces[$i]['cidx'][1]);
                 for ($j = 0;$j<count($province_cities);$j++){
@@ -68,7 +68,7 @@ class fixAddress extends Command
 //                    $province_city -> name = $province_cities[$j]['fullname'];
 //                    $province_city -> latitude = $province_cities[$j]['location']['lat'];
 //                    $province_city -> longitude = $province_cities[$j]['location']['lng'];
-//                    echo "FINISH J".$j."\n";
+                    echo "FINISH J".$j."\n";
 //                    $province_city->save();
                     if (isset($province_cities[$j]['cidx'])){
                         $city_dists = array_slice($dist,$province_cities[$j]['cidx'][0],$province_cities[$j]['cidx'][1]);
@@ -80,7 +80,7 @@ class fixAddress extends Command
 //                            $dist->latitude = $city_dists[$k]['location']['lat'];
 //                            $dist->longitude = $city_dists[$k]['location']['lng'];
 //                            $dist->save();
-//                            echo "FINISH $k".$k."\n";
+                            echo "FINISH K".$k."\n";
                         }
                     }
                 }
