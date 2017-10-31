@@ -52,7 +52,7 @@ class fixAddress extends Command
         echo count($dist);
         foreach ($provinces as $province){
             if ($province['cidx']){
-                $province_cities = array_slice($cities,$province['cidx'][0],$province[1]);
+                $province_cities = array_slice($cities,$province['cidx'][0],$province['cidx'][1]);
                 for ($j=0;$j<count($province_cities);$j++){
                     $city = new City();
                     $city->id = $province_cities[$j]['id'];
