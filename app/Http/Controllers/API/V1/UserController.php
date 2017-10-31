@@ -212,16 +212,16 @@ class UserController extends Controller
                 ])->limit($limit)->offset(($page-1)*$limit)->get();
                 break;
         };
-//        if (!empty($commodities)){
-//            $length = count($commodities);
-//            for ($i=0;$i<$length;$i++){
-////                $type = TypeList::where('commodity_id','=',$commodities[$i]->id)->pluck('type_id');
+        if (!empty($commodities)){
+            $length = count($commodities);
+            for ($i=0;$i<$length;$i++){
+//                $type = TypeList::where('commodity_id','=',$commodities[$i]->id)->pluck('type_id');
 //                $title = CommodityType::find($commodities[$i]->type);
 //                $commodities[$i]->type = empty($title)?'':$title->title;
-//                $picture = $commodities[$i]->pictures()->pluck('thumb_url')->first();
-//                $commodities[$i]->picture = empty($picture)?'':$picture;
-//            }
-//        }
+                $picture = $commodities[$i]->pictures()->pluck('thumb_url')->first();
+                $commodities[$i]->picture = empty($picture)?'':$picture;
+            }
+        }
         return response()->json([
             'return_code'=>'SUCCESS',
             'data'=>$commodities
