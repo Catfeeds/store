@@ -27,4 +27,16 @@ Route::get('role/{id}','API\V1\SystemController@getRole');
 Route::get('permissions','API\V1\SystemController@getPermissions');
 Route::post('permission','API\V1\SystemController@addPermission');
 Route::post('attach/permission','API\V1\SystemController@attachPermission');
-Route::get('test','API\V1\UserController@push');
+Route::get('test',function (){
+    $array = [
+        'a',
+        'b',
+        'c',
+        'd',
+        'e'
+    ];
+    $a = array_slice($array,0,2);
+    $b = array_slice($array,1,4);
+    var_dump($a);
+    var_dump($b);
+});
