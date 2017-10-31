@@ -50,19 +50,21 @@ class fixAddress extends Command
         echo count($provinces)."provinces";
         echo count($cities)."cities";
         echo count($dist);
-        for ($i=0;$i<count($provinces);$i++){
-            echo $i;
-                $province_cities = array_slice($cities,$provinces[$i]['cidx'][0],$provinces[$i]['cidx'][1]);
+        foreach ($provinces as $province){
+            if ($province['cidx']){
+                $province_cities = array_slice($cities,$province['cidx'][0],$province[1]);
                 for ($j=0;$j<count($province_cities);$j++){
                     $city = new City();
                     $city->id = $province_cities[$j]['id'];
-                    $city->pid = $provinces[$i]['id'];
+                    $city->pid = $province['id'];
                     $city->name = $province_cities[$j]['fullname'];
                     $city->latitude = $province_cities[$j]['location']['lat'];
                     $city->longitude = $province_cities[$j]['location']['lng'];
                     $city->save();
                 }
+            }
         }
+
 
     }
     public function getCityInfo($url)
