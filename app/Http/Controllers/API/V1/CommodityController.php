@@ -98,7 +98,7 @@ class CommodityController extends Controller
             $commodity->pictures = $commodity->pictures()->get();
         }
 //        $list = TypeList::where('commodity_id','=',$commodity->id)->pluck('type_id');
-        $commodity->type = CommodityType::find($commodity->type);
+//        $commodity->type = CommodityType::find($commodity->type);
         return response()->json([
             'return_code'=>'SUCCESS',
             'data'=>$commodity
@@ -121,14 +121,14 @@ class CommodityController extends Controller
         }else{
             $commodities = [];
         }
-        if (!empty($commodities)){
-            $length = count($commodities);
-            for ($i=0;$i<$length;$i++){
-//                $type = TypeList::where('commodity_id','=',$commodities[$i]->id)->pluck('type_id');
-                $title = CommodityType::find($commodities[$i]->type);
-                $commodities[$i]->type = empty($title)?'':$title->title;
-            }
-        }
+//        if (!empty($commodities)){
+//            $length = count($commodities);
+//            for ($i=0;$i<$length;$i++){
+////                $type = TypeList::where('commodity_id','=',$commodities[$i]->id)->pluck('type_id');
+//                $title = CommodityType::find($commodities[$i]->type);
+//                $commodities[$i]->type = empty($title)?'':$title->title;
+//            }
+//        }
         return response()->json([
             'return_code'=>'SUCCESS',
             'data'=>$commodities
