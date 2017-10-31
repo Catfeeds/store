@@ -52,7 +52,6 @@ class fixAddress extends Command
         echo count($dist);
         for ($i=0;$i<count($provinces);$i++){
             echo $i;
-            if (isset($provinces[$i]['cidx'])){
                 $province_cities = array_slice($cities,$provinces[$i]['cidx'][0],$provinces[$i]['cidx'][1]);
                 for ($j=0;$j<count($province_cities);$j++){
                     $city = new City();
@@ -63,7 +62,6 @@ class fixAddress extends Command
                     $city->longitude = $province_cities[$j]['location']['lng'];
                     $city->save();
                 }
-            }
         }
 
     }
