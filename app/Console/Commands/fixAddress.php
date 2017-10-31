@@ -47,43 +47,39 @@ class fixAddress extends Command
         $provinces = $data['result'][0];
         $cities = $data['result'][1];
         $dist = $data['result'][2];
-        for ($i=0;$i<count($provinces);$i++) {
-            $city3 = new City();
-            $city3->id = $provinces[$i]['id'];
-            $city3->name = $provinces[$i]['fullname'];
-            $city3->latitude = $provinces[$i]['location']['lat'];
-            $city3->longitude = $provinces[$i]['location']['lng'];
-            echo "finish" . $city3->name . "\n";
-            $city3->save();
-            if (isset($provinces[$i]['cidx'])) {
-                echo $provinces[$i]['cidx'][0] . "==" . $provinces[$i]['cidx'][1] . "\n";
-                $ci = array_slice($cities, $provinces[$i]['cidx'][0], $provinces[$i]['cidx'][1]);
-                for ($j = 0; $j < count($ci); $j++) {
-                    $city4 = new City();
-                    $city4->id = $ci[$j]['id'];
-                    $city4->pid = $provinces[$i]['id'];
-                    $city4->latitude = $ci[$j]['location']['lat'];
-                    $city4->longitude = $ci[$j]['location']['lng'];
-                    $city4->name = $ci[$j]['fullname'];
-                    echo "finish" . $city4->name . "\n";
-                    $city4->save();
-                    if (isset($ci[$j]['cidx'])) {
-                        echo $ci[$j]['cidx'][0] . "==" . $ci[$j]['cidx'][1] . "\n";
-                        $ix = array_slice($dist, $ci[$j]['cidx'][0], $ci[$j]['cidx'][1]);
-                        for ($k = 0; $k < count($ix); $k++) {
-                            $city2 = new City();
-                            $city2->id = $ix[$k]['id'];
-                            $city2->pid = $ci[$j]['id'];
-                            $city2->latitude = $ix[$k]['location']['lat'];
-                            $city2->longitude = $ix[$k]['location']['lng'];
-                            $city2->name = $ix[$k]['fullname'];
-                            echo "finish" . $city2->name . "\n";
-                            $city2->save();
+        for ($i=0;$i<count($provinces);$i++){
+            $province = new City();
+            $province ->id = $provinces[$i]['id'];
+            $province ->pid = 0;
+            $province ->name = $provinces[$i]['fullname'];
+            $province ->latitude = $provinces[$i]['location']['lat'];
+            $province ->longitude = $provinces[$i]['location']['lng'];
+            $province->save();
+            echo "FINISH".$province->name."\n";
+            if (isset($provinces[$i]['cidx'])){
+                $province_cities = array_slice($cities,$provinces[$i]['cidx'][0],$provinces[$i]['cidx'][1]);
+                for ($j = 0;$j<count($province_cities);$j++){
+                    $province_city = new City();
+                    $province_city -> id = $province_cities[$j]['id'];
+                    $province_city -> pid = $provinces[$i]['id'];
+                    $province_city -> name = $province_cities[$j]['fullname'];
+                    $province_city -> latitude = $province_cities[$j]['location']['lat'];
+                    $province_city -> longitude = $province_cities[$j]['location']['lng'];
+                    echo "FINISH".$province_city->name."\n";
+                    $province_city->save();
+                    if (isset($province_city[$j]['cidx'])){
+                        $city_dists = array_slice($dist,$province_city[$j]['cidx'][0],$province_city[$j]['cidx'][1]);
+                        for($k=0;$k<count($city_dists);$k++){
+                            $dist = new City();
+                            $dist->id = $city_dists[$k]['id'];
+                            $dist->pid = $province_city[$j]['id'];
+                            $dist->name = $city_dists[$k]['fullname'];
+                            $dist->latitude = $city_dists[$k]['location']['lat'];
+                            $dist->longitude = $city_dists[$k]['location']['lng'];
+                            $dist->save();
+                            echo "FINISH".$dist->name."\n";
                         }
-
                     }
-
-
                 }
             }
         }
