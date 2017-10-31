@@ -36,7 +36,7 @@ Route::get('test',function (){
         'e'
     ];
     $a = array_slice($array,0,2);
-    $b = array_slice($array,1,4);
+    $b = array_slice($array,2,4);
     var_dump($a);
     var_dump($b);
 });
