@@ -246,15 +246,10 @@ class CommodityController extends Controller
             ]);
         }
     }
-    public function addPicture(Request $request)
+    public function addPicture($id)
     {
-        $destinationPath = 'uploads';
-        $file_name = $request->get('file_name');
-        $pic = new CommodityPicture();
-        $pic->title = $request->get('title');
-        $pic->base_url = $destinationPath.'/'.$file_name;
-        $pic->thumb_url = formatUrl($destinationPath.'/thumb_'.$file_name);
-        $pic->url = formatUrl($destinationPath.'/'.$file_name);
+        $pic =CommodityPicture::find($id);
+        $pic->title = Input::get('title');
         if ($pic->save()){
             return response()->json([
                 'return_code'=>'SUCCESS',
