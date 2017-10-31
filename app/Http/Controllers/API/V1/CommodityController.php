@@ -145,7 +145,7 @@ class CommodityController extends Controller
     public function addCommodity(CommodityPost $commodityPost)
     {
         $id = $commodityPost->get('id');
-        $uid = (Input::get('token'));
+        $uid = getUserToken(Input::get('token'));
         if (isset($id)){
             $commodity = Commodity::find($id);
             if (empty($commodity)){
