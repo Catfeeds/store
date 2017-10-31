@@ -154,13 +154,13 @@ class CommodityController extends Controller
                     'return_msg'=>'没找到该消息!'
                 ]);
             }else{
-                if ($commodity->user_id !=$uid){
+                if ($commodity->user_id != $uid){
                     return response()->json([
                         'return_code'=>"FAIL",
                         'return_msg'=>'无权修改该信息!'
                     ]);
                 }
-                $commodity->type = $commodityPost->get('type');
+//                $commodity->type = $commodityPost->get('type');
                 $commodity->title = $commodityPost->get('title');
                 $commodity->price = $commodityPost->get('price');
                 $commodity->description = $commodityPost->get('description');
@@ -249,6 +249,14 @@ class CommodityController extends Controller
     public function addPicture($id)
     {
         $pic =CommodityPicture::find($id);
+        $uid = getUserToken(Input::get('token'));
+        $commodtity = Commodity::find($pic->commodtity_id);
+        if ($commodtity->user_id!=$uid){
+            return response()->json([
+                'return_code'=>'FAIL',
+                'return_message'=>'无权操作！'
+            ]);
+        }
         $pic->title = Input::get('title');
         if ($pic->save()){
             return response()->json([
@@ -260,6 +268,14 @@ class CommodityController extends Controller
     public function delPicture($id)
     {
         $pic = CommodityPicture::find($id);
+        $uid = getUserToken(Input::get('token'));
+        $commodtity = Commodity::find($pic->commodtity_id);
+        if ($commodtity->user_id!=$uid){
+            return response()->json([
+                'return_code'=>'FAIL',
+                'return_message'=>'无权操作！'
+            ]);
+        }
         if ($pic->delete()){
             return response()->json([
                 'return_code'=>'SUCCESS'
