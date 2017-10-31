@@ -67,8 +67,8 @@ class fixAddress extends Command
                     $city4->name = $ci[$j]['fullname'];
                     echo "finish" . $city4->name . "\n";
                     $city4->save();
-                    if (isset($ci[$i]['cidx'])) {
-                        echo $ci[$i]['cidx'][0] . "==" . $ci[$i]['cidx'][1] . "\n";
+                    if (isset($ci[$j]['cidx'])) {
+                        echo $ci[$j]['cidx'][0] . "==" . $ci[$j]['cidx'][1] . "\n";
                         $ix = array_slice($dist, $ci[$j]['cidx'][0], $ci[$j]['cidx'][1]);
                         for ($k = 0; $k < count($ix); $k++) {
                             $city2 = new City();
