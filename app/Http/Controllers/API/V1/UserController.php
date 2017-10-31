@@ -215,9 +215,9 @@ class UserController extends Controller
         if (!empty($commodities)){
             $length = count($commodities);
             for ($i=0;$i<$length;$i++){
-                $type = TypeList::where('commodity_id','=',$commodities[$i]->id)->pluck('type_id');
-                $title = CommodityType::whereIn('id',$type)->pluck('title');
-                $commodities[$i]->type = empty($title)?'':$title;
+//                $type = TypeList::where('commodity_id','=',$commodities[$i]->id)->pluck('type_id');
+                $title = CommodityType::find($commodities[$i]->type);
+                $commodities[$i]->type = empty($title)?'':$title->title;
                 $picture = $commodities[$i]->pictures()->pluck('thumb_url')->first();
                 $commodities[$i]->picture = empty($picture)?'':$picture;
             }

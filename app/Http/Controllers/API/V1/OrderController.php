@@ -15,6 +15,12 @@ use Latrell\Alipay\Facades\AlipayMobile;
 class OrderController extends Controller
 {
     //
+
+    public function getOrders()
+    {
+
+    }
+
     public function buyCommodityPicture(Request $request)
     {
         $uid = getUserToken($request->get('token'));
@@ -247,3 +253,4 @@ class OrderController extends Controller
         return 'ERROR';
     }
 }
+

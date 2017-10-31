@@ -70,8 +70,8 @@ class CommodityController extends Controller
                 $commodity->collect = $collect;
                 if ($commodity->user_id == $uid){
 
-                    $list = TypeList::where('commodity_id','=',$commodity->id)->pluck('type_id');
-                    $commodity->type = CommodityType::whereIn('id',$list)->get();
+//                    $list = TypeList::where('commodity_id','=',$commodity->id)->pluck('type_id');
+                    $commodity->type = CommodityType::find($commodity->type);
                     $commodity->pictures = $commodity->pictures()->get();
                     return response()->json([
                         'return_code'=>'SUCCESS',
@@ -113,8 +113,8 @@ class CommodityController extends Controller
         $fixdata = getAround($latitude,$longitude,$radius*1000);
         $type = $filterPost->get('type');
         if (isset($type)){
-            $category_id = TypeList::where('type_id','=',$type)->pluck('commodity_id');
-            $commodities = Commodity::whereIn('id',$category_id)->where([
+//            $category_id = TypeList::where('type_id','=',$type)->pluck('commodity_id');
+            $commodities = Commodity::where('type','=',$type)->where([
                 'pass'=>1,
                 'enable'=>1
             ])->whereBetween('latitude',[$fixdata['minLat'],$fixdata['maxLat']])->whereBetween('longitude',[$fixdata['minLng'],$fixdata['maxLng']])->get();
@@ -124,9 +124,9 @@ class CommodityController extends Controller
         if (!empty($commodities)){
             $length = count($commodities);
             for ($i=0;$i<$length;$i++){
-                $type = TypeList::where('commodity_id','=',$commodities[$i]->id)->pluck('type_id');
-                $title = CommodityType::whereIn('id',$type)->pluck('title');
-                $commodities[$i]->type = empty($title)?'':$title;
+//                $type = TypeList::where('commodity_id','=',$commodities[$i]->id)->pluck('type_id');
+                $title = CommodityType::find($commodities[$i]->type);
+                $commodities[$i]->type = empty($title)?'':$title->title;
             }
         }
         return response()->json([
@@ -160,7 +160,7 @@ class CommodityController extends Controller
                         'return_msg'=>'无权修改该信息!'
                     ]);
                 }
-//                $commodity->type = $commodityPost->get('type');
+                $commodity->type = $commodityPost->get('type');
                 $commodity->title = $commodityPost->get('title');
                 $commodity->price = $commodityPost->get('price');
                 $commodity->description = $commodityPost->get('description');
@@ -186,19 +186,19 @@ class CommodityController extends Controller
             $commodity->longitude = $commodityPost->get('longitude');
             $commodity->address = $commodityPost->get('address');
             $commodity->user_id = $uid;
-//            $commodity->type = $commodityPost->get('type');
+            $commodity->type = $commodityPost->get('type');
         }
         if ($commodity->save()){
-            $type = $commodityPost->get('type');
-            if (!empty($type)){
-                TypeList::where('commodity_id','=',$commodity->id)->delete();
-                for($i=0;$i<count($type);$i++){
-                    $list = new TypeList();
-                    $list->commodity_id = $commodity->id;
-                    $list->type_id = $type[$i];
-                    $list->save();
-                }
-            }
+//            $type = $commodityPost->get('type');
+//            if (!empty($type)){
+//                TypeList::where('commodity_id','=',$commodity->id)->delete();
+//                for($i=0;$i<count($type);$i++){
+//                    $list = new TypeList();
+//                    $list->commodity_id = $commodity->id;
+//                    $list->type_id = $type[$i];
+//                    $list->save();
+//                }
+//            }
             $pic = $commodityPost->get('pic');
             if(!empty($pic)){
                 CommodityPicture::whereIn('id',$pic)->update([
@@ -249,13 +249,15 @@ class CommodityController extends Controller
     public function addPicture($id)
     {
         $pic =CommodityPicture::find($id);
-        $uid = getUserToken(Input::get('token'));
-        $commodtity = Commodity::find($pic->commodtity_id);
-        if ($commodtity->user_id!=$uid){
-            return response()->json([
-                'return_code'=>'FAIL',
-                'return_message'=>'无权操作！'
-            ]);
+        if ($pic->commodtity_id != 0){
+            $uid = getUserToken(Input::get('token'));
+            $commodtity = Commodity::find($pic->commodtity_id);
+            if ($commodtity->user_id!=$uid){
+                return response()->json([
+                    'return_code'=>'FAIL',
+                    'return_message'=>'无权操作！'
+                ]);
+            }
         }
         $pic->title = Input::get('title');
         if ($pic->save()){
@@ -268,13 +270,15 @@ class CommodityController extends Controller
     public function delPicture($id)
     {
         $pic = CommodityPicture::find($id);
-        $uid = getUserToken(Input::get('token'));
-        $commodtity = Commodity::find($pic->commodtity_id);
-        if ($commodtity->user_id!=$uid){
-            return response()->json([
-                'return_code'=>'FAIL',
-                'return_message'=>'无权操作！'
-            ]);
+        if ($pic->commodtity_id != 0){
+            $uid = getUserToken(Input::get('token'));
+            $commodtity = Commodity::find($pic->commodtity_id);
+            if ($commodtity->user_id!=$uid){
+                return response()->json([
+                    'return_code'=>'FAIL',
+                    'return_message'=>'无权操作！'
+                ]);
+            }
         }
         if ($pic->delete()){
             return response()->json([

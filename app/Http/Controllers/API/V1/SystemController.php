@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\V1;
 
 use App\Models\City;
 use App\Models\MemberLevel;
+use App\Models\Message;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -130,5 +131,16 @@ class SystemController extends Controller
         }
         curl_close($curl);
         return json_decode($output,JSON_UNESCAPED_UNICODE);
+    }
+    public function getMessage()
+    {
+        $uid = getUserToken(Input::get('token'));
+        $limit = Input::get('limit',10);
+        $page = Input::get('page',1);
+        $messages = Message::where('receive_id','=',$uid)->limit($limit)->offset(($page-1)*$limit)->get();
+        return response()->json([
+            'return_code'=>'SUCCESS',
+            'data'=>$messages
+        ]);
     }
 }
