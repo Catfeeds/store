@@ -111,24 +111,9 @@ class SystemController extends Controller
     }
     public function setCity()
     {
-        $cities = City::where('pid','=',0)->select([
-            'name',
-            'pid',
-            'id',
-            'latitude',
-            'longitude',
-            'city'
-        ])->orderBy('city','DESC')->get();
+        $cities = City::where('pid','=',0)->get();
         for ($i=0;$i<count($cities);$i++){
-            if ($cities[$i]->city!=1){
-                $cities[$i]->cities = City::where('pid','=',$cities[$i]->id)->select([
-                    'name',
-                    'pid',
-                    'id',
-                    'latitude',
-                    'longitude'
-                ])->get();
-            }
+                $cities[$i]->cities = City::where('pid','=',$cities[$i]->id)->get();
         }
         return response()->json($cities);
     }
