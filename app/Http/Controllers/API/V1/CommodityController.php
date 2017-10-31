@@ -61,8 +61,15 @@ class CommodityController extends Controller
             if (!$uid){
                 $commodity->phone = '***********';
                 $commodity->pictures =[];
+                $commodity->collect = 0;
             }else{
+                $collect = Collect::where([
+                    'user_id'=>$uid,
+                    'commodity_id'=>$id
+                ])->count();
+                $commodity->collect = $collect;
                 if ($commodity->user_id == $uid){
+
                     $list = TypeList::where('commodity_id','=',$commodity->id)->pluck('type_id');
                     $commodity->type = CommodityType::whereIn('id',$list)->get();
                     $commodity->pictures = $commodity->pictures()->get();
