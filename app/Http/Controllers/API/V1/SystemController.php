@@ -163,7 +163,14 @@ class SystemController extends Controller
     }
     public function delMessage($id)
     {
+        $uid = getUserToken(Input::get('token'));
         $message = Message::find($id);
+        if ($message->receive_id != $uid){
+            return response()->json([
+                'return_code'=>'FAIL',
+                'return_msg'=>'无权操作！'
+            ]);
+        }
         if ($message->delete()){
             return response()->json([
                 'return_code'=>'SUCCESS'

@@ -454,4 +454,32 @@ class CommodityController extends Controller
             ]
         ]);
     }
+    public function getBasicStore($id)
+    {
+        $user = User::find($id);
+        if (empty($user)){
+            return response()->json([
+                'return_code'=>"FAIL",
+                'return_msg'=>'未找到！'
+            ]);
+        }
+        $member = Member::where('user_id','=',$id)->orderBy('id','DESC')->first();
+        if (empty($member)){
+            $level = 0;
+        }else{
+            if ($member->end_time<time()){
+                $level = 0;
+            }else{
+                $level = $member->level;
+            }
+        }
+        return response()->json([
+            'return_code'=>'SUCCESS',
+            'data'=>[
+                'avatar'=>$user->avatar,
+                'level'=>$level,
+                'name'=>$user->name
+            ]
+        ]);
+    }
 }
