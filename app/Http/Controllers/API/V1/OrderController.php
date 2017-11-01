@@ -55,12 +55,12 @@ class OrderController extends Controller
                     $data =[];
                     break;
                 case 2:
-                    if ($this->makeOrder($uid,$number,0.3,$title,2,2)){
+                    if ($this->makeOrder($uid,$number,0.3,$title,2,2,$commodity_id)){
                         $data = $this->aliPay($number,$title,0.3);
                     }
                     break;
                 case 3:
-                    if ($this->makeOrder($uid,$number,0.3,$title,2,3)){
+                    if ($this->makeOrder($uid,$number,0.3,$title,2,3,$commodity_id)){
                         $data = $this->wxPay($number,$title,0.3*100);
                     }
                     break;
