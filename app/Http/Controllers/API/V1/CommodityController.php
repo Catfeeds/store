@@ -99,8 +99,8 @@ class CommodityController extends Controller
         }else{
             $commodity->pictures = $commodity->pictures()->get();
         }
-//        $list = TypeList::where('commodity_id','=',$commodity->id)->pluck('type_id');
-//        $commodity->type = CommodityType::find($commodity->type);
+        $list = DescriptionList::where('commodity_id','=',$commodity->id)->pluck('desc_id');
+        $commodity->description = Description::whereIn('id',$list)->get();
         return response()->json([
             'return_code'=>'SUCCESS',
             'data'=>$commodity
