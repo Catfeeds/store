@@ -73,7 +73,7 @@ class CommodityController extends Controller
                 if ($commodity->user_id == $uid){
 
 //                    $list = TypeList::where('commodity_id','=',$commodity->id)->pluck('type_id');
-//                    $commodity->type = CommodityType::find($commodity->type);
+
                     $commodity->pictures = $commodity->pictures()->get();
                     return response()->json([
                         'return_code'=>'SUCCESS',
@@ -101,6 +101,7 @@ class CommodityController extends Controller
         }
         $list = DescriptionList::where('commodity_id','=',$commodity->id)->pluck('desc_id');
         $commodity->description = Description::whereIn('id',$list)->get();
+        $commodity->type = CommodityType::find($commodity->type);
         return response()->json([
             'return_code'=>'SUCCESS',
             'data'=>$commodity
