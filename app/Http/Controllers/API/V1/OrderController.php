@@ -51,8 +51,18 @@ class OrderController extends Controller
             $title = '即时查看-'.$title.'-图片';
             switch ($type){
                 case 1:
-                    $this->scorePay($uid,$number,$title,3,2,$buy->id);
-                    $data =[];
+                    $bool = $this->scorePay($uid,$number,$title,3,3,$buy->id);
+                    if ($bool){
+                        return response()->json([
+                            'return_code'=>"SUCCESS",
+                            'data'=>[]
+                        ]);
+                    }else{
+                        return response()->json([
+                            'return_code'=>"FAIL",
+                            'return_msg'=>'积分余额不足！'
+                        ]);
+                    }
                     break;
                 case 2:
                     if ($this->makeOrder($uid,$number,0.3,$title,2,2,$commodity_id)){
@@ -61,7 +71,8 @@ class OrderController extends Controller
                     break;
                 case 3:
                     if ($this->makeOrder($uid,$number,0.3,$title,2,3,$commodity_id)){
-                        $data = $this->wxPay($number,$title,0.3*100);
+                        $ip = $request->getClientIp();
+                        $data = $this->wxPay($number,$title,0.3*100,$ip);
                     }
                     break;
             }
@@ -113,7 +124,8 @@ class OrderController extends Controller
                     break;
                 case 3:
                     if ($this->makeOrder($uid,$number,0.3,$title,3,3,$commodity_id,$buy->id)){
-                        $data = $this->wxPay($number,$title,0.3*100);
+                        $ip = $request->getClientIp();
+                        $data = $this->wxPay($number,$title,0.3*100,$ip);
                     }
                     break;
             }
