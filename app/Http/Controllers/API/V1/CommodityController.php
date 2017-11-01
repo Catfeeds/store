@@ -12,6 +12,7 @@ use App\Models\Collect;
 use App\Models\Commodity;
 use App\Models\CommodityPicture;
 use App\Models\CommodityType;
+use App\Models\Description;
 use App\Models\Member;
 use App\Models\PartTime;
 use App\Models\Reject;
@@ -486,6 +487,28 @@ class CommodityController extends Controller
                 'level'=>$level,
                 'name'=>$user->name
             ]
+        ]);
+    }
+    public function addDescription()
+    {
+        $desc = new Description();
+        $desc->type_id = Input::get('type_id');
+        $desc->title = Input::get('title');
+        if ($desc->save()){
+            return response()->json([
+                'return_code'=>'SUCCESS'
+            ]);
+        }
+    }
+    public function getDescriptions()
+    {
+        $type = Input::get('type');
+        $descs = Description::where([
+            'type_id'=>$type
+        ])->get();
+        return response()->json([
+            'return_code'=>'SUCCESS',
+            'data'=>$descs
         ]);
     }
 }

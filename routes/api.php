@@ -54,4 +54,5 @@ Route::group(['prefix'=>'v1','middleware'=>'cross'],function (){
     Route::get('del/message/{id}','API\V1\SystemController@delMessage');
     Route::get('orders','API\V1\OrderController@getOrders');
     Route::post('parttime','API\V1\CommodityController@addPartTime');
+    Route::get('descriptions','API\V1\CommodityController@getDescriptions');
 });
