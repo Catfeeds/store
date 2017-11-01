@@ -41,7 +41,7 @@ class OrderController extends Controller
             'user_id'=>$uid,
             'commodity_id'=>$commodity_id
         ])->first();
-        if (empty($buy)||$buy->pic ==0){
+        if (empty($buy)){
             $buy = new UserBuy();
             $buy->user_id = $uid;
             $buy->commodity_id = $commodity_id;
@@ -94,7 +94,7 @@ class OrderController extends Controller
             'user_id'=>$uid,
             'commodity_id'=>$commodity_id
         ])->first();
-        if (empty($buy)||$buy->phone ==0){
+        if (empty($buy)){
             $buy = new UserBuy();
             $buy->user_id = $uid;
             $buy->commodity_id = $commodity_id;
