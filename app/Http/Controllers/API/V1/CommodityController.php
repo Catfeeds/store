@@ -356,8 +356,8 @@ class CommodityController extends Controller
         }
         for ($i=0;$i<$length;$i++){
 //            $type = TypeList::where('commodity_id','=',$commodities[$i]->id)->pluck('type_id');
-//            $title = CommodityType::whereIn('id',$type)->pluck('title');
-//            $commodities[$i]->type = empty($title)?'':$title;
+            $title = CommodityType::find($commodities[$i]->type)->title;
+            $commodities[$i]->type = empty($title)?'':$title;
             $picture = $commodities[$i]->pictures()->pluck('thumb_url')->first();
             $commodities[$i]->picture = empty($picture)?'':$picture;
         }
@@ -453,6 +453,7 @@ class CommodityController extends Controller
         ])->limit($limit)->offset(($page-1)*$limit)->get();
         if (count($commodities)>0){
             for ($i=0;$i<count($commodities);$i++){
+                $commodities[$i]->type = CommodityType::find($commodities[$i]->type)->title;
                 $commodities[$i]->picture = $commodities[$i]->pictures()->pluck('thumb_url')->first();
             }
         }
