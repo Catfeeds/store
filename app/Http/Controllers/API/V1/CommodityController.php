@@ -201,7 +201,7 @@ class CommodityController extends Controller
             if (!empty($description)){
                 DescriptionList::where('commodity_id','=',$commodity->id)->delete();
                 for($i=0;$i<count($description);$i++){
-                    $list = new TypeList();
+                    $list = new DescriptionList();
                     $list->commodity_id = $commodity->id;
                     $list->desc_id = $description[$i];
                     $list->save();
