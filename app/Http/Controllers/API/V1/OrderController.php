@@ -95,9 +95,15 @@ class OrderController extends Controller
                 case 1:
                     $bool = $this->scorePay($uid,$number,$title,3,3,$buy->id);
                     if ($bool){
-                        $data = '购买成功!';
+                        return response()->json([
+                            'return_code'=>"SUCCESS",
+                            'data'=>[]
+                        ]);
                     }else{
-                        $data = '积分不足！';
+                        return response()->json([
+                            'return_code'=>"FAIL",
+                            'return_msg'=>'积分余额不足！'
+                        ]);
                     }
                     break;
                 case 2:
