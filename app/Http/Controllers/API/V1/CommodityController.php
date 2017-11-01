@@ -347,9 +347,9 @@ class CommodityController extends Controller
             return [];
         }
         for ($i=0;$i<$length;$i++){
-            $type = TypeList::where('commodity_id','=',$commodities[$i]->id)->pluck('type_id');
-            $title = CommodityType::whereIn('id',$type)->pluck('title');
-            $commodities[$i]->type = empty($title)?'':$title;
+//            $type = TypeList::where('commodity_id','=',$commodities[$i]->id)->pluck('type_id');
+//            $title = CommodityType::whereIn('id',$type)->pluck('title');
+//            $commodities[$i]->type = empty($title)?'':$title;
             $picture = $commodities[$i]->pictures()->pluck('thumb_url')->first();
             $commodities[$i]->picture = empty($picture)?'':$picture;
         }
