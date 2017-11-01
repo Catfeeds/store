@@ -52,6 +52,7 @@ class OrderController extends Controller
             switch ($type){
                 case 1:
                     $this->scorePay($uid,$number,$title,3,2,$buy->id);
+                    $data =[];
                     break;
                 case 2:
                     if ($this->makeOrder($uid,$number,0.3,$title,2,2)){
@@ -92,7 +93,12 @@ class OrderController extends Controller
             $title = '即时查看-'.$title.'-联系方式';
             switch ($type){
                 case 1:
-                    $this->scorePay($uid,$number,$title,3,3,$buy->id);
+                    $bool = $this->scorePay($uid,$number,$title,3,3,$buy->id);
+                    if ($bool){
+                        $data = '购买成功!';
+                    }else{
+                        $data = '积分不足！';
+                    }
                     break;
                 case 2:
                     if ($this->makeOrder($uid,$number,0.3,$title,2,2)){
@@ -154,10 +160,7 @@ class OrderController extends Controller
     {
         $user = User::find($uid);
         if ($user->score<$price){
-            return response()->json([
-                'return_code'=>"FAIL",
-                'return_msg'=>'积分余额不足！'
-            ]);
+            return false;
         }else{
             if ($this->makeOrder($uid,$number,$price,$title,$type,1,$content,1)){
                 $user->score -= $price;
@@ -173,10 +176,7 @@ class OrderController extends Controller
                         $buy->save();
                         break;
                 }
-                return response()->json([
-                    'return_code'=>"SUCCESS",
-                    'data'=>[]
-                ]);
+                return true;
             }
         }
     }
