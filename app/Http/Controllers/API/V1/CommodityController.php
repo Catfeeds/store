@@ -13,6 +13,7 @@ use App\Models\Commodity;
 use App\Models\CommodityPicture;
 use App\Models\CommodityType;
 use App\Models\Description;
+use App\Models\DescriptionList;
 use App\Models\Member;
 use App\Models\PartTime;
 use App\Models\Reject;
@@ -122,14 +123,14 @@ class CommodityController extends Controller
         }else{
             $commodities = [];
         }
-//        if (!empty($commodities)){
-//            $length = count($commodities);
-//            for ($i=0;$i<$length;$i++){
-////                $type = TypeList::where('commodity_id','=',$commodities[$i]->id)->pluck('type_id');
-//                $title = CommodityType::find($commodities[$i]->type);
-//                $commodities[$i]->type = empty($title)?'':$title->title;
-//            }
-//        }
+        if (!empty($commodities)){
+            $length = count($commodities);
+            for ($i=0;$i<$length;$i++){
+                $desc = DescriptionList::where('commodity_id','=',$commodities[$i]->id)->pluck('desc_id');
+                $title = Description::whereIn('id',$desc)->pluck('title');
+                $commodities[$i]->description = $title;
+            }
+        }
         return response()->json([
             'return_code'=>'SUCCESS',
             'data'=>$commodities
@@ -164,7 +165,7 @@ class CommodityController extends Controller
                 $commodity->type = $commodityPost->get('type');
                 $commodity->title = $commodityPost->get('title');
                 $commodity->price = $commodityPost->get('price');
-                $commodity->description = $commodityPost->get('description');
+//                $commodity->description = $commodityPost->get('description');
                 $commodity->detail = $commodityPost->get('detail',null);
                 $commodity->phone = $commodityPost->get('phone');
                 $commodity->QQ = $commodityPost->get('qq',null);
@@ -178,7 +179,7 @@ class CommodityController extends Controller
             $commodity = new Commodity();
             $commodity->title = $commodityPost->get('title');
             $commodity->price = $commodityPost->get('price');
-            $commodity->description = $commodityPost->get('description');
+//            $commodity->description = $commodityPost->get('description');
             $commodity->detail = $commodityPost->get('detail',null);
             $commodity->phone = $commodityPost->get('phone');
             $commodity->QQ = $commodityPost->get('qq',null);
@@ -190,16 +191,16 @@ class CommodityController extends Controller
             $commodity->type = $commodityPost->get('type');
         }
         if ($commodity->save()){
-//            $type = $commodityPost->get('type');
-//            if (!empty($type)){
-//                TypeList::where('commodity_id','=',$commodity->id)->delete();
-//                for($i=0;$i<count($type);$i++){
-//                    $list = new TypeList();
-//                    $list->commodity_id = $commodity->id;
-//                    $list->type_id = $type[$i];
-//                    $list->save();
-//                }
-//            }
+            $description = $commodityPost->get('description');
+            if (!empty($description)){
+                DescriptionList::where('commodity_id','=',$commodity->id)->delete();
+                for($i=0;$i<count($description);$i++){
+                    $list = new TypeList();
+                    $list->commodity_id = $commodity->id;
+                    $list->desc_id = $description[$i];
+                    $list->save();
+                }
+            }
             $pic = $commodityPost->get('pic');
             if(!empty($pic)){
                 CommodityPicture::whereIn('id',$pic)->update([
