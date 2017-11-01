@@ -62,8 +62,11 @@ class CommodityController extends Controller
             $uid = getUserToken(Input::get('token'));
             if (!$uid){
                 $commodity->phone = '***********';
-                $commodity->pictures =[];
+                $commodity->pictures =$commodity->pictures()->first();
                 $commodity->collect = 0;
+                $list = DescriptionList::where('commodity_id','=',$commodity->id)->pluck('desc_id');
+                $commodity->description = Description::whereIn('id',$list)->get();
+                $commodity->type = CommodityType::find($commodity->type);
             }else{
                 $collect = Collect::where([
                     'user_id'=>$uid,
