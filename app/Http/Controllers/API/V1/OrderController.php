@@ -51,7 +51,7 @@ class OrderController extends Controller
             $title = '即时查看-'.$title.'-图片';
             switch ($type){
                 case 1:
-                    $bool = $this->scorePay($uid,$number,$title,3,3,$buy->id);
+                    $bool = $this->scorePay($uid,$number,$title,3,2,$buy->id);
                     if ($bool){
                         return response()->json([
                             'return_code'=>"SUCCESS",
@@ -83,7 +83,7 @@ class OrderController extends Controller
                 $title = '即时查看-'.$title.'-图片';
                 switch ($type){
                     case 1:
-                        $bool = $this->scorePay($uid,$number,$title,3,3,$buy->id);
+                        $bool = $this->scorePay($uid,$number,$title,3,2,$buy->id);
                         if ($bool){
                             return response()->json([
                                 'return_code'=>"SUCCESS",
