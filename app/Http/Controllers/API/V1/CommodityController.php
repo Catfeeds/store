@@ -433,11 +433,16 @@ class CommodityController extends Controller
         }
         $page = Input::get('page',1);
         $limit = Input::get('limit',10);
-        $commodity = Commodity::where([
+        $commodities = Commodity::where([
             'user_id'=>$id,
             'enable'=>1,
             'pass'=>1
         ])->limit($limit)->offset(($page-1)*$limit)->get();
+        if (count($commodities)>0){
+            for ($i=0;$i<count($commodities);$i++){
+                $commodities[$i]->picture = $commodities[$i]->pictures()->pluck('thumb_url')->first();
+            }
+        }
         return response()->json([
             'return_code'=>'SUCCESS',
             'data'=>[
@@ -445,7 +450,7 @@ class CommodityController extends Controller
                 'create_time'=>date('Y-m-d',strtotime($user->created_at)),
                 'avatar'=>$user->avatar,
                 'level'=>$level,
-                'commodities'=>$commodity
+                'commodities'=>$commodities
             ]
         ]);
     }
