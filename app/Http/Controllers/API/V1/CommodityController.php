@@ -414,6 +414,11 @@ class CommodityController extends Controller
     }
     public function getStore($id)
     {
+        $uid = getUserToken(Input::get('token'));
+        $attention = Attention::where([
+            'attention_id'=>$id,
+            'user_id'=>$uid
+        ])->count();
         $user = User::find($id);
         if (empty($user)){
             return response()->json([
@@ -450,6 +455,7 @@ class CommodityController extends Controller
                 'create_time'=>date('Y-m-d',strtotime($user->created_at)),
                 'avatar'=>$user->avatar,
                 'level'=>$level,
+                'attention'=>$attention,
                 'commodities'=>$commodities
             ]
         ]);
