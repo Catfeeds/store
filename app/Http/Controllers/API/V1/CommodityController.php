@@ -58,6 +58,13 @@ class CommodityController extends Controller
         }
         $commodity->read();
         $needPay = SysConfig::first();
+        $fixdata = getAround($commodity->latitude,$commodity->longitude,500);
+        $commodities = Commodity::where([
+            'pass'=>1,
+            'enable'=>1
+        ])->whereBetween('latitude',[$fixdata['minLat'],$fixdata['maxLat']])->whereBetween('longitude',[$fixdata['minLng'],$fixdata['maxLng']])->select(['id','type','latitude','longitude'])->orderByRaw('RAND()')->limit(4)->get();
+        $data = $this->formatCommodities($commodities,$commodity->latitude,$commodity->longitude);
+        $commodity->around = $data;
         if ($needPay->need_pay){
             $uid = getUserToken(Input::get('token'));
             if (!$uid){
@@ -574,5 +581,36 @@ class CommodityController extends Controller
             'return_code'=>'SUCCESS',
             'data'=>$descs
         ]);
+    }
+    public function changeState()
+    {
+        $uid = getUserToken(Input::get('token'));
+        $commodity_id = Input::get('commodity_id');
+        $commodity = Commodity::find($commodity_id);
+        if ($commodity->user_id!=$uid){
+            return response()->json([
+                'return_code'=>'FAIL',
+                'return_msg'=>'无权操作！'
+            ]);
+        }else{
+            $enable = $commodity->enable;
+            $commodity->enable = ($enable==0)?1:0;
+            $commodity->save();
+            return response()->json([
+                'return_code'=>"SUCCESS"
+            ]);
+        }
+
+    }
+    public function formatCommodities($data,$lat,$lng)
+    {
+        if (empty($data)){
+            return [];
+        }
+        for ($i=0;$i<count($data);$i++){
+            $data[$i]->picture = $data[$i]->pictures()->pluck('thumb_url')->first();
+            $dist = calculateDistance($data[$i]->latitude,$data[$i]->longitude,$lat,$lng);
+            $data[$i]->dist = round($dist,2);
+        }
     }
 }
