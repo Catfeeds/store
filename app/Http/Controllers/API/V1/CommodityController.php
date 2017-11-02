@@ -414,6 +414,12 @@ class CommodityController extends Controller
             $attentions[$i]->name = $user->name;
             $attentions[$i]->create_time = date('Y-m-d',strtotime($user->created_at));
             $attentions[$i]->avatar = $user->avatar;
+            $count = Commodity::where([
+                'user_id'=>$attentions[$i]->attention_id,
+                'enable'=>1,
+                'pass'=>1
+            ])->count();
+            $attentions[$i]->commodity_count = $count;
             $member = Member::where('user_id','=',$user->id)->orderBy('id','DESC')->first();
             if (empty($member)){
                 $attentions[$i]->level = 0;
