@@ -610,6 +610,7 @@ class CommodityController extends Controller
         for ($i=0;$i<count($data);$i++){
             $data[$i]->picture = $data[$i]->pictures()->pluck('thumb_url')->first();
             $dist = calculateDistance($data[$i]->latitude,$data[$i]->longitude,$lat,$lng);
+            $data[$i]->type = CommodityType::find($data[$i]->type)->title;
             $data[$i]->dist = round($dist,3)*1000;
         }
         return $data;
