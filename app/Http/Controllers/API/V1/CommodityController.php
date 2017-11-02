@@ -390,7 +390,7 @@ class CommodityController extends Controller
         $attention_id = Input::get('attention_id');
         $attention = Attention::where([
             'user_id'=>$uid,
-            'attention_id'=>attention_id
+            'attention_id'=>$attention_id
         ])->first();
         if (!empty($attention)){
             return response()->json([
