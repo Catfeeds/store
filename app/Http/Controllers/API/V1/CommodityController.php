@@ -343,7 +343,7 @@ class CommodityController extends Controller
             'user_id'=>$uid,
             'commodity_id'=>$commodity_id
         ])->first();
-        if (!empty($collect)){
+        if (empty($collect)){
             return response()->json([
                 'return_code'=>'SUCCESS'
             ]);
