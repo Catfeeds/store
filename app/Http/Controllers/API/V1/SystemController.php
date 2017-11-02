@@ -90,6 +90,16 @@ class SystemController extends Controller
         $role->display_name = Input::get('display_name');
         $role->description = Input::get('description');
         if ($role->save()){
+            $pres = Input::get('pres');
+            if (!empty($pres)){
+                for ($i=0;$i<count($pres);$i++){
+                    $permission = EntrustPermission::find($pres[$i]);
+                    $role->attachPermission($permission);
+                }
+            }
+            return response()->json([
+                'return_code'=>'SUCCESS'
+            ]);
             return response()->json([
                 'return_code'=>'SUCCESS'
             ]);
@@ -139,12 +149,7 @@ class SystemController extends Controller
     }
     public function attachPermission()
     {
-        $role = EntrustRole::find(Input::get('role'));
-        $permission = EntrustPermission::find(Input::get('permission'));
-        $role->attachPermission($permission);
-        return response()->json([
-            'return_code'=>'SUCCESS'
-        ]);
+
     }
     public function test()
     {
