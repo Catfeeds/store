@@ -377,7 +377,14 @@ class CommodityController extends Controller
     }
     public function delAttention($id)
     {
+        $uid = getUserToken(Input::get('token'));
         $attention = Attention::find($id);
+        if ($attention->user_id!=$uid){
+            return response()->json([
+                'return_code'=>'FAIL',
+                'return_msg'=>'无权操作！'
+            ]);
+        }
         if ($attention->delete()){
             return response()->json([
                 'return_code'=>'SUCCESS'
@@ -446,6 +453,11 @@ class CommodityController extends Controller
         }
         $page = Input::get('page',1);
         $limit = Input::get('limit',10);
+        $count = Commodity::where([
+            'user_id'=>$id,
+            'enable'=>1,
+            'pass'=>1
+        ])->count();
         $commodities = Commodity::where([
             'user_id'=>$id,
             'enable'=>1,
@@ -465,6 +477,8 @@ class CommodityController extends Controller
                 'avatar'=>$user->avatar,
                 'level'=>$level,
                 'attention'=>$attention,
+                'user_id'=>$id,
+                'commodity_count'=>$count,
                 'commodities'=>$commodities
             ]
         ]);
