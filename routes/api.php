@@ -42,10 +42,10 @@ Route::group(['prefix'=>'v1','middleware'=>'cross'],function (){
     Route::get('store/{id}','API\V1\CommodityController@getStore');
     Route::get('basic/store/{id}','API\V1\CommodityController@getBasicStore');
     Route::post('collect','API\V1\CommodityController@addCollect');
-    Route::get('del/collect/{id}','API\V1\CommodityController@delCollect');
+    Route::post('del/collect','API\V1\CommodityController@delCollect');
     Route::get('collects','API\V1\CommodityController@getCollects');
     Route::post('attention','API\V1\CommodityController@addAttention');
-    Route::get('del/attention/{id}','API\V1\CommodityController@delAttention');
+    Route::post('del/attention','API\V1\CommodityController@delAttention');
     Route::get('attentions','API\V1\CommodityController@getAttentions');
     Route::get('city','API\V1\SystemController@setCity');
     Route::get('messages','API\V1\SystemController@getMessages');

@@ -316,6 +316,16 @@ class CommodityController extends Controller
     {
         $uid = getUserToken(Input::get('token'));
         $commodity_id = Input::get('commodity_id');
+        $collect = Collect::where([
+            'user_id'=>$uid,
+            'commodity_id'=>$commodity_id
+        ])->first();
+        if (!empty($collect)){
+            return response()->json([
+                'return_code'=>'FAIL',
+                'return_msg'=>'已收藏的不能重复收藏！'
+            ]);
+        }
         $collect = new Collect();
         $collect->user_id = $uid;
         $collect->commodity_id = $commodity_id;
@@ -325,14 +335,25 @@ class CommodityController extends Controller
             ]);
         }
     }
-    public function delCollect($id)
+    public function delCollect()
     {
-        $collect = Collect::find($id);
+        $uid = getUserToken(Input::get('token'));
+        $commodity_id = Input::get('commodity_id');
+        $collect = Collect::where([
+            'user_id'=>$uid,
+            'commodity_id'=>$commodity_id
+        ])->first();
+        if (!empty($collect)){
+            return response()->json([
+                'return_code'=>'SUCCESS'
+            ]);
+        }
         if ($collect->delete()){
             return response()->json([
                 'return_code'=>'SUCCESS'
             ]);
         }
+
     }
     public function getCollects()
     {
@@ -366,6 +387,16 @@ class CommodityController extends Controller
     public function addAttention()
     {
         $uid = getUserToken(Input::get('token'));
+        $attention = Attention::where([
+            'user_id'=>$uid,
+            'attention_id'=>attention_id
+        ])->first();
+        if (!empty($attention)){
+            return response()->json([
+                'return_code'=>'FAIL',
+                'return_msg'=>'不能重复关注！'
+            ]);
+        }
         $attention = new Attention();
         $attention->user_id = $uid;
         $attention->attention_id = Input::get('attention_id');
@@ -375,14 +406,17 @@ class CommodityController extends Controller
             ]);
         }
     }
-    public function delAttention($id)
+    public function delAttention()
     {
         $uid = getUserToken(Input::get('token'));
-        $attention = Attention::find($id);
-        if ($attention->user_id!=$uid){
+        $attention_id = Input::get('attention_id');
+        $attention = Attention::where([
+            'user_id'=>$uid,
+            'attention_id'=>$attention_id
+        ])->first();
+        if (empty($attention)){
             return response()->json([
-                'return_code'=>'FAIL',
-                'return_msg'=>'无权操作！'
+                'return_code'=>'SUCCESS'
             ]);
         }
         if ($attention->delete()){
@@ -390,6 +424,7 @@ class CommodityController extends Controller
                 'return_code'=>'SUCCESS'
             ]);
         }
+
     }
     public function getAttentions()
     {
