@@ -612,5 +612,6 @@ class CommodityController extends Controller
             $dist = calculateDistance($data[$i]->latitude,$data[$i]->longitude,$lat,$lng);
             $data[$i]->dist = round($dist,2);
         }
+        return $data;
     }
 }
