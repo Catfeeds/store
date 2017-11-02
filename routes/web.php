@@ -28,15 +28,6 @@ Route::get('permissions','API\V1\SystemController@getPermissions');
 Route::post('permission','API\V1\SystemController@addPermission');
 Route::post('attach/permission','API\V1\SystemController@attachPermission');
 Route::get('test',function (){
-    $array = [
-        'a',
-        'b',
-        'c',
-        'd',
-        'e'
-    ];
-    $a = array_slice($array,0,2);
-    $b = array_slice($array,2,4);
-    var_dump($a);
-    var_dump($b);
+    $data = getAround(23.128788,113.284406,500);
+    var_dump($data);
 });
