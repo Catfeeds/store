@@ -137,7 +137,7 @@ class SystemController extends Controller
         $uid = getUserToken(Input::get('token'));
         $limit = Input::get('limit',10);
         $page = Input::get('page',1);
-        $messages = Message::where('receive_id','=',$uid)->limit($limit)->offset(($page-1)*$limit)->orderBy('id','DESC')->get();
+        $messages = Message::where('receive_id','=',$uid)->limit($limit)->offset(($page-1)*$limit)->orderBy('read','ASC')->orderBy('id','DESC')->get();
         return response()->json([
             'return_code'=>'SUCCESS',
             'data'=>$messages

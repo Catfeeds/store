@@ -387,6 +387,7 @@ class CommodityController extends Controller
     public function addAttention()
     {
         $uid = getUserToken(Input::get('token'));
+        $attention_id = Input::get('attention_id');
         $attention = Attention::where([
             'user_id'=>$uid,
             'attention_id'=>attention_id
@@ -399,7 +400,7 @@ class CommodityController extends Controller
         }
         $attention = new Attention();
         $attention->user_id = $uid;
-        $attention->attention_id = Input::get('attention_id');
+        $attention->attention_id = $attention_id;
         if ($attention->save()){
             return response()->json([
                 'return_code'=>'SUCCESS'

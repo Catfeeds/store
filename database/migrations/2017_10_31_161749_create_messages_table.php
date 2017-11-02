@@ -17,6 +17,7 @@ class CreateMessagesTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('send_id')->default(0);
             $table->unsignedInteger('receive_id');
+            $table->string('title');
             $table->string('content',1000);
             $table->tinyInteger('read')->default(0);
             $table->timestamps();
