@@ -14,6 +14,7 @@ use App\Models\Score;
 use App\Models\Sign;
 use App\Models\TypeList;
 use App\User;
+use function GuzzleHttp\Psr7\uri_for;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -303,5 +304,22 @@ class UserController extends Controller
         $data =Umeng::android()->sendCustomizedcast($uid,$alias_type,$android_predefined,$customField);
         dd($data);
 //        Umeng::ios()->sendCustomizedcast($uid,$alias_type,$predefined,$customField);
+    }
+    public function findUser()
+    {
+        $phone = Input::get('phone');
+        $user = User::where('phone','=',$phone)->first();
+        if (empty($user)){
+            return response()->json([
+                'return_code'=>'FAIL',
+                'return_msg'=>'未找到该用户！'
+            ]);
+        }
+        return response()->json([
+            'return_code'=>"SUCCESS",
+            'data'=>[
+                'user_id'=>$user->id
+            ]
+        ]);
     }
 }

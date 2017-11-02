@@ -18,14 +18,66 @@ class SystemController extends Controller
     //
     public function addMemberLevel()
     {
-        $member = new MemberLevel();
-        $member->level = Input::get('level');
-        $member->title = Input::get('title');
-        $member->price = Input::get('price');
-        $member->time = Input::get('time');
-        $member->send_daily = Input::get('send_daily');
-        $member->send_max = Input::get('send_max');
+        $id = Input::get('id');
+        $level = Input::get('level');
+        if (empty($id)){
+            $member = new MemberLevel();
+            $count = MemberLevel::where('level','=',$level)->count();
+            if ($count>=1){
+                return response()->json([
+                    'return_code'=>'FAIL',
+                    'return_msg'=>'不能添加重复的会员等级'
+                ]);
+            }
+            $member->level = Input::get('level');
+            $member->title = Input::get('title');
+            $member->price = Input::get('price');
+            $member->time = Input::get('time');
+            $member->send_daily = Input::get('send_daily');
+            $member->send_max = Input::get('send_max');
+        }else{
+            $member = MemberLevel::find($id);
+            $count = MemberLevel::where('level','=',$level)->count();
+            if ($count>=1){
+                return response()->json([
+                    'return_code'=>'FAIL',
+                    'return_msg'=>'不能添加重复的会员等级'
+                ]);
+            }
+            $member->level = Input::get('level');
+            $member->title = Input::get('title');
+            $member->price = Input::get('price');
+            $member->time = Input::get('time');
+            $member->send_daily = Input::get('send_daily');
+            $member->send_max = Input::get('send_max');
+        }
+
         if ($member->save()){
+            return response()->json([
+                'return_code'=>'SUCCESS'
+            ]);
+        }
+    }
+    public function getMemberLevels()
+    {
+        $level = MemberLevel::all();
+        return response()->json([
+            'return_code'=>'SUCCESS',
+            'data'=>$level
+        ]);
+    }
+    public function getMemberLevel($id)
+    {
+        $level = MemberLevel::find($id);
+        return response()->json([
+            'return_code'=>'SUCCESS',
+            'data'=>$level
+        ]);
+    }
+    public function delMemberLevel($id)
+    {
+        $level = MemberLevel::find($id);
+        if ($level->delete()){
             return response()->json([
                 'return_code'=>'SUCCESS'
             ]);
