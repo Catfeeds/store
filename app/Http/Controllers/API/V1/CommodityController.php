@@ -129,7 +129,7 @@ class CommodityController extends Controller
         $type = $filterPost->get('type');
         if (isset($type)){
 //            $category_id = TypeList::where('type_id','=',$type)->pluck('commodity_id');
-            $commodities = Commodity::where('type','=',$type)->where([
+            $commodities = Commodity::whereIn('type','=',$type)->where([
                 'pass'=>1,
                 'enable'=>1
             ])->whereBetween('latitude',[$fixdata['minLat'],$fixdata['maxLat']])->whereBetween('longitude',[$fixdata['minLng'],$fixdata['maxLng']])->get();
@@ -139,9 +139,11 @@ class CommodityController extends Controller
         if (!empty($commodities)){
             $length = count($commodities);
             for ($i=0;$i<$length;$i++){
+                $commodities[$i]->type = CommodityType::find($commodities[$i]->type)->title;
                 $desc = DescriptionList::where('commodity_id','=',$commodities[$i]->id)->pluck('desc_id');
                 $title = Description::whereIn('id',$desc)->pluck('title');
                 $commodities[$i]->description = $title;
+
             }
         }
         return response()->json([
@@ -386,6 +388,9 @@ class CommodityController extends Controller
 //            $type = TypeList::where('commodity_id','=',$commodities[$i]->id)->pluck('type_id');
             $title = CommodityType::find($commodities[$i]->type)->title;
             $commodities[$i]->type = empty($title)?'':$title;
+            $desc = DescriptionList::where('commodity_id','=',$commodities[$i]->id)->pluck('desc_id');
+            $desc = Description::whereIn('id',$desc)->pluck('title');
+            $commodities[$i]->description =  $desc;
             $picture = $commodities[$i]->pictures()->pluck('thumb_url')->first();
             $commodities[$i]->picture = empty($picture)?'':$picture;
         }
@@ -516,6 +521,9 @@ class CommodityController extends Controller
             for ($i=0;$i<count($commodities);$i++){
                 $commodities[$i]->type = CommodityType::find($commodities[$i]->type)->title;
                 $commodities[$i]->picture = $commodities[$i]->pictures()->pluck('thumb_url')->first();
+                $desc = DescriptionList::where('commodity_id','=',$commodities[$i]->id)->pluck('desc_id');
+                $desc = Description::whereIn('id',$desc)->pluck('title');
+                $commodities[$i]->description =  $desc;
             }
         }
         return response()->json([
