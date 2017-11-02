@@ -59,7 +59,7 @@ class CommodityController extends Controller
         $commodity->read();
         $needPay = SysConfig::first();
         $fixdata = getAround($commodity->latitude,$commodity->longitude,500);
-        $commodities = Commodity::where([
+        $commodities = Commodity::where('id','!=',$id)->where([
             'pass'=>1,
             'enable'=>1
         ])->whereBetween('latitude',[$fixdata['minLat'],$fixdata['maxLat']])->whereBetween('longitude',[$fixdata['minLng'],$fixdata['maxLng']])->select(['id','type','latitude','longitude'])->orderByRaw('RAND()')->limit(4)->get();
@@ -610,7 +610,7 @@ class CommodityController extends Controller
         for ($i=0;$i<count($data);$i++){
             $data[$i]->picture = $data[$i]->pictures()->pluck('thumb_url')->first();
             $dist = calculateDistance($data[$i]->latitude,$data[$i]->longitude,$lat,$lng);
-            $data[$i]->dist = round($dist,2);
+            $data[$i]->dist = sprintf('%.2f',$dist);
         }
         return $data;
     }
