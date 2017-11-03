@@ -632,7 +632,7 @@ class CommodityController extends Controller
     {
         $cid = Input::get('city_id');
         $cid_group = City::where('pid','=',$cid)->pluck('id');
-        $city_group = Commodity::whereIn('city_id',$cid_group)->selectRaw('count(*) as number')->groupBy('city_id');
+        $city_group = Commodity::whereIn('city_id',$cid_group)->groupBy('citdy_id')->toSql();
         dd($city_group);
     }
 }
