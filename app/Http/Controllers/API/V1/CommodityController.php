@@ -646,34 +646,71 @@ class CommodityController extends Controller
     }
     public function addCommodityType()
     {
+//        dd(Input::all());
+        $id = Input::get('id');
         $title = Input::get('title');
-        $count = CommodityType::where('title','=',$title)->count();
-        if ($count>=1){
-            return response()->json([
-                'return_code'=>'FAIL',
-                'return_msg'=>'该类型已存在！'
-            ]);
-        }
-        $type = new CommodityType();
-        $type->title = $title;
-        if ($type->save()){
-            $desc = Input::get('desc');
-            if (!empty($desc)){
-                for ($i=0;$i<count($desc);$i++){
-                    $desc = new Description();
-                    $desc->title = $desc[$i];
-                    $desc->type_id = $type->id;
-                }
+        $desc = Input::get('desc');
+        if (!empty($id)){
+            $count = CommodityType::where('title','=',$title)->where('id','!=',$id)->count();
+            if ($count>=1){
+                return response()->json([
+                    'return_code'=>'FAIL',
+                    'return_msg'=>'该类型已存在！'
+                ]);
             }
-            return response()->json([
-                'return_code'=>'SUCCESS'
-            ]);
+            $type = CommodityType::find($id);
+            if (empty($type)){
+                return response()->json([
+                    'return_code'=>'FAIL',
+                    'return_msg'=>'该类型不存在！'
+                ]);
+            }
+            $type->title = $title;
+            if ($type->save()){
+                if (!empty($desc)){
+                    Description::where('type_id','=',$type->id)->delete();
+                    foreach ($desc as $item){
+                        $desc = new Description();
+                        $desc->title = $item;
+                        $desc->type_id = $type->id;
+                        $desc->save();
+                    }
+                }
+                return response()->json([
+                    'return_code'=>'SUCCESS'
+                ]);
+            }
+        }else{
+            $count = CommodityType::where('title','=',$title)->count();
+            if ($count>=1){
+                return response()->json([
+                    'return_code'=>'FAIL',
+                    'return_msg'=>'该类型已存在！'
+                ]);
+            }
+            $type = new CommodityType();
+            $type->title = $title;
+            if ($type->save()){
+                if (!empty($desc)){
+                    foreach ($desc as $item){
+                        $desc = new Description();
+                        $desc->title = $item;
+                        $desc->type_id = $type->id;
+                        $desc->save();
+                    }
+                }
+                return response()->json([
+                    'return_code'=>'SUCCESS'
+                ]);
+            }
         }
+
 
 
     }
     public function getTypes()
     {
+        $count = CommodityType::where('state','=',1)->count();
         $limit = Input::get('limit',10);
         $page = Input::get('page',1);
         $type = CommodityType::limit($limit)->offset(($page-1)*$limit)->get();
@@ -684,7 +721,21 @@ class CommodityController extends Controller
         }
         return response()->json([
             'return_code'=>'SUCCESS',
+            'count'=>$count,
             'data'=>$type
+        ]);
+    }
+    public function delType($id)
+    {
+        $type = CommodityType::find($id);
+        $state = $type->state;
+        $type->state = ($state==0)?1:0;
+        $type->save();
+        return response()->json([
+            'return_code'=>'SUCCESS',
+            'data'=>[
+                'state'=>$type->state
+            ]
         ]);
     }
 }

@@ -18,9 +18,10 @@ Route::get('/', function () {
 Route::group(['middleware'=>'cross'],function (){
     Route::post('login','API\V1\UserController@adminLogin');
     Route::get('test',function (){
-       $role = \Zizaco\Entrust\EntrustRole::find(1);
-       $pres = \Zizaco\Entrust\EntrustPermission::find(1);
-       $role->attachPermission($pres);
+       $dsc = new \App\Models\Description();
+       $dsc->type_id = 1;
+       $dsc->title = "dadfa";
+       $dsc->save();
 
     });
     Route::group(['middleware'=>'auth'],function (){
@@ -42,5 +43,6 @@ Route::group(['middleware'=>'cross'],function (){
         Route::post('attach/permission','API\V1\SystemController@attachPermission');
         Route::post('type','API\V1\CommodityController@addCommodityType');
         Route::get('types','API\V1\CommodityController@getTypes');
+        Route::get('modify/type/{id}','API\V1\CommodityController@delType');
     });
 });

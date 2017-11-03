@@ -117,11 +117,13 @@ class SystemController extends Controller
     public function getRoles()
     {
         $roles = EntrustRole::all();
+        $count = EntrustRole::count();
         for ($i=0;$i<count($roles);$i++){
             $roles[$i]->perms = $roles[$i]->perms()->get();
         }
         return response()->json([
             'return_code'=>'SUCCESS',
+            'count'=>$count,
             'data'=>$roles
         ]);
     }
