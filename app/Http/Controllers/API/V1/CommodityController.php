@@ -8,6 +8,7 @@ use App\Http\Requests\PartTimePost;
 use App\Http\Requests\RejectPost;
 use App\Http\Requests\ReportPost;
 use App\Models\Attention;
+use App\Models\City;
 use App\Models\Collect;
 use App\Models\Commodity;
 use App\Models\CommodityPicture;
@@ -161,6 +162,8 @@ class CommodityController extends Controller
     {
         $id = $commodityPost->get('id');
         $uid = getUserToken(Input::get('token'));
+        $district = $commodityPost->get('district');
+        $cid = City::where('name','=',$district)->pluck('id')->first();
         if (isset($id)){
             $commodity = Commodity::find($id);
             if (empty($commodity)){
@@ -186,6 +189,7 @@ class CommodityController extends Controller
                 $commodity->latitude = $commodityPost->get('latitude');
                 $commodity->longitude = $commodityPost->get('longitude');
                 $commodity->address = $commodityPost->get('address');
+                $commodity->city_id = $cid;
                 $commodity->pass = 0;
             }
         }else{
@@ -200,6 +204,7 @@ class CommodityController extends Controller
             $commodity->latitude = $commodityPost->get('latitude');
             $commodity->longitude = $commodityPost->get('longitude');
             $commodity->address = $commodityPost->get('address');
+            $commodity->city_id = $cid;
             $commodity->user_id = $uid;
             $commodity->type = $commodityPost->get('type');
         }

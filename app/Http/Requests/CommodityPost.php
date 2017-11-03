@@ -35,7 +35,8 @@ class CommodityPost extends FormRequest
             'phone'=>'required',
             'address'=>'required',
             'latitude'=>'required|numeric',
-            'longitude'=>'required|numeric'
+            'longitude'=>'required|numeric',
+            'district'=>'required'
         ];
     }
     public function messages()
@@ -52,7 +53,8 @@ class CommodityPost extends FormRequest
             'latitude.required'=>'位置信息不能为空！',
             'latitude.numeric'=>'位置信息格式不正确！',
             'longitude.required'=>'位置信息不能为空！',
-            'longitude.numeric'=>'位置信息格式不正确！'
+            'longitude.numeric'=>'位置信息格式不正确！',
+            'district.required'=>'区域信息不能为空！'
         ];
     }
     protected function formatErrors(Validator $validator)

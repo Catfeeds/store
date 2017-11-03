@@ -17,6 +17,7 @@ class CreateCommoditiesTable extends Migration
             $table->increments('id');
             $table->string('title');
             $table->unsignedInteger('user_id');
+            $table->unsignedInteger('city_id')->default(0);
             $table->float('price')->default(0);
             $table->text('description');
             $table->tinyInteger('state')->defalut(0);
