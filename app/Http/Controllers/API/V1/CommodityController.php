@@ -26,6 +26,7 @@ use App\User;
 use function GuzzleHttp\Psr7\uri_for;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use League\Flysystem\Config;
 
@@ -632,7 +633,7 @@ class CommodityController extends Controller
     {
         $cid = Input::get('city_id');
         $cid_group = City::where('pid','=',$cid)->pluck('id');
-        $city_group = Commodity::whereIn('city_id',$cid_group)->groupBy('citdy_id')->toSql();
+        $city_group = DB::select(getCityCountSql($cid_group));
         dd($city_group);
     }
 }

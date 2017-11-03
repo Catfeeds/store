@@ -33,6 +33,13 @@ if (!function_exists('getCountSql')) {
         return "SELECT DATE_FORMAT(`created_at`,'%d') as date FROM signs WHERE `user_id` ="." $user_id"." AND `created_at` BETWEEN '".$start."' AND '".$end."'";
     }
 }
+if (!function_exists('getCityCountSql')) {
+    function getCityCountSql($city_id)
+    {
+        $city_id = implode(',',$city_id);
+        return "SELECT COUNT(*) as number FROM commodities WHERE `city_id` in("." $city_id".") group by `citdy_id`";
+    }
+}
 if (!function_exists('setCode')){
     function setCode($key,$value)
     {
