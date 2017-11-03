@@ -632,8 +632,12 @@ class CommodityController extends Controller
     public function countCity()
     {
         $cid = Input::get('city_id');
-        $cid_group = City::where('pid','=',$cid)->pluck('id')->toArray();
-        $city_group = DB::select(getCityCountSql($cid_group));
+        $city_group = City::where('pid','=',$cid)->get();
+        if (!empty($city_group)){
+            for ($i=0;$i<count($city_group);$i++){
+                $city_group[$i]->count = Commodity::where('city_id','=',$city_group[$i]->id)->count();
+            }
+        }
         return response()->json([
             'return_code'=>'SUCCESS',
             'data'=>$city_group
