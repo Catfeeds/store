@@ -8,6 +8,8 @@ use App\Http\Requests\ResetPasswordPost;
 use App\Models\Attention;
 use App\Models\Commodity;
 use App\Models\CommodityType;
+use App\Models\Description;
+use App\Models\DescriptionList;
 use App\Models\Member;
 use App\Models\MemberLevel;
 use App\Models\Score;
@@ -221,6 +223,9 @@ class UserController extends Controller
                 $commodities[$i]->type = empty($title)?'':$title->title;
                 $picture = $commodities[$i]->pictures()->pluck('thumb_url')->first();
                 $commodities[$i]->picture = empty($picture)?'':$picture;
+                $desc = DescriptionList::where('commodity_id','=',$commodities[$i]->id)->pluck('desc_id');
+                $desc = Description::whereIn('id',$desc)->pluck('title');
+                $commodities[$i]->description =  $desc;
             }
         }
         return response()->json([
