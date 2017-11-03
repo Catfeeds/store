@@ -628,4 +628,11 @@ class CommodityController extends Controller
         }
         return $data;
     }
+    public function countCity()
+    {
+        $cid = Input::get('city_id');
+        $cid_group = City::where('pid','=',$cid)->pluck('id');
+        $city_group = Commodity::whereIn('city_id',$cid_group)->groupBy('city_id')->count();
+        dd($city_group);
+    }
 }

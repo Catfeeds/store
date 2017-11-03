@@ -56,5 +56,6 @@ Route::group(['prefix'=>'v1','middleware'=>'cross'],function (){
     Route::post('parttime','API\V1\CommodityController@addPartTime');
     Route::get('descriptions','API\V1\CommodityController@getDescriptions');
     Route::get('around','API\V1\CommodityController@getRound');
+    Route::get('city/count','API\V1\CommodityController@countCity');
     Route::get('find/user','API\V1\UserController@findUser');
 });
