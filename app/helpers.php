@@ -37,7 +37,7 @@ if (!function_exists('getCityCountSql')) {
     function getCityCountSql($city_id)
     {
         $city_id = implode(',',$city_id);
-        return "SELECT COUNT(*) as number FROM commodities WHERE `city_id` in("." $city_id".") group by `citdy_id`";
+        return "SELECT COUNT(*) as number FROM commodities WHERE `city_id` in("." $city_id".") group by `city_id`";
     }
 }
 if (!function_exists('setCode')){
