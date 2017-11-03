@@ -131,7 +131,7 @@ class CommodityController extends Controller
         $type = $filterPost->get('type');
         if (isset($type)){
 //            $category_id = TypeList::where('type_id','=',$type)->pluck('commodity_id');
-            $commodities = Commodity::whereIn('type','=',$type)->where([
+            $commodities = Commodity::whereIn('type',$type)->where([
                 'pass'=>1,
                 'enable'=>1
             ])->whereBetween('latitude',[$fixdata['minLat'],$fixdata['maxLat']])->whereBetween('longitude',[$fixdata['minLng'],$fixdata['maxLng']])->get();
@@ -641,6 +641,49 @@ class CommodityController extends Controller
         return response()->json([
             'return_code'=>'SUCCESS',
             'data'=>$city_group
+        ]);
+    }
+    public function addCommodityType()
+    {
+        $title = Input::get('title');
+        $count = CommodityType::where('title','=',$title)->count();
+        if ($count>=1){
+            return response()->json([
+                'return_code'=>'FAIL',
+                'return_msg'=>'该类型已存在！'
+            ]);
+        }
+        $type = new CommodityType();
+        $type->title = $title;
+        if ($type->save()){
+            $desc = Input::get('desc');
+            if (!empty($desc)){
+                for ($i=0;$i<count($desc);$i++){
+                    $desc = new Description();
+                    $desc->title = $desc[$i];
+                    $desc->type_id = $type->id;
+                }
+            }
+            return response()->json([
+                'return_code'=>'SUCCESS'
+            ]);
+        }
+
+
+    }
+    public function getTypes()
+    {
+        $limit = Input::get('limit',10);
+        $page = Input::get('page',1);
+        $type = CommodityType::limit($limit)->offset(($page-1)*$limit)->get();
+        if (!empty($type)){
+            for ($i=0;$i<count($type);$i++){
+                $type[$i]->descript = Description::where('type_id','=',$type[$i]->id)->get();
+            }
+        }
+        return response()->json([
+            'return_code'=>'SUCCESS',
+            'data'=>$type
         ]);
     }
 }

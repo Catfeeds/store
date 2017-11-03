@@ -100,14 +100,26 @@ class SystemController extends Controller
             return response()->json([
                 'return_code'=>'SUCCESS'
             ]);
-            return response()->json([
-                'return_code'=>'SUCCESS'
-            ]);
         }
+    }
+    public function delRole($id)
+    {
+        $role = EntrustRole::find($id);
+        $role->delete(); // This will work no matter what
+// Force Delete
+        $role->users()->sync([]); // Delete relationship data
+        $role->perms()->sync([]); // Delete relationship data
+        $role->forceDelete();
+        return response()->json([
+            'return_code'=>'SUCCESS'
+        ]);
     }
     public function getRoles()
     {
         $roles = EntrustRole::all();
+        for ($i=0;$i<count($roles);$i++){
+            $roles[$i]->perms = $roles[$i]->perms()->get();
+        }
         return response()->json([
             'return_code'=>'SUCCESS',
             'data'=>$roles

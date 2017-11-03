@@ -18,7 +18,10 @@ Route::get('/', function () {
 Route::group(['middleware'=>'cross'],function (){
     Route::post('login','API\V1\UserController@adminLogin');
     Route::get('test',function (){
-       dd(\Illuminate\Support\Facades\Auth::user());
+       $role = \Zizaco\Entrust\EntrustRole::find(1);
+       $pres = \Zizaco\Entrust\EntrustPermission::find(1);
+       $role->attachPermission($pres);
+
     });
     Route::group(['middleware'=>'auth'],function (){
         Route::get('launcher/images','API\V1\LaunchImageController@getLaunchImages');
@@ -33,8 +36,11 @@ Route::group(['middleware'=>'cross'],function (){
         Route::post('role','API\V1\SystemController@addRole');
         Route::get('roles','API\V1\SystemController@getRoles');
         Route::get('role/{id}','API\V1\SystemController@getRole');
+        Route::get('del/role/{id}','API\V1\SystemController@delRole');
         Route::get('permissions','API\V1\SystemController@getPermissions');
         Route::post('permission','API\V1\SystemController@addPermission');
         Route::post('attach/permission','API\V1\SystemController@attachPermission');
+        Route::post('type','API\V1\CommodityController@addCommodityType');
+        Route::get('types','API\V1\CommodityController@getTypes');
     });
 });
