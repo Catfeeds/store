@@ -67,7 +67,8 @@ class CommodityController extends Controller
         ])->whereBetween('latitude',[$fixdata['minLat'],$fixdata['maxLat']])->whereBetween('longitude',[$fixdata['minLng'],$fixdata['maxLng']])->select(['id','type','latitude','longitude'])->orderByRaw('RAND()')->limit(4)->get();
         $data = $this->formatCommodities($commodities,$commodity->latitude,$commodity->longitude);
         $commodity->around = $data;
-        $commodity->city_id = City::find($commodity->city_id)->name;
+        $city = City::find($commodity->city_id);
+        $commodity->district = empty($city)?'未知':$city->name;
         if ($needPay->need_pay){
             $uid = getUserToken(Input::get('token'));
             if (!$uid){
