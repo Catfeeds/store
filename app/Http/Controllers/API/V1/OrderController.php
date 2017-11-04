@@ -276,7 +276,7 @@ class OrderController extends Controller
             case 3:
                 $ip = $request->getClientIp();
                 if ($this->makeOrder($uid,$number,$level->price,'升级会员',3,3,$level->level)){
-                    $data = $this->wxPay($number,'升级会员',$level->pcire*100,$ip);
+                    $data = $this->wxPay($number,'升级会员',$level->price*100,$ip);
                 }
         }
 
