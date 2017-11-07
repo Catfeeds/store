@@ -125,7 +125,7 @@ class WxPay
             'prepayid'=>$unifiedOrder['prepay_id'],
             'package'=>'Sign=WXPay',
             'noncestr'=>$this->createNoncestr(),
-            'timeStamp' => ''. time() . ''
+            'timestamp' => ''. time() . ''
         ];
         $parameters['sign'] = $this->getSign($parameters);
         return $parameters;

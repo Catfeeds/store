@@ -16,6 +16,7 @@ Route::get('/', function () {
 });
 
 Route::group(['middleware'=>'cross'],function (){
+    Route::any('upload','API\V1\UploadController@uploadImage');
     Route::post('login','API\V1\UserController@adminLogin');
     Route::get('test',function (){
        $dsc = new \App\Models\Description();
@@ -25,9 +26,11 @@ Route::group(['middleware'=>'cross'],function (){
 
     });
     Route::group(['middleware'=>'auth'],function (){
+
         Route::get('launcher/images','API\V1\LaunchImageController@getLaunchImages');
         Route::get('enable/launcher/image/{id}','API\V1\LaunchImageController@enableLauncherImage');
         Route::post('launcher/image','API\V1\LaunchImageController@addLaunchImage');
+        Route::get('del/image/{id}','API\V1\LaunchImageController@delLauncherImage');
         Route::post('store/type','API\V1\StoreController@addType');
         Route::get('modify/store/type/{id}','API\V1\StoreController@modifyType');
         Route::post('member/level','API\V1\SystemController@addMemberLevel');

@@ -52,4 +52,13 @@ class LaunchImageController extends Controller
             'return_code'=>"SUCCESS"
         ]);
     }
+    public function delLauncherImage($id)
+    {
+        $image = LaunchImage::find($id);
+        if ($image->delete()){
+            return response()->json([
+                'return_code'=>"SUCCESS"
+            ]);
+        }
+    }
 }
