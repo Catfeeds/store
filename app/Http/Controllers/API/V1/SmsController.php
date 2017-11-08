@@ -13,7 +13,10 @@ class SmsController extends Controller
     {
         $number = $sendPost->get('number');
         $type = $sendPost->get('type');
-        $code = rand(1000,9999);
+        $code = getRandCode();
+        $smsContent = [
+            'code'=>$code
+        ];
         switch ($type) {
             case 1:
                 $data = [
@@ -33,12 +36,25 @@ class SmsController extends Controller
                     'code'=>$code
                 ];
                 break;
+            case 4:
+                $data = [
+                    'type'=>'apply',
+                    'code'=>$code
+                ];
+                break;
         }
-        $data = serialize($data);
-        setCode($number,$data);
-        return response()->json([
-            'return_code'=>'SUCCESS',
-            'data'=>unserialize($data)
-        ]);
+        if (sendSMS($number,config('alisms.VerificationCode'),$smsContent)) {
+            $data = serialize($data);
+            setCode($number,$data);
+            return response()->json([
+                'return_code'=>'SUCCESS'
+            ]);
+        }else{
+            return response()->json([
+                'return_code'=>'FAIL',
+                'return_msg'=>'短信发送失败!'
+            ]);
+        }
+
     }
 }

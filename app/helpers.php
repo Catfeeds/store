@@ -126,3 +126,10 @@ if (!function_exists('calculateDistance')){
         return $dist = $dist * $radius;
     }
 }
+
+if (!function_exists('getRandCode')){
+    function getRandCode($length = 6)
+    {
+        return rand(pow(10,($length-1)), pow(10,$length)-1);
+    }
+}
