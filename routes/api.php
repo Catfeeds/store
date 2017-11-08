@@ -54,7 +54,7 @@ Route::group(['prefix'=>'v1','middleware'=>'cross'],function (){
     Route::get('read/message/{id}','API\V1\SystemController@readMessage');
     Route::get('del/message/{id}','API\V1\SystemController@delMessage');
     Route::get('orders','API\V1\OrderController@getOrders');
-    Route::post('add/parttime','API\V1\CommodityController@addPartTime');
+    Route::post('parttime','API\V1\CommodityController@addPartTime');
     Route::get('descriptions','API\V1\CommodityController@getDescriptions');
     Route::get('around','API\V1\CommodityController@getRound');
     Route::get('city/count','API\V1\CommodityController@countCity');
