@@ -313,6 +313,21 @@ class CommodityController extends Controller
     }
     public function addPartTime(PartTimePost $partTimePost)
     {
+        $number = $partTimePost->get('number');
+        $code = $partTimePost->get('code');
+        $data = getCode($number);
+        if (empty($data)||$data['type']!='apply'){
+            return response()->json([
+                'return_code'=>"FAIL",
+                'return_msg'=>'验证码已失效！'
+            ]);
+        }
+        if ($data['code']!=$code){
+            return response()->json([
+                'return_code'=>"FAIL",
+                'return_msg'=>'验证码错误！'
+            ]);
+        }
         $uid = getUserToken($partTimePost->get('token'));
         $partTime = new PartTime();
         $partTime->user_id = $uid;
@@ -320,7 +335,7 @@ class CommodityController extends Controller
         $partTime->sex = $partTimePost->get('sex');
         $partTime->area = $partTimePost->get('area');
         $partTime->time = $partTimePost->get('time');
-        $partTime->number = $partTimePost->get('number');
+        $partTime->number = $number;
         $partTime->front = $partTimePost->get('front');
         $partTime->back = $partTimePost->get('back');
         if ($partTime->save()){
