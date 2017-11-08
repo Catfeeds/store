@@ -58,10 +58,19 @@ if (!function_exists('getCode')) {
         return unserialize($code);
     }
 }
-if (!function_exists('Push')) {
-    function Push()
+if (!function_exists('sendSMS')) {
+    function sendSMS($number,$code,$data)
     {
-        \Zzl\Umeng\Facades\Umeng::ios()->push();
+        $sms = new \App\Libraries\AliyunSMS();
+        $data = $sms->send($number,\config('alisms.company'),json_encode($data),$code);
+        if($data){
+            $data = json_decode($data);
+            if ($data->success=='true'){
+                return true;
+            }
+            return false;
+        }
+        return false;
     }
 }
 if (!function_exists('formatUrl')) {

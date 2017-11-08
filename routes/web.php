@@ -19,11 +19,9 @@ Route::group(['middleware'=>'cross'],function (){
     Route::any('upload','API\V1\UploadController@uploadImage');
     Route::post('login','API\V1\UserController@adminLogin');
     Route::get('test',function (){
-       $dsc = new \App\Models\Description();
-       $dsc->type_id = 1;
-       $dsc->title = "dadfa";
-       $dsc->save();
-
+       sendSMS('18664894928',config('alisms.VerificationCode'),[
+           'code'=>'123456'
+       ]);
     });
     Route::group(['middleware'=>'auth'],function (){
 
