@@ -49,6 +49,7 @@ Route::group(['prefix'=>'v1','middleware'=>'cross'],function (){
     Route::get('attentions','API\V1\CommodityController@getAttentions');
     Route::get('city','API\V1\SystemController@setCity');
     Route::get('messages','API\V1\SystemController@getMessages');
+    Route::get('adverts','API\V1\SystemController@getAdverts');
     Route::get('message/{id}','API\V1\SystemController@getMessage');
     Route::get('read/message/{id}','API\V1\SystemController@readMessage');
     Route::get('del/message/{id}','API\V1\SystemController@delMessage');

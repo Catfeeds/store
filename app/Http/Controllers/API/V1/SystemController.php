@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\V1;
 
+use App\Models\Advert;
 use App\Models\City;
 use App\Models\MemberLevel;
 use App\Models\Message;
@@ -247,5 +248,52 @@ class SystemController extends Controller
                 'return_code'=>'SUCCESS'
             ]);
         }
+    }
+
+    public function addAdvert()
+    {
+        $id = Input::get('id');
+        if ($id){
+            $advert = Advert::find($id);
+        }else{
+            $advert = new Advert();
+        }
+        $advert->title = Input::get('title');
+        $advert->city_id = Input::get('city_id');
+        $advert->url = Input::get('url');
+        $advert->link_url = Input::get('link_url');
+        if ($advert->save()){
+            return response()->json([
+                'return_code'=>'SUCCESS'
+            ]);
+        }
+    }
+    public function getAdverts()
+    {
+        $type = Input::get('type');
+        $page = Input::get('page',1);
+        $limit = Input::get('limit',10);
+        $adverts = Advert::where([
+            'type'=>$type,
+            'state'=>'1'
+        ])->limit($limit)->offset(($page-1)*$limit)->get();
+        return response()->json([
+            'return_code'=>'SUCCESS',
+            'data'=>$adverts
+        ]);
+    }
+
+    public function getAllAdverts()
+    {
+        $type = Input::get('type');
+        $page = Input::get('page',1);
+        $limit = Input::get('limit',10);
+        $adverts = Advert::where([
+            'type'=>$type
+        ])->limit($limit)->offset(($page-1)*$limit)->get();
+        return response()->json([
+            'return_code'=>'SUCCESS',
+            'data'=>$adverts
+        ]);
     }
 }
