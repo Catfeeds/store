@@ -28,7 +28,7 @@ class RegisterPost extends FormRequest
         return [
             //
             'username'=>'required|unique:users|max:255',
-            'password'=>'required|mix:6',
+            'password'=>'required|min:6',
             'phone'=>'required|unique:users',
             'code'=>'required'
         ];
@@ -39,7 +39,7 @@ class RegisterPost extends FormRequest
             'username.required'=>'用户名不能为空！',
             'username.unique'=>'该用户名已存在！',
             'password.required'=>'密码不能为空！',
-            'password.mix'=>'密码少于六位！',
+            'password.min'=>'密码少于六位！',
             'phone.required'=>'手机号不能为空',
             'phone.unique'=>'该手机号已被绑定！',
             'code.required'=>'验证码不能为空！'
