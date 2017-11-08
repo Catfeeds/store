@@ -102,6 +102,29 @@ class UserController extends Controller
     }
     public function resetPassword(ResetPasswordPost $request)
     {
+        $phone = $request->get('phone');
+        $code = $request->get('code');
+        $password = $request->get('password');
+        $data = getCode($phone);
+        if (empty($data)||$data['type']!='findPassword'){
+            return response()->json([
+                'return_code'=>"FAIL",
+                'return_msg'=>'验证码已失效！'
+            ]);
+        }
+        if ($data['code']!=$code){
+            return response()->json([
+                'return_code'=>"FAIL",
+                'return_msg'=>'验证码错误！'
+            ]);
+        }
+        $user = User::where('phone','=',$phone)->first();
+        $user->password = bcrypt($password);
+        if ($user->save()){
+            return response()->json([
+                'return_code'=>"SUCCESS"
+            ]);
+        }
 
     }
     public function changePassword()

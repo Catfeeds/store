@@ -13,7 +13,7 @@ class ResetPasswordPost extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -25,10 +25,10 @@ class ResetPasswordPost extends FormRequest
     {
         return [
             //
-            'password'=>'required|mix:6',
+            'password'=>'required|min:6',
             'code'=>'required',
             'phone'=>'required',
-            'username'=>'required'
+//            'username'=>'required'
         ];
     }
     public function messages()
@@ -37,8 +37,8 @@ class ResetPasswordPost extends FormRequest
             'password.required'=>'密码不允许为空！',
             'code.required'=>'验证码不能为空！',
             'phone.required'=>'手机号不能为空！',
-            'username.required'=>'用户名不能为空！',
-            'password.mix'=>'密码不得短于6位',
+//            'username.required'=>'用户名不能为空！',
+            'password.min'=>'密码不得短于6位',
         ];
     }
 }

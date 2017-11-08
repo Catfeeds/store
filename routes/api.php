@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 Route::group(['prefix'=>'v1','middleware'=>'cross'],function (){
     Route::post('register','API\V1\UserController@register');
     Route::post('login','API\V1\UserController@login');
+    Route::post('reset/password','API\V1\UserController@resetPassword');
     Route::get('token','API\V1\UserController@getToken');
     Route::get('commodities','API\V1\CommodityController@getCommodities');
     Route::get('types','API\V1\CommodityController@getCommodityTypes');
