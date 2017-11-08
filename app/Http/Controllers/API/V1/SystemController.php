@@ -6,6 +6,7 @@ use App\Models\Advert;
 use App\Models\City;
 use App\Models\MemberLevel;
 use App\Models\Message;
+use App\Models\Qrcode;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -297,5 +298,24 @@ class SystemController extends Controller
             'return_code'=>'SUCCESS',
             'data'=>$adverts
         ]);
+    }
+    public function getQrCode()
+    {
+        $qrcode = Qrcode::first();
+        return response()->json([
+            'return_code'=>"SUCCESS",
+            'data'=>$qrcode
+        ]);
+    }
+    public function addQrCode($id)
+    {
+        $qrcode = Qrcode::find($id);
+        $qrcode->logo = Input::get('logo');
+        $qrcode->content = Input::get('content');
+        if ($qrcode->save()){
+            return response()->json([
+                'return_code'=>'SUCCESS'
+            ]);
+        }
     }
 }
