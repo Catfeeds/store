@@ -271,12 +271,14 @@ class SystemController extends Controller
     public function getAdverts()
     {
         $type = Input::get('type');
+        $city_id = Input::get('city_id');
         $page = Input::get('page',1);
         $limit = Input::get('limit',10);
         $adverts = Advert::where([
             'type'=>$type,
+            'city_id'=>$city_id,
             'state'=>'1'
-        ])->limit($limit)->offset(($page-1)*$limit)->get();
+        ])->orderByRaw('Rand()')->limit($limit)->offset(($page-1)*$limit)->first();
         return response()->json([
             'return_code'=>'SUCCESS',
             'data'=>$adverts
