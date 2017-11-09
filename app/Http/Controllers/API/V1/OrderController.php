@@ -12,10 +12,12 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
 use Latrell\Alipay\Facades\AlipayMobile;
+use Yansongda\Pay\Pay;
 
 class OrderController extends Controller
 {
     //
+
 
     public function getOrders()
     {
@@ -222,8 +224,15 @@ class OrderController extends Controller
     }
     public function wxPay($number,$title,$price,$ip)
     {
-        $payment = new WxPay(config('wxxcx.app_id'),config('wxxcx.mch_id'),config('wxxcx.api_key'));
-        return $payment->pay($number,$title,$price,$ip);
+        $config = config('wxxcx');
+        $pay = new Pay($config);
+        $config_biz = [
+            'out_trade_no' => $number,           // 订单号
+            'total_fee' => $price,              // 订单金额，**单位：分**
+            'body' => $title,                   // 订单描述
+            'spbill_create_ip' => $ip,       // 支付人的 IP
+        ];
+        return $pay->driver('wechat')->gateway('app')->pay($config_biz);
     }
     public function aliPay($number,$title,$price)
     {

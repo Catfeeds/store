@@ -12,7 +12,8 @@
         "predis/predis": "~1.1@dev",
         "zzl/umeng":"1.0.*",
         "zizaco/entrust": "5.2.x-dev",
-        "latrell/alipay":"1.2"
+        "latrell/alipay":"1.2",
+        "yansongda/pay":"^1.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

@@ -45,5 +45,7 @@ Route::group(['middleware'=>'cross'],function (){
         Route::post('type','API\V1\CommodityController@addCommodityType');
         Route::get('types','API\V1\CommodityController@getTypes');
         Route::get('modify/type/{id}','API\V1\CommodityController@delType');
+        Route::post('qrcode/{id}','API\V1\SystemController@addQrCode');
+        Route::get('qrcode','API\V1\SystemController@getQrCode');
     });
 });
