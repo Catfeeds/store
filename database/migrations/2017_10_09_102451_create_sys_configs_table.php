@@ -20,6 +20,9 @@ class CreateSysConfigsTable extends Migration
             $table->unsignedInteger('phone_score')->default(1);
             $table->float('pic_price')->default(1);
             $table->float('phone_price')->default(1);
+            $table->tinyInteger('show_sign')->default(0);
+            $table->tinyInteger('show_qrcode')->default(0);
+            $table->tinyInteger('show_share')->default(0);
             $table->timestamps();
         });
     }

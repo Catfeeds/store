@@ -8,6 +8,7 @@ use App\Models\MemberLevel;
 use App\Models\Message;
 use App\Models\Qrcode;
 use App\Models\ReportReason;
+use App\Models\SysConfig;
 use App\Models\UserGuide;
 use App\User;
 use function GuzzleHttp\Psr7\uri_for;
@@ -367,6 +368,14 @@ class SystemController extends Controller
         return response()->json([
             'return_code'=>'SUCCESS',
             'data'=>$guides
+        ]);
+    }
+    public function getSystemConfig()
+    {
+        $config = SysConfig::first();
+        return response()->json([
+            'return_code'=>'SUCCESS',
+            'data'=>$config
         ]);
     }
 }

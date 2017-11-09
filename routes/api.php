@@ -64,4 +64,5 @@ Route::group(['prefix'=>'v1','middleware'=>'cross'],function (){
     Route::get('reasons','API\V1\SystemController@getReportReasons');
     Route::get('modify/commodity/{id}','API\V1\CommodityController@modifyCommodity');
     Route::get('guides','API\V1\SystemController@getUserGuides');
+    Route::get('config','API\V1\SystemController@getSystemConfig');
 });
