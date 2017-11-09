@@ -63,6 +63,7 @@ if (!function_exists('sendSMS')) {
     {
         $sms = new \App\Libraries\AliyunSMS();
         $data = $sms->send($number,\config('alisms.company'),json_encode($data),$code);
+        dd($data);
         if($data){
             $data = json_decode($data);
             if ($data->success=='true'){
