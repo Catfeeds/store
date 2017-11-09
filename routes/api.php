@@ -39,7 +39,7 @@ Route::group(['prefix'=>'v1','middleware'=>'cross'],function (){
     Route::post('picture/{id}','API\V1\CommodityController@addPicture');
     Route::get('del/picture/{id}','API\V1\CommodityController@delPicture');
     Route::post('user','API\V1\UserController@setUserInfo');
-    Route::get('cities','API\V1\SystemController@getCities');
+    Route::get('cities','API\V1\SystemController@getAllCities');
     Route::get('store/{id}','API\V1\CommodityController@getStore');
     Route::get('basic/store/{id}','API\V1\CommodityController@getBasicStore');
     Route::post('collect','API\V1\CommodityController@addCollect');

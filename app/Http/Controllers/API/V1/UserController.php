@@ -14,6 +14,7 @@ use App\Models\Member;
 use App\Models\MemberLevel;
 use App\Models\Score;
 use App\Models\Sign;
+use App\Models\SignActivity;
 use App\Models\TypeList;
 use App\User;
 use function GuzzleHttp\Psr7\uri_for;
@@ -159,7 +160,8 @@ class UserController extends Controller
     public function sign()
     {
         $uid = getUserToken(Input::get('token'));
-        $sign = Sign::where('user_id','=',$uid)->whereDate('created_at', date('Y-m-d',time()))->first();
+        $activity = SignActivity::where('end','>',time())->where('state','=','1')->first();
+        $sign = Sign::where('user_id','=',$uid)->where('activity_id','=',$activity->id)->whereDate('created_at', date('Y-m-d',time()))->first();
         if (!empty($sign)){
             return response()->json([
                 'return_code'=>"ERROR",
@@ -169,6 +171,7 @@ class UserController extends Controller
             $sign = new Sign();
         }
         $sign->user_id = $uid;
+        $sign->activity_id = $activity->id;
         $sign->save();
         return response()->json([
             'return_code'=>"SUCCESS"
@@ -176,6 +179,7 @@ class UserController extends Controller
     }
     public function signRecord()
     {
+        $activity = SignActivity::where('end','>',time())->where('state','=','1')->first();
         $uid = getUserToken(Input::get('token'));
         $time = Input::get('date',date('Y-m-d',time()));
         $start = date('Y-m-01 0:0:0',strtotime($time));

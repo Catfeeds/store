@@ -180,9 +180,22 @@ class SystemController extends Controller
         }
         return "NO";
     }
-    public function getCities()
+    public function getAllCities()
     {
         $cities = City::all();
+        return response()->json([
+            'return_code'=>'SUCCESS',
+            'data'=>$cities
+        ]);
+    }
+    public function getCities()
+    {
+        $pid = Input::get('pid');
+        if(!$pid){
+            $cities = City::where('pid','=',0)->get();
+        }else{
+            $cities = City::where('pid','=',$pid)->get();
+        }
         return response()->json([
             'return_code'=>'SUCCESS',
             'data'=>$cities
@@ -298,6 +311,11 @@ class SystemController extends Controller
         $page = Input::get('page',1);
         $limit = Input::get('limit',10);
         $adverts = Advert::limit($limit)->offset(($page-1)*$limit)->get();
+        if(!empty($adverts)){
+            for ($i=0;$i<count($adverts);$i++){
+                $adverts[$i]->city = $adverts[$i]->city()->get();
+            }
+        }
         return response()->json([
             'return_code'=>'SUCCESS',
             'data'=>$adverts
