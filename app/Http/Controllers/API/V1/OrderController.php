@@ -74,7 +74,7 @@ class OrderController extends Controller
                 case 3:
                     if ($this->makeOrder($uid,$number,0.3,$title,2,3,$commodity_id)){
                         $ip = $request->getClientIp();
-                        $data = $this->wxPay($number,$title,0.3*100,$ip);
+                        $data = $this->wxPay($number,$title,0.3,$ip);
                     }
                     break;
             }
@@ -106,7 +106,7 @@ class OrderController extends Controller
                     case 3:
                         if ($this->makeOrder($uid,$number,0.3,$title,3,3,$commodity_id,$buy->id)){
                             $ip = $request->getClientIp();
-                            $data = $this->wxPay($number,$title,0.3*100,$ip);
+                            $data = $this->wxPay($number,$title,0.3,$ip);
                         }
                         break;
                 }
@@ -158,7 +158,7 @@ class OrderController extends Controller
                 case 3:
                     if ($this->makeOrder($uid,$number,0.3,$title,3,3,$buy->id)){
                         $ip = $request->getClientIp();
-                        $data = $this->wxPay($number,$title,0.3*100,$ip);
+                        $data = $this->wxPay($number,$title,0.3,$ip);
                     }
                     break;
             }
@@ -190,7 +190,7 @@ class OrderController extends Controller
                     case 3:
                         if ($this->makeOrder($uid,$number,0.3,$title,3,3,$buy->id)){
                             $ip = $request->getClientIp();
-                            $data = $this->wxPay($number,$title,0.3*100,$ip);
+                            $data = $this->wxPay($number,$title,0.3,$ip);
                         }
                         break;
                 }
@@ -228,7 +228,7 @@ class OrderController extends Controller
         $pay = new Pay($config);
         $config_biz = [
             'out_trade_no' => $number,           // 订单号
-            'total_fee' => $price,              // 订单金额，**单位：分**
+            'total_fee' => intval($price*100),              // 订单金额，**单位：分**
             'body' => $title,                   // 订单描述
             'spbill_create_ip' => $ip,       // 支付人的 IP
         ];
@@ -285,7 +285,7 @@ class OrderController extends Controller
             case 3:
                 $ip = $request->getClientIp();
                 if ($this->makeOrder($uid,$number,$level->price,'升级会员',3,3,$level->level)){
-                    $data = $this->wxPay($number,'升级会员',$level->price*100,$ip);
+                    $data = $this->wxPay($number,'升级会员',$level->price,$ip);
                 }
         }
 
