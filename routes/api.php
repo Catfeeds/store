@@ -63,4 +63,5 @@ Route::group(['prefix'=>'v1','middleware'=>'cross'],function (){
     Route::get('qrcode','API\V1\SystemController@getQrCode');
     Route::get('reasons','API\V1\SystemController@getReportReasons');
     Route::get('modify/commodity/{id}','API\V1\CommodityController@modifyCommodity');
+    Route::get('guides','API\V1\SystemController@getUserGuides');
 });

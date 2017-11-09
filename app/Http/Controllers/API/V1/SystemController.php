@@ -8,6 +8,7 @@ use App\Models\MemberLevel;
 use App\Models\Message;
 use App\Models\Qrcode;
 use App\Models\ReportReason;
+use App\Models\UserGuide;
 use App\User;
 use function GuzzleHttp\Psr7\uri_for;
 use Illuminate\Http\Request;
@@ -341,6 +342,31 @@ class SystemController extends Controller
         return response()->json([
             'return_code'=>'SUCCESS',
             'data'=>$reasons
+        ]);
+    }
+    public function addUserGuide()
+    {
+        $id = Input::get('id');
+        if ($id){
+            $guide = UserGuide::find($id);
+        }else{
+            $guide = new UserGuide();
+        }
+        $guide->title = Input::get('title');
+        $guide->content = Input::get('content');
+        $guide->sort = Input::get('sort',1);
+        if ($guide->save()){
+            return response()->json([
+                'return_code'=>"SUCCESS"
+            ]);
+        }
+    }
+    public function getUserGuides()
+    {
+        $guides = UserGuide::orderBy('sort','DESC')->get();
+        return response()->json([
+            'return_code'=>'SUCCESS',
+            'data'=>$guides
         ]);
     }
 }
