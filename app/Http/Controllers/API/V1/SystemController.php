@@ -8,6 +8,7 @@ use App\Models\MemberLevel;
 use App\Models\Message;
 use App\Models\Qrcode;
 use App\Models\ReportReason;
+use App\Models\ShareActivity;
 use App\Models\SysConfig;
 use App\Models\UserGuide;
 use App\User;
@@ -377,5 +378,24 @@ class SystemController extends Controller
             'return_code'=>'SUCCESS',
             'data'=>$config
         ]);
+    }
+    public function addShareActivity()
+    {
+        $id = Input::get('id');
+        $start = strtotime(Input::get('start'));
+        $end = strtotime(Input::get('end'));
+        if ($start>$end || $end<time()){
+            return response()->json([
+                'return_code'=>"FAIL",
+                'return_msg'=>'时间错误！'
+            ]);
+        }
+        if ($id){
+            $activity = ShareActivity::find($id);
+        }else{
+            $activity = new ShareActivity();
+        }
+        $activity->start = $start;
+        $activity->start = $start;
     }
 }

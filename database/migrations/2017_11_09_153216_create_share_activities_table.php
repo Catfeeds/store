@@ -15,7 +15,11 @@ class CreateShareActivitiesTable extends Migration
     {
         Schema::create('share_activities', function (Blueprint $table) {
             $table->increments('id');
-
+            $table->integer('start');
+            $table->integer('end');
+            $table->unsignedTinyInteger('score');
+            $table->string('content',3000);
+            $table->tinyInteger('state')->default(0);
             $table->timestamps();
         });
     }

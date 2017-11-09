@@ -297,34 +297,16 @@ class OrderController extends Controller
     }
     public function pay_notify(Request $request)
     {
-        $data = $request->getContent();
-        $wx = WxPay::xmlToArray($data);
-        $wspay = new WxPay(config('wxxcx.app_id'),config('wxxcx.mch_id'),config('wxxcx.api_key'),$wx['openid']);
-        $data = [
-            'appid'=>$wx['appid'],
-            'attach'=>$wx['attach'],
-            'bank_type'=>$wx['bank_type'],
-            'fee_type'=>$wx['fee_type'],
-            'is_subscribe'=>$wx['is_subscribe'],
-            'mch_id'=>$wx['mch_id'],
-            'nonce_str'=>$wx['nonce_str'],
-            'openid'=>$wx['openid'],
-            'out_trade_no'=>$wx['out_trade_no'],
-            'result_code'=>$wx['result_code'],
-            'return_code'=>$wx['return_code'],
-            'sub_mch_id'=>$wx['sub_mch_id'],
-            'time_end'=>$wx['time_end'],
-            'total_fee'=>$wx['total_fee'],
-            'trade_type'=>$wx['trade_type'],
-            'transaction_id'=>$wx['transaction_id']
-        ];
-        $sign = $wspay->getSign($data);
-        if ($sign == $wx['sign']){
-            $order = Order::where(['number'=>$wx['out_trade_no']])->first();
+        $config = config('wxxcx');
+        $pay = new Pay($config);
+        $verify = $pay->driver('wechat')->gateway('app')->verify($request->getContent());
+
+        if ($verify) {
+            $order = Order::where(['number'=>$verify['out_trade_no']])->first();
             if ($order->state==0){
                 switch ($order->type){
                     case 1:
-                        $lever = MemberLevel::find($order->content);
+                        $level = MemberLevel::find($order->content);
 
                         break;
                     case 2:
@@ -345,12 +327,15 @@ class OrderController extends Controller
                 if ($order->save()){
                     return 'SUCCESS';
                 }
-            }else{
-                return 'SUCCESS';
+//            file_put_contents('notify.txt', "收到来自微信的异步通知\r\n", FILE_APPEND);
+//            file_put_contents('notify.txt', '订单号：' . $verify['out_trade_no'] . "\r\n", FILE_APPEND);
+    //            file_put_contents('notify.txt', '订单金额：' . $verify['total_fee'] . "\r\n\r\n", FILE_APPEND);
+            } else {
+    //            file_put_contents(storage_path('notify.txt'), "收到异步通知\r\n", FILE_APPEND);
             }
 
+             echo "success";
         }
-        return 'ERROR';
     }
 }
 
