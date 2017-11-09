@@ -754,4 +754,22 @@ class CommodityController extends Controller
             ]
         ]);
     }
+    public function modifyCommodity($id)
+    {
+        $uid = getUserToken(Input::get('token'));
+        $commodity = Commodity::find($id);
+        if ($commodity->user_id!=$uid){
+            return response()->json([
+                'return_code'=>'FAIL',
+                'return_msg'=>'无权操作!'
+            ]);
+        }
+        $enable = $commodity->enable;
+        $commodity->enable = ($enable==0)?1:0;
+        if ($commodity->save()){
+            return response()->json([
+                'return_code'=>'SUCCESS'
+            ]);
+        }
+    }
 }
