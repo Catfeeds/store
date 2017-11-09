@@ -61,4 +61,5 @@ Route::group(['prefix'=>'v1','middleware'=>'cross'],function (){
     Route::get('city/count','API\V1\CommodityController@countCity');
     Route::get('find/user','API\V1\UserController@findUser');
     Route::get('qrcode','API\V1\SystemController@getQrCode');
+    Route::get('reasons','API\V1\SystemController@getReportReasons');
 });

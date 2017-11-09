@@ -7,7 +7,9 @@ use App\Models\City;
 use App\Models\MemberLevel;
 use App\Models\Message;
 use App\Models\Qrcode;
+use App\Models\ReportReason;
 use App\User;
+use function GuzzleHttp\Psr7\uri_for;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
@@ -317,5 +319,28 @@ class SystemController extends Controller
                 'return_code'=>'SUCCESS'
             ]);
         }
+    }
+    public function addReportReason()
+    {
+        $id = Input::get('id');
+        if ($id){
+            $reason = ReportReason::find($id);
+        }else{
+            $reason = new ReportReason();
+        }
+        $reason->content = Input::get('content');
+        if ($reason->save()){
+            return response()->json([
+                'return_code'=>'SUCCESS'
+            ]);
+        }
+    }
+    public function getReportReasons()
+    {
+        $reasons = ReportReason::all();
+        return response()->json([
+            'return_code'=>'SUCCESS',
+            'data'=>$reasons
+        ]);
     }
 }
