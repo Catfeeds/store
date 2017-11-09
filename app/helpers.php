@@ -70,7 +70,7 @@ if (!function_exists('sendSMS')) {
             }
             dd($data);
         }
-        return false;
+        echo "ERROR";
     }
 }
 if (!function_exists('formatUrl')) {
