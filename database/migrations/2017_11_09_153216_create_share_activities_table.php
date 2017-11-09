@@ -18,6 +18,7 @@ class CreateShareActivitiesTable extends Migration
             $table->integer('start');
             $table->integer('end');
             $table->unsignedTinyInteger('score');
+            $table->string('rule',3000);
             $table->string('content',3000);
             $table->tinyInteger('state')->default(0);
             $table->timestamps();

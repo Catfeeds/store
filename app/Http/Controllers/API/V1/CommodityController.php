@@ -231,7 +231,10 @@ class CommodityController extends Controller
                 ]);
             }
             return response()->json([
-                'return_code'=>'SUCCESS'
+                'return_code'=>'SUCCESS',
+                'data'=>[
+                    'id'=>$commodity->id
+                ]
             ]);
         }
     }

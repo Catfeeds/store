@@ -268,6 +268,7 @@ class SystemController extends Controller
         $advert->city_id = Input::get('city_id');
         $advert->url = Input::get('url');
         $advert->link_url = Input::get('link_url');
+        $advert->state = Input::get('state',0);
         if ($advert->save()){
             return response()->json([
                 'return_code'=>'SUCCESS'
@@ -293,12 +294,10 @@ class SystemController extends Controller
 
     public function getAllAdverts()
     {
-        $type = Input::get('type');
+//        $type = Input::get('type');
         $page = Input::get('page',1);
         $limit = Input::get('limit',10);
-        $adverts = Advert::where([
-            'type'=>$type
-        ])->limit($limit)->offset(($page-1)*$limit)->get();
+        $adverts = Advert::limit($limit)->offset(($page-1)*$limit)->get();
         return response()->json([
             'return_code'=>'SUCCESS',
             'data'=>$adverts
@@ -312,9 +311,12 @@ class SystemController extends Controller
             'data'=>$qrcode
         ]);
     }
-    public function addQrCode($id)
+    public function addQrCode()
     {
-        $qrcode = Qrcode::find($id);
+        $qrcode = Qrcode::first();
+        if (empty($qrcode)){
+            $qrcode = new Qrcode();
+        }
         $qrcode->logo = Input::get('logo');
         $qrcode->content = Input::get('content');
         if ($qrcode->save()){
@@ -396,6 +398,15 @@ class SystemController extends Controller
             $activity = new ShareActivity();
         }
         $activity->start = $start;
-        $activity->start = $start;
+        $activity->end = $end;
+        $activity->score = Input::get('score');
+        $activity->content = Input::get('content');
+        $activity->rule = Input::get('rule');
+        $activity->state = Input::get('state',0);
+        if ($activity->save()){
+            return response()->json([
+                'return_code'=>'SUCCESS'
+            ]);
+        }
     }
 }
