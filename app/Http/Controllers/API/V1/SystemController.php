@@ -497,7 +497,7 @@ class SystemController extends Controller
             $count = $reports->count();
         }
         if ($user_id){
-            $reports->where('user_id','=',$user->id);
+            $reports->where('user_id','=',$user_id);
             $count = $reports->count();
         }
         $data = $reports->limit($limit)->offset(($page-1)*$limit)->get();
