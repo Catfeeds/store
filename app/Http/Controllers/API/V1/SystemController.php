@@ -13,6 +13,7 @@ use App\Models\Qrcode;
 use App\Models\Report;
 use App\Models\ReportReason;
 use App\Models\ShareActivity;
+use App\Models\SignActivity;
 use App\Models\SysConfig;
 use App\Models\UserGuide;
 use App\User;
@@ -551,6 +552,32 @@ class SystemController extends Controller
         $parttime = PartTime::find($id);
         $parttime->state = $state;
         if ($parttime->save()){
+            return response()->json([
+                'return_code'=>'SUCCESS'
+            ]);
+        }
+    }
+    public function getSignActivity()
+    {
+        $activity = SignActivity::where('state','=',1)->first();
+        if (empty($activity)){
+            $activity = new SignActivity();
+        }
+        return response()->json([
+            'return_code'=>'SUCCESS',
+            'data'=>$activity
+        ]);
+    }
+    public function addSignActivity()
+    {
+        $activity = SignActivity::where('state','=',1)->first();
+        if (empty($activity)){
+            $activity = new SignActivity();
+        }
+        $activity->start = strtotime(Input::get('start'));
+        $activity->end = strtotime(Input::get('end'));
+        $activity->score = Input::get('score');
+        if ($activity->save()){
             return response()->json([
                 'return_code'=>'SUCCESS'
             ]);
