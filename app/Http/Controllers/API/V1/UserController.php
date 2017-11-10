@@ -569,6 +569,7 @@ class UserController extends Controller
         $start = Input::get('start');
         $end = Input::get('end');
         $userDB = DB::table('users');
+        $count = $userDB->count();
         if ($user_id){
             $userDB->where('id','=',$user_id);
             $count = $userDB->count();
@@ -586,7 +587,7 @@ class UserController extends Controller
             $userDB->where('created_at','>',$start)->where('created_at','<',$end);
             $count = $userDB->count();
         }
-        $data = $userDB->get();
+        $data = $userDB->limit($limit)->offset(($page-1)*$limit)->get();
         return response()->json([
             'return_code'=>'SUCCESS',
             'data'=>$data,
