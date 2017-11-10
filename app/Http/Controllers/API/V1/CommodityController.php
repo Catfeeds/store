@@ -785,6 +785,7 @@ class CommodityController extends Controller
         $start = Input::get('start');
         $end = Input::get('end');
         $commodity = Commodity::where('pass','=',1);
+        $count = $commodity->count();
         if ($user_id){
             $commodity->where('user_id','=',$user_id);
             $count = $commodity->count();
@@ -819,6 +820,7 @@ class CommodityController extends Controller
         $start = Input::get('start');
         $end = Input::get('end');
         $commodity = Commodity::where('pass','=',0);
+        $count = $commodity->count();
         if ($user_id){
             $commodity->where('user_id','=',$user_id);
             $count = $commodity->count();

@@ -16,6 +16,7 @@ class CreateRefuseReasensTable extends Migration
         Schema::create('refuse_reasens', function (Blueprint $table) {
             $table->increments('id');
             $table->string('title');
+            $table->text('content');
             $table->timestamps();
         });
     }
