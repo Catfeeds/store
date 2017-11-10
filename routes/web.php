@@ -63,3 +63,7 @@ Route::group(['middleware'=>'cross'],function (){
     });
 });
 Route::get('reports','API\V1\SystemController@getReports');
+Route::get('parttimes','API\V1\SystemController@listPartTime');
+Route::get('modify/report/{id}','API\V1\SystemController@modifyReport');
+Route::get('modify/parttime/{id}','API\V1\SystemController@modifyPartTime');
+//Route::get('reports','API\V1\SystemController@getReports');

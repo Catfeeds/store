@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\API\V1;
 
+use App\Http\Requests\ReportPost;
 use App\Models\Advert;
 use App\Models\Article;
 use App\Models\City;
 use App\Models\MemberLevel;
 use App\Models\Message;
+use App\Models\PartTime;
 use App\Models\Qrcode;
+use App\Models\Report;
 use App\Models\ReportReason;
 use App\Models\ShareActivity;
 use App\Models\SysConfig;
@@ -487,6 +490,7 @@ class SystemController extends Controller
     {
         $page = Input::get('page',1);
         $limit = Input::get('limit',10);
+        $state = Input::get('state');
         $reports = DB::table('reports');
         $count = $reports->count();
         $username = Input::get('username');
@@ -500,6 +504,10 @@ class SystemController extends Controller
             $reports->where('user_id','=',$user_id);
             $count = $reports->count();
         }
+        if($state){
+            $reports->where('state','=',$state);
+            $count = $reports->count();
+        }
         $data = $reports->limit($limit)->offset(($page-1)*$limit)->get();
         return response()->json([
             'return_code'=>'SUCCESS',
@@ -507,5 +515,45 @@ class SystemController extends Controller
             'data'=>$data
         ]);
 
+    }
+    public function modifyReport($id)
+    {
+        $state = Input::get('state');
+        $report = Report::find($id);
+        $report->state = $state;
+        if ($report->save()){
+            return response()->json([
+                'return_code'=>'SUCCESS'
+            ]);
+        }
+    }
+    public function listPartTime()
+    {
+        $page = Input::get('page',1);
+        $limit = Input::get('limit',10);
+        $state = Input::get('state');
+        $parttime = DB::table('part_times');
+        $count = $parttime->count();
+        if ($state){
+            $parttime->where('state','=',$state);
+            $count  = $parttime->count();
+        }
+        $data = $parttime->limit($limit)->offset(($page-1)*$limit)->orderBy('state','ASC')->orderBy('id','DESC')->get();
+        return response()->json([
+            'return_code'=>"SUCCESS",
+            'count'=>$count,
+            'data'=>$data
+        ]);
+    }
+    public function modifyPartTime($id)
+    {
+        $state = Input::get('state');
+        $parttime = PartTime::find($id);
+        $parttime->state = $state;
+        if ($parttime->save()){
+            return response()->json([
+                'return_code'=>'SUCCESS'
+            ]);
+        }
     }
 }
