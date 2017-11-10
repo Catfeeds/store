@@ -58,7 +58,8 @@ Route::group(['middleware'=>'cross'],function (){
         Route::get('guides','API\V1\SystemController@getUserGuides');
         Route::get('del/guide/{id}','API\V1\SystemController@delUserGuides');
         Route::get('orders','API\V1\OrderController@getAllOrders');
-        Route::get('reports','API\V1\SystemController@getReports');
+
 
     });
 });
+Route::get('reports','API\V1\SystemController@getReports');
