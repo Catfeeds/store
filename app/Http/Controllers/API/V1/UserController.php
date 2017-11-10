@@ -13,6 +13,8 @@ use App\Models\DescriptionList;
 use App\Models\Member;
 use App\Models\MemberLevel;
 use App\Models\QQBind;
+use App\Models\ScanActivity;
+use App\Models\ScanRecord;
 use App\Models\Score;
 use App\Models\Sign;
 use App\Models\SignActivity;
@@ -183,6 +185,7 @@ class UserController extends Controller
         $sign->save();
         $user = User::find($uid);
         $user->score += $activity->score;
+        $user->save();
         return response()->json([
             'return_code'=>"SUCCESS"
         ]);
@@ -423,5 +426,42 @@ class UserController extends Controller
     public function OauthLogin()
     {
         $open_id = Input::get('open_id');
+    }
+    public function scan()
+    {
+        $uid = getUserToken(Input::get('token'));
+        $store_id = Input::get('store_id');
+        $activity = ScanActivity::where('end','>',time())->where('state','=','1')->first();
+        if(empty($activity)){
+            return response()->json([
+                'return_code'=>'FAIL',
+                'return_msg'=>'当前没有扫码活动！'
+            ]);
+        }
+        $scan = ScanRecord::where('user_id','=',$uid)->where('activity_id','=',$activity->id)->whereDate('created_at', date('Y-m-d',time()))->first();
+        $count = ScanRecord::where([
+            'user_id'=>$uid,
+            'activity_id'=>$activity->id,
+            'store_id'=>$store_id
+        ])->whereMonth('created_at',date('m',time()))->whereYear('created_at',date('Y',time()))->count();
+        if (!empty($scan)){
+            return response()->json([
+                'return_code'=>"SUCCESS",
+                'data'=>[]
+            ]);
+        }else{
+            $scan = new ScanRecord();
+            $scan->user_id = $uid;
+            $scan->activity_id = $activity->id;
+            $scan->store_id = $store_id;
+            $scan->save();
+            $user = User::find($uid);
+            $user->score += $activity->score;
+            $user->save();
+        }
+
+        return response()->json([
+            'return_code'=>"SUCCESS"
+        ]);
     }
 }

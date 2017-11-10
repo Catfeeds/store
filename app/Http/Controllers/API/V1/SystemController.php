@@ -406,6 +406,15 @@ class SystemController extends Controller
             'data'=>$guides
         ]);
     }
+    public function delUserGuides($id)
+    {
+        $guide = UserGuide::find($id);
+        if ($guide->delete()){
+            return response()->json([
+                'return_code'=>'SUCCESS'
+            ]);
+        }
+    }
     public function getSystemConfig()
     {
         $config = SysConfig::first();
@@ -458,6 +467,7 @@ class SystemController extends Controller
             $article = new Article();
         }
         $article -> content = Input::get('content');
+        $article -> title = Input::get('title');
         if ($article->save()){
             return response()->json([
                 'return_code'=>'SUCCESS'

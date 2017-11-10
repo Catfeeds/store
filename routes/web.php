@@ -54,6 +54,9 @@ Route::group(['middleware'=>'cross'],function (){
         Route::get('cities','API\V1\SystemController@getCities');
         Route::post('article','API\V1\SystemController@addArticle');
         Route::get('articles','API\V1\SystemController@getArticles');
+        Route::post('guide','API\V1\SystemController@addUserGuide');
+        Route::get('guides','API\V1\SystemController@getUserGuides');
+        Route::get('del/guide/{id}','API\V1\SystemController@delUserGuides');
 
     });
 });
