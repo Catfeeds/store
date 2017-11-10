@@ -269,6 +269,8 @@ class UserController extends Controller
         }
         $user->level = $level;
         $user->commodities = $user->commodities()->count();
+        $user->wechat = WechatBind::where('user_id','=',$user->id)->count();
+        $user->qq = QQBind::where('user_id','=',$user->id)->count();
         return response()->json([
             'return_code'=>'SUCCESS',
             'data'=>$user

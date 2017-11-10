@@ -75,3 +75,5 @@ Route::post('config','API\V1\SystemController@modifySystemConfig');
 Route::get('users','API\V1\UserController@getAllUsers');
 Route::get('refuses','API\V1\SystemController@getRefuseReasons');
 Route::post('refuse','API\V1\SystemController@addRefuseReasen');
+Route::get('pass/commodities','API\V1\CommodityController@getPassCommodities');
+Route::get('unpass/commodities','API\V1\CommodityController@getUnPassCommodities');

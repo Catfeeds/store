@@ -775,8 +775,72 @@ class CommodityController extends Controller
             ]);
         }
     }
-    public function getAllCommodities()
+    public function getPassCommodities()
     {
-        
+        $page = Input::get('page',1);
+        $limit = Input::get('limit',10);
+        $username = Input::get('username');
+        $user_id = Input::get('user_id');
+        $city_id = Input::get('city_id');
+        $start = Input::get('start');
+        $end = Input::get('end');
+        $commodity = Commodity::where('pass','=',1);
+        if ($user_id){
+            $commodity->where('user_id','=',$user_id);
+            $count = $commodity->count();
+        }
+        if ($username){
+            $id = User::where('username','like','%'.$username.'%')->pluck('id');
+            $commodity->whereIn('user_id',$id);
+            $count = $commodity->count();
+        }
+        if ($city_id){
+            $commodity->where('city_id','=',$city_id);
+            $count = $commodity->count();
+        }
+        if ($start){
+            $commodity->where('created_at','>',$start)->where('created_at','<',$end);
+            $count = $commodity->count();
+        }
+        $data = $commodity->limit($limit)->offset(($page-1)*$limit)->get();
+        return response()->json([
+            'return_code'=>'SUCCESS',
+            'count'=>$count,
+            'data'=>$data
+        ]);
+    }
+    public function getUnPassCommodities()
+    {
+        $page = Input::get('page',1);
+        $limit = Input::get('limit',10);
+        $username = Input::get('username');
+        $user_id = Input::get('user_id');
+        $city_id = Input::get('city_id');
+        $start = Input::get('start');
+        $end = Input::get('end');
+        $commodity = Commodity::where('pass','=',0);
+        if ($user_id){
+            $commodity->where('user_id','=',$user_id);
+            $count = $commodity->count();
+        }
+        if ($username){
+            $id = User::where('username','like','%'.$username.'%')->pluck('id');
+            $commodity->whereIn('user_id',$id);
+            $count = $commodity->count();
+        }
+        if ($city_id){
+            $commodity->where('city_id','=',$city_id);
+            $count = $commodity->count();
+        }
+        if ($start){
+            $commodity->where('created_at','>',$start)->where('created_at','<',$end);
+            $count = $commodity->count();
+        }
+        $data = $commodity->limit($limit)->offset(($page-1)*$limit)->get();
+        return response()->json([
+            'return_code'=>'SUCCESS',
+            'count'=>$count,
+            'data'=>$data
+        ]);
     }
 }

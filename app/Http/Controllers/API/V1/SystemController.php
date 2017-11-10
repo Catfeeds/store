@@ -638,6 +638,7 @@ class SystemController extends Controller
             $refuse = new RefuseReasen();
         }
         $refuse->title = Input::get('title');
+        $refuse->content = Input::get('content');
         if ($refuse->save()){
             return response()->json([
                 'return_code'=>'SUCCESS'
