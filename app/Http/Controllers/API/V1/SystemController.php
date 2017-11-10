@@ -432,9 +432,15 @@ class SystemController extends Controller
     public function modifySystemConfig()
     {
         $config = SysConfig::first();
-        $Ckey = Input::get('key');
-        $value = Input::get('value');
-        $config->$Ckey = $value;
+        $config->need_pay = Input::get('need_pay');
+        $config->pic_score = Input::get('pic_score');
+        $config->phone_score = Input::get('phone_score');
+        $config->pic_price = Input::get('pic_price');
+        $config->phone_price = Input::get('phone_price');
+        $config->show_sign = Input::get('show_sign');
+        $config->show_qrcode = Input::get('show_qrcode');
+        $config->show_share = Input::get('show_share');
+        $config->apply = Input::get('apply');
         $config->save();
         return response()->json([
             'return_code'=>'SUCCESS',

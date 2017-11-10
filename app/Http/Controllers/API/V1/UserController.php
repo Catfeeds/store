@@ -559,4 +559,35 @@ class UserController extends Controller
             ]);
         }
     }
+    public function getAllUsers()
+    {
+        $username = Input::get('username');
+        $user_id = Input::get('user_id');
+        $level = Input::get('level');
+        $start = Input::get('start');
+        $end = Input::get('end');
+        $userDB = DB::table('users');
+        if ($user_id){
+            $data = $userDB->where('id','=',$user_id);
+            $count = $userDB->count();
+        }
+        if ($username){
+            $data = $userDB->where('username','like','%'.$username.'%');
+            $count = $userDB->count();
+        }
+        if ($level){
+            $id = Member::where('level','=',$level)->pluck('user_id');
+            $data = $userDB->whereIn('id',$id);
+            $count = $userDB->count();
+        }
+        if ($start){
+            $data = $userDB->where('created_at','>',$start)->where('created_at','<',$end);
+            $count = $userDB->count();
+        }
+        return response()->json([
+            'return_code'=>'SUCCESS',
+            'data'=>$data,
+            'count'=>$count
+        ]);
+    }
 }

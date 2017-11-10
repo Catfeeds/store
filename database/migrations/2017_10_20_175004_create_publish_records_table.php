@@ -16,7 +16,6 @@ class CreatePublishRecordsTable extends Migration
         Schema::create('publish_records', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('user_id');
-            $table->integer('member_id');
             $table->timestamps();
         });
     }

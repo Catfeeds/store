@@ -8,6 +8,7 @@ use App\Models\Member;
 use App\Models\MemberLevel;
 use App\Models\Order;
 use App\Models\UserBuy;
+use App\PublishRecord;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -308,7 +309,13 @@ class OrderController extends Controller
                 switch ($order->type){
                     case 1:
                         $level = MemberLevel::find($order->content);
-
+                        $member = Member::where('user_id','=',$order->user_id)->first();
+                        if (empty($member)){
+                            $member->level = $level->level;
+                        }else{
+                            $member->level = $level->level;
+                            PublishRecord::where('user_id','=',$order->user_id)->delete();
+                        }
                         break;
                     case 2:
                         $buy = UserBuy::find($order->content);
@@ -375,6 +382,67 @@ class OrderController extends Controller
             'sum'=>$sum,
             'data'=>$data
         ]);
+    }
+    public function alipayNotify()
+    {
+        // 验证请求。
+        if (! app('alipay.mobile')->verify()) {
+//            Log::notice('Alipay notify post data verification fail.', [
+//                'data' => Request::instance()->getContent()
+//            ]);
+            return 'fail';
+        }
+
+        // 判断通知类型。
+        switch (Input::get('trade_status')) {
+            case 'TRADE_SUCCESS':
+            case 'TRADE_FINISHED':
+                // TODO: 支付成功，取得订单号进行其它相关操作。
+//                Log::debug('Alipay notify get data verification success.', [
+//                    'out_trade_no' => Input::get('out_trade_no'),
+//                    'trade_no' => Input::get('trade_no')
+//                ]);
+            $order = Order::where(['number'=>Input::get('out_trade_no')])->first();
+            if ($order->state==0){
+                switch ($order->type){
+                    case 1:
+                        $level = MemberLevel::find($order->content);
+                        $member = Member::where('user_id','=',$order->user_id)->first();
+                        if (empty($member)){
+                            $member->level = $level->level;
+                        }else{
+                            $member->level = $level->level;
+                            PublishRecord::where('user_id','=',$order->user_id)->delete();
+                        }
+                        break;
+                    case 2:
+                        $buy = UserBuy::find($order->content);
+                        $buy->pic = 1;
+                        $buy->save();
+                        $order->state = 1;
+                        break;
+                    case 3:
+                        $buy = UserBuy::find($order->content);
+                        $buy->phone = 1;
+                        $buy->save();
+                        $order->state = 1;
+                        break;
+                    case 4:
+                        break;
+                }
+                if ($order->save()){
+                    return 'SUCCESS';
+                }
+//            file_put_contents('notify.txt', "收到来自微信的异步通知\r\n", FILE_APPEND);
+//            file_put_contents('notify.txt', '订单号：' . $verify['out_trade_no'] . "\r\n", FILE_APPEND);
+                //            file_put_contents('notify.txt', '订单金额：' . $verify['total_fee'] . "\r\n\r\n", FILE_APPEND);
+            } else {
+                //            file_put_contents(storage_path('notify.txt'), "收到异步通知\r\n", FILE_APPEND);
+            }
+                break;
+        }
+
+        return 'success';
     }
 }
 
