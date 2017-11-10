@@ -488,7 +488,24 @@ class SystemController extends Controller
         $page = Input::get('page',1);
         $limit = Input::get('limit',10);
         $reports = DB::table('reports');
+        $count = $reports->count();
         $username = Input::get('username');
+        $user_id = Input::get('user_id');
+        if ($username){
+            $user = User::where('username','like','%'.$username.'%')->pluck('id');
+            $reports->whereIn('user_id',$user);
+            $count = $reports->count();
+        }
+        if ($user_id){
+            $reports->where('user_id','=',$user->id);
+            $count = $reports->count();
+        }
+        $data = $reports->limit($limit)->offset(($page-1)*$limit)->get();
+        return response()->json([
+            'return_code'=>'SUCCESS',
+            'count'=>$count,
+            'data'=>$data
+        ]);
 
     }
 }
