@@ -16,4 +16,8 @@ class Commodity extends Model
         $this->read_number += 1;
         $this->save();
     }
+    public function report()
+    {
+        return $this->hasMany('App\Models\Report','commodity_id','id');
+    }
 }
