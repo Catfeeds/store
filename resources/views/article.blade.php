@@ -12,7 +12,7 @@
 <body>
 <div class="ql-bubble">
     <div class="ql-editor">
-        {{$article->content}}
+        @{{$article->content}}
     </div>
 </div>
 </body>
