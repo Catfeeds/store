@@ -342,26 +342,37 @@ class OrderController extends Controller
     {
         $page = Input::get('page',1);
         $limit = Input::get('limit',10);
-        $orderDb = Order::where('state','!=',0);
+        $orderDb = Order::where('state','!=',0)->where('pay_type','!=',1);
+        $sum = $orderDb->sum('price');
         $pay_type = Input::get('pay_type');
         $start = Input::get('start');
         $end = Input::get('end');
         $level = Input::get('level');
         if ($pay_type){
             $orderDb->where('pay_type','=',$pay_type);
+            $sum = $orderDb->sum('price');
         }
         if ($level){
             $user_id = Member::whereIn('level',$level)->pluck('user_id');
             $orderDb->whereIn('user_id',$user_id);
+            $sum = $orderDb->sum('price');
         }
         if ($start){
             $orderDb->whereBetween('created_at',[$start,$end]);
+            $sum = $orderDb->sum('price');
         }
         $count = $orderDb->count();
+
         $data = $orderDb->limit($limit)->offset(($page-1)*$limit)->orderBy('id','DESC')->get();
+        if (!empty($data)){
+            for ($i=0;$i<count($data);$i++){
+                $data[$i]->username = User::find($data[$i]->user_id)->username;
+            }
+        }
         return response()->json([
             'return_code'=>'SUCCESS',
             'count'=>$count,
+            'sum'=>$sum,
             'data'=>$data
         ]);
     }

@@ -17,6 +17,7 @@ use DeepCopy\f001\A;
 use function GuzzleHttp\Psr7\uri_for;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Zizaco\Entrust\Entrust;
 use Zizaco\Entrust\EntrustPermission;
@@ -481,5 +482,13 @@ class SystemController extends Controller
         return view('article',[
             'article'=>$article
         ]);
+    }
+    public function getReports()
+    {
+        $page = Input::get('page',1);
+        $limit = Input::get('limit',10);
+        $reports = DB::table('reports');
+        $username = Input::get('username');
+
     }
 }
