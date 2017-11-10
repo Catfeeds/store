@@ -161,6 +161,12 @@ class UserController extends Controller
     {
         $uid = getUserToken(Input::get('token'));
         $activity = SignActivity::where('end','>',time())->where('state','=','1')->first();
+        if(empty($activity)){
+            return response()->json([
+                'return_code'=>'FAIL',
+                'return_msg'=>'当前没有签到活动！'
+            ]);
+        }
         $sign = Sign::where('user_id','=',$uid)->where('activity_id','=',$activity->id)->whereDate('created_at', date('Y-m-d',time()))->first();
         if (!empty($sign)){
             return response()->json([
@@ -173,6 +179,8 @@ class UserController extends Controller
         $sign->user_id = $uid;
         $sign->activity_id = $activity->id;
         $sign->save();
+        $user = User::find($uid);
+        $user->score += $activity->score;
         return response()->json([
             'return_code'=>"SUCCESS"
         ]);
@@ -180,15 +188,29 @@ class UserController extends Controller
     public function signRecord()
     {
         $activity = SignActivity::where('end','>',time())->where('state','=','1')->first();
+        if (empty($activity)){
+            return response()->json([
+                'return_code'=>'FAIL',
+                'return_msg'=>'当前没有签到活动！'
+            ]);
+        }
         $uid = getUserToken(Input::get('token'));
         $time = Input::get('date',date('Y-m-d',time()));
         $start = date('Y-m-01 0:0:0',strtotime($time));
         $end = date('Y-m-d 23:59:59', strtotime("$start +1 month -1 day"));
         $sql = getCountSql($uid,$start,$end);
         $data = DB::select($sql);
+        $count = Sign::where([
+            'user_id'=>$uid,
+            'activity_id'=>$activity->id
+        ])->whereMonth('created_at',date('m',time()))->whereYear('created_at',date('Y',time()))->count();
         return response()->json([
             'return_code'=>'SUCCESS',
-            'data'=>$data
+            'data'=>[
+                'user_score'=>User::find($uid)->score,
+                'current_score'=>$count*$activity->score,
+                'signs'=>$data
+            ]
         ]);
     }
     public function UserInfo()
