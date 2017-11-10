@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\API\V1;
 
 use App\Http\Requests\SendPost;
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Input;
 
 class SmsController extends Controller
 {
@@ -42,6 +44,12 @@ class SmsController extends Controller
                     'code'=>$code
                 ];
                 break;
+            case 5:
+                $data = [
+                    'type'=>'modifyPhone',
+                    'code'=>$code
+                ];
+                break;
         }
         if (sendSMS($number,config('alisms.VerificationCode'),$smsContent)) {
             $data = serialize($data);
@@ -56,5 +64,22 @@ class SmsController extends Controller
             ]);
         }
 
+    }
+    public function sendModifySMS()
+    {
+        $user_id = getUserToken(Input::get('token'));
+        $user = User::find($user_id);
+        $code = getRandCode();
+        $smsContent = [
+            'code'=>$code
+        ];
+        if (sendSMS($user->phone,config('alisms.VerificationCode'),$smsContent)) {
+            return response()->json([
+                'return_code'=>'SUCCESS',
+                'data'=>[
+                    'code'=>$code
+                ]
+            ]);
+        }
     }
 }

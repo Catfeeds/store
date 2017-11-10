@@ -105,6 +105,40 @@ class UserController extends Controller
         }
 
     }
+
+    public function modifyPhone()
+    {
+        $uid = getUserToken(Input::get('token'));
+        $code = Input::get('code');
+        $number = Input::get('number');
+        $data = getCode($number);
+        if (empty($data)||$data['type']!='modifyPhone'){
+            return response()->json([
+                'return_code'=>"FAIL",
+                'return_msg'=>'验证码已失效！'
+            ]);
+        }
+        if ($data['code']!=$code){
+            return response()->json([
+                'return_code'=>"FAIL",
+                'return_msg'=>'验证码错误！'
+            ]);
+        }
+        $count = User::where('phone','=',$number)->count();
+        if ($count!=0){
+            return response()->json([
+                'return_code'=>"FAIL",
+                'return_msg'=>'该手机已被绑定！'
+            ]);
+        }
+        $user = User::find($uid);
+        $user->phone = $number;
+        if ($user->save()){
+            return response()->json([
+                'return_code'=>'SUCCESS'
+            ]);
+        }
+    }
     public function resetPassword(ResetPasswordPost $request)
     {
         $phone = $request->get('phone');
@@ -499,6 +533,7 @@ class UserController extends Controller
                 'data'=>[
                     'current_score'=>$count*$activity->score,
                     'single_score'=>$activity->score,
+                    'do'=>'1',
                     'user_score'=>$user->score
                 ]
             ]);
@@ -516,6 +551,7 @@ class UserController extends Controller
                 'data'=>[
                     'current_score'=>$count*$activity->score,
                     'single_score'=>$activity->score,
+                    'do'=>0,
                     'user_score'=>$user->score
                 ]
             ]);
