@@ -10,6 +10,7 @@ use App\Models\MemberLevel;
 use App\Models\Message;
 use App\Models\PartTime;
 use App\Models\Qrcode;
+use App\Models\RefuseReasen;
 use App\Models\Report;
 use App\Models\ReportReason;
 use App\Models\ScanActivity;
@@ -627,5 +628,32 @@ class SystemController extends Controller
                 'return_code'=>'SUCCESS'
             ]);
         }
+    }
+    public function addRefuseReasen()
+    {
+        $id = Input::get('id');
+        if ($id){
+            $refuse = RefuseReasen::find($id);
+        }else{
+            $refuse = new RefuseReasen();
+        }
+        $refuse->title = Input::get('title');
+        if ($refuse->save()){
+            return response()->json([
+                'return_code'=>'SUCCESS'
+            ]);
+        }
+    }
+    public function getRefuseReasons()
+    {
+        $page = Input::get('page',1);
+        $limit = Input::get('limit',10);
+        $refuse = RefuseReasen::limit($limit)->offset(($page-1)*$limit)->get();
+        $count = RefuseReasen::count();
+        return response()->json([
+            'return_code'=>'SUCCESS',
+            'count'=>$count,
+            'data'=>$refuse
+        ]);
     }
 }
