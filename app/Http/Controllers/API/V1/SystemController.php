@@ -429,6 +429,18 @@ class SystemController extends Controller
             'data'=>$config
         ]);
     }
+    public function modifySystemConfig()
+    {
+        $config = SysConfig::first();
+        $Ckey = Input::get('key');
+        $value = Input::get('value');
+        $config->$Ckey = $value;
+        $config->save();
+        return response()->json([
+            'return_code'=>'SUCCESS',
+            'data'=>$config
+        ]);
+    }
     public function addShareActivity()
     {
         $id = Input::get('id');
