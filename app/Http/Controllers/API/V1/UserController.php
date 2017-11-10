@@ -561,6 +561,8 @@ class UserController extends Controller
     }
     public function getAllUsers()
     {
+        $page = Input::get('page',1);
+        $limit = Input::get('limit',10);
         $username = Input::get('username');
         $user_id = Input::get('user_id');
         $level = Input::get('level');
@@ -568,22 +570,23 @@ class UserController extends Controller
         $end = Input::get('end');
         $userDB = DB::table('users');
         if ($user_id){
-            $data = $userDB->where('id','=',$user_id);
+            $userDB->where('id','=',$user_id);
             $count = $userDB->count();
         }
         if ($username){
-            $data = $userDB->where('username','like','%'.$username.'%');
+             $userDB->where('username','like','%'.$username.'%');
             $count = $userDB->count();
         }
         if ($level){
             $id = Member::where('level','=',$level)->pluck('user_id');
-            $data = $userDB->whereIn('id',$id);
+             $userDB->whereIn('id',$id);
             $count = $userDB->count();
         }
         if ($start){
-            $data = $userDB->where('created_at','>',$start)->where('created_at','<',$end);
+            $userDB->where('created_at','>',$start)->where('created_at','<',$end);
             $count = $userDB->count();
         }
+        $data = $userDB->get();
         return response()->json([
             'return_code'=>'SUCCESS',
             'data'=>$data,
