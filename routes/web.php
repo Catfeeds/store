@@ -74,4 +74,4 @@ Route::get('config','API\V1\SystemController@getSystemConfig');
 Route::post('config','API\V1\SystemController@modifySystemConfig');
 Route::get('users','API\V1\UserController@getAllUsers');
 Route::get('refuses','API\V1\SystemController@getRefuseReasons');
-Route::post('refuses','API\V1\SystemController@addRefuseReasen');
+Route::post('refuse','API\V1\SystemController@addRefuseReasen');
