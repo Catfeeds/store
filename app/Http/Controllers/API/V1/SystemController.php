@@ -12,6 +12,7 @@ use App\Models\PartTime;
 use App\Models\Qrcode;
 use App\Models\Report;
 use App\Models\ReportReason;
+use App\Models\ScanActivity;
 use App\Models\ShareActivity;
 use App\Models\SignActivity;
 use App\Models\SysConfig;
@@ -573,6 +574,32 @@ class SystemController extends Controller
         $activity = SignActivity::where('state','=',1)->first();
         if (empty($activity)){
             $activity = new SignActivity();
+        }
+        $activity->start = strtotime(Input::get('start'));
+        $activity->end = strtotime(Input::get('end'));
+        $activity->score = Input::get('score');
+        if ($activity->save()){
+            return response()->json([
+                'return_code'=>'SUCCESS'
+            ]);
+        }
+    }
+    public function getScanActivity()
+    {
+        $activity = ScanActivity::where('state','=',1)->first();
+        if (empty($activity)){
+            $activity = new ScanActivity();
+        }
+        return response()->json([
+            'return_code'=>'SUCCESS',
+            'data'=>$activity
+        ]);
+    }
+    public function addScanActivity()
+    {
+        $activity = ScanActivity::where('state','=',1)->first();
+        if (empty($activity)){
+            $activity = new ScanActivity();
         }
         $activity->start = strtotime(Input::get('start'));
         $activity->end = strtotime(Input::get('end'));
