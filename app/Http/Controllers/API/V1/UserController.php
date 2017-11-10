@@ -596,4 +596,8 @@ class UserController extends Controller
             'count'=>$count
         ]);
     }
+    public function modifyUser($id)
+    {
+        $user = User::find($id);
+    }
 }

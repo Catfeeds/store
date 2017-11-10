@@ -657,4 +657,29 @@ class SystemController extends Controller
             'data'=>$refuse
         ]);
     }
+    public function getShareActivity()
+    {
+        $uid = getUserToken(Input::get('token'));
+        $activity = ShareActivity::where('end','>',time())->where('state','=','1')->first();
+        if (empty($activity)){
+            return response()->json([
+                'return_code'=>'FAIL',
+                'return_msg'=>'当前没有活动！'
+            ]);
+        }else{
+            $code = createNonceStr(5);
+            $code .=$uid;
+            setUserToken($code,$uid);
+            return response()->json([
+                'return_code'=>'SUCCESS',
+                'data'=>[
+                    'start'=>date('m-d H:i',$activity->start),
+                    'end'=>date('m-d H:i',$activity->end),
+                    'rule'=>$activity->rule,
+                    'score'=>8,
+                    'like'=>formatUrl('activity/'.$code),
+                ]
+            ]);
+        }
+    }
 }
