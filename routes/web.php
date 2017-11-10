@@ -72,5 +72,5 @@ Route::post('activity/sign','API\V1\SystemController@addSignActivity');
 Route::post('activity/scan','API\V1\SystemController@addScanActivity');
 Route::get('config','API\V1\SystemController@getSystemConfig');
 Route::post('config','API\V1\SystemController@modifySystemConfig');
-Route::get('users','API\V1\SystemController@getAllUsers');
+Route::get('users','API\V1\UserController@getAllUsers');
 //Route::get('reports','API\V1\SystemController@getReports');
