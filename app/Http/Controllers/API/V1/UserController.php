@@ -38,6 +38,7 @@ class UserController extends Controller
     public function register(RegisterPost $request)
     {
         $code = $request->get('code');
+        $type = $request->get('type');
         $data = getCode($request->get('phone'));
         if (empty($data)||$data['type']!='register'){
             return response()->json([

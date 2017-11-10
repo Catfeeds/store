@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\V1;
 
 use App\Libraries\WxPay;
 use App\Models\Commodity;
+use App\Models\Member;
 use App\Models\MemberLevel;
 use App\Models\Order;
 use App\Models\UserBuy;
@@ -336,6 +337,33 @@ class OrderController extends Controller
 
              echo "success";
         }
+    }
+    public function getAllOrders()
+    {
+        $page = Input::get('page',1);
+        $limit = Input::get('limit',10);
+        $orderDb = Order::where('state','!=',0);
+        $pay_type = Input::get('pay_type');
+        $start = Input::get('start');
+        $end = Input::get('end');
+        $level = Input::get('level');
+        if ($pay_type){
+            $orderDb->where('pay_type','=',$pay_type);
+        }
+        if ($level){
+            $user_id = Member::whereIn('level',$level)->pluck('user_id');
+            $orderDb->whereIn('user_id',$user_id);
+        }
+        if ($start){
+            $orderDb->whereBetween('created_at',[$start,$end]);
+        }
+        $count = $orderDb->count();
+        $data = $orderDb->limit($limit)->offset(($page-1)*$limit)->orderBy('id','DESC')->get();
+        return response()->json([
+            'return_code'=>'SUCCESS',
+            'count'=>$count,
+            'data'=>$data
+        ]);
     }
 }
 
