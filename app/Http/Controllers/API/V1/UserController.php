@@ -426,6 +426,54 @@ class UserController extends Controller
     public function OauthLogin()
     {
         $open_id = Input::get('open_id');
+        $type = Input::get('type');
+        if ($type==1){
+            $bind = QQBind::where('open_id','=',$open_id)->first();
+            if (empty($bind)){
+                return response()->json([
+                    'return_code'=>"FAIL",
+                    'return_msg'=>'该QQ没有绑定任何账号!'
+                ]);
+            }
+            $user = User::find($bind->user_id);
+            if ($user->state!=1){
+                return response()->json([
+                    'return_code'=>"FAIL",
+                    'return_msg'=>'账号已被封禁！'
+                ]);
+            }
+            $key = createNonceStr();
+            setUserToken($key,$user->id);
+            return response()->json([
+                'return_code'=>"SUCCESS",
+                'data'=>[
+                    'token'=>$key
+                ]
+            ]);
+        }else{
+            $bind = WechatBind::where('open_id','=',$open_id)->first();
+            if (empty($bind)){
+                return response()->json([
+                    'return_code'=>"FAIL",
+                    'return_msg'=>'该微信没有绑定任何账号!'
+                ]);
+            }
+            $user = User::find($bind->user_id);
+            if ($user->state!=1){
+                return response()->json([
+                    'return_code'=>"FAIL",
+                    'return_msg'=>'账号已被封禁！'
+                ]);
+            }
+            $key = createNonceStr();
+            setUserToken($key,$user->id);
+            return response()->json([
+                'return_code'=>"SUCCESS",
+                'data'=>[
+                    'token'=>$key
+                ]
+            ]);
+        }
     }
     public function scan()
     {
@@ -445,9 +493,14 @@ class UserController extends Controller
             'store_id'=>$store_id
         ])->whereMonth('created_at',date('m',time()))->whereYear('created_at',date('Y',time()))->count();
         if (!empty($scan)){
+            $user = User::find($uid);
             return response()->json([
                 'return_code'=>"SUCCESS",
-                'data'=>[]
+                'data'=>[
+                    'current_score'=>$count*$activity->score,
+                    'single_score'=>$activity->score,
+                    'user_score'=>$user->score
+                ]
             ]);
         }else{
             $scan = new ScanRecord();
@@ -458,10 +511,14 @@ class UserController extends Controller
             $user = User::find($uid);
             $user->score += $activity->score;
             $user->save();
+            return response()->json([
+                'return_code'=>"SUCCESS",
+                'data'=>[
+                    'current_score'=>$count*$activity->score,
+                    'single_score'=>$activity->score,
+                    'user_score'=>$user->score
+                ]
+            ]);
         }
-
-        return response()->json([
-            'return_code'=>"SUCCESS"
-        ]);
     }
 }

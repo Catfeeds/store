@@ -20,9 +20,9 @@ Route::group(['middleware'=>'cross'],function (){
     Route::any('upload','API\V1\UploadController@uploadImage');
     Route::post('login','API\V1\UserController@adminLogin');
     Route::get('test',function (){
-       sendSMS('18664894928',config('alisms.VerificationCode'),[
-           'code'=>'123456'
-       ]);
+        echo strtotime('2017-11-1');
+        echo "<br/>";
+       echo strtotime('2017-11-25');
     });
     Route::group(['middleware'=>'auth'],function (){
 
