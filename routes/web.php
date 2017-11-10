@@ -14,6 +14,7 @@
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('article','API\V1\SystemController@getArticle');
 
 Route::group(['middleware'=>'cross'],function (){
     Route::any('upload','API\V1\UploadController@uploadImage');
@@ -49,6 +50,10 @@ Route::group(['middleware'=>'cross'],function (){
         Route::get('qrcode','API\V1\SystemController@getQrCode');
         Route::post('advert','API\V1\SystemController@addAdvert');
         Route::get('adverts','API\V1\SystemController@getAllAdverts');
+        Route::get('del/advert/{id}','API\V1\SystemController@delAdvert');
         Route::get('cities','API\V1\SystemController@getCities');
+        Route::post('article','API\V1\SystemController@addArticle');
+        Route::get('articles','API\V1\SystemController@getArticles');
+
     });
 });

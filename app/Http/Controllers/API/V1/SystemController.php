@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\V1;
 
 use App\Models\Advert;
+use App\Models\Article;
 use App\Models\City;
 use App\Models\MemberLevel;
 use App\Models\Message;
@@ -12,6 +13,7 @@ use App\Models\ShareActivity;
 use App\Models\SysConfig;
 use App\Models\UserGuide;
 use App\User;
+use DeepCopy\f001\A;
 use function GuzzleHttp\Psr7\uri_for;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -281,6 +283,8 @@ class SystemController extends Controller
         $advert->city_id = Input::get('city_id');
         $advert->url = Input::get('url');
         $advert->link_url = Input::get('link_url');
+        $advert->type = Input::get('type');
+        $advert->parents = Input::get('parents');
         $advert->state = Input::get('state',0);
         if ($advert->save()){
             return response()->json([
@@ -313,13 +317,24 @@ class SystemController extends Controller
         $adverts = Advert::limit($limit)->offset(($page-1)*$limit)->get();
         if(!empty($adverts)){
             for ($i=0;$i<count($adverts);$i++){
-                $adverts[$i]->city = $adverts[$i]->city()->get();
+                $adverts[$i]->city = $adverts[$i]->city()->first();
             }
         }
+        $count = Advert::count();
         return response()->json([
             'return_code'=>'SUCCESS',
+            'count'=>$count,
             'data'=>$adverts
         ]);
+    }
+    public function delAdvert($id)
+    {
+        $advert = Advert::find($id);
+        if ($advert->delete()){
+            return response()->json([
+                'return_code'=>"SUCCESS"
+            ]);
+        }
     }
     public function getQrCode()
     {
@@ -426,5 +441,35 @@ class SystemController extends Controller
                 'return_code'=>'SUCCESS'
             ]);
         }
+    }
+    public function getArticles()
+    {
+        $articles = Article::all();
+        return response()->json([
+            'return_code'=>'SUCCESS',
+            'data'=>$articles
+        ]);
+    }
+    public function addArticle()
+    {
+        $type = Input::get('type');
+        $article = Article::where('type','=',$type)->first();
+        if (empty($article)){
+            $article = new Article();
+        }
+        $article -> content = Input::get('content');
+        if ($article->save()){
+            return response()->json([
+                'return_code'=>'SUCCESS'
+            ]);
+        }
+    }
+    public function getArticle()
+    {
+        $type = Input::get('type');
+        $article = Article::where('type','=',$type)->first();
+        return view('article',[
+            'article'=>$article
+        ]);
     }
 }

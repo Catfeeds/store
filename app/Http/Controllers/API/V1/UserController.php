@@ -12,10 +12,12 @@ use App\Models\Description;
 use App\Models\DescriptionList;
 use App\Models\Member;
 use App\Models\MemberLevel;
+use App\Models\QQBind;
 use App\Models\Score;
 use App\Models\Sign;
 use App\Models\SignActivity;
 use App\Models\TypeList;
+use App\Models\WechatBind;
 use App\User;
 use function GuzzleHttp\Psr7\uri_for;
 use Illuminate\Http\Request;
@@ -375,5 +377,51 @@ class UserController extends Controller
                 'user_id'=>$user->id
             ]
         ]);
+    }
+    public function bindQQ()
+    {
+        $uid = getUserToken(Input::get('token'));
+        $open_id = Input::get('open_id');
+        QQBind::where('user_id','=',$uid)->delete();
+        $bind = QQBind::where('open_id','=',$open_id)->first();
+        if (empty($bind)){
+            $bind = new QQBind();
+            $bind->user_id = $uid;
+            $bind->open_id = $open_id;
+            $bind->save();
+            return response()->json([
+                'return_code'=>"SUCCESS"
+            ]);
+        }else{
+            return response()->json([
+                'return_code'=>"FAIL",
+                'return_msg'=>'该账号已被绑定！'
+            ]);
+        }
+    }
+    public function bindWeChat()
+    {
+        $uid = getUserToken(Input::get('token'));
+        $open_id = Input::get('open_id');
+        WechatBind::where('user_id','=',$uid)->delete();
+        $bind = WechatBind::where('open_id','=',$open_id)->first();
+        if (empty($bind)){
+            $bind = new WechatBind();
+            $bind->user_id = $uid;
+            $bind->open_id = $open_id;
+            $bind->save();
+            return response()->json([
+                'return_code'=>"SUCCESS"
+            ]);
+        }else{
+            return response()->json([
+                'return_code'=>"FAIL",
+                'return_msg'=>'该账号已被绑定！'
+            ]);
+        }
+    }
+    public function OauthLogin()
+    {
+        $open_id = Input::get('open_id');
     }
 }
