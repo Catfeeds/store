@@ -677,7 +677,7 @@ class SystemController extends Controller
                     'end'=>date('m-d H:i',$activity->end),
                     'rule'=>$activity->rule,
                     'score'=>8,
-                    'like'=>formatUrl('activity/'.$code),
+                    'link'=>formatUrl('activity/'.$code),
                 ]
             ]);
         }
