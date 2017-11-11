@@ -6,6 +6,7 @@ use App\Http\Requests\ReportPost;
 use App\Models\Advert;
 use App\Models\Article;
 use App\Models\City;
+use App\Models\Commodity;
 use App\Models\MemberLevel;
 use App\Models\Message;
 use App\Models\PartTime;
@@ -505,6 +506,16 @@ class SystemController extends Controller
             $count = $reports->count();
         }
         $data = $reports->limit($limit)->offset(($page-1)*$limit)->get();
+        if (!empty($data)){
+            for ($i=0;$i<count($data);$i++) {
+                $commodity = Commodity::find($data[$i]->commodity_id);
+                $data[$i]->commodity_name = $commodity->title;
+                $data[$i]->read_number = $commodity->read;
+                $data[$i]->report_number = $commodity->report()->count();
+                $user = User::find($data[$i]->user_id);
+                $data[$i]->username = empty($user)?'':$user->username;
+            }
+        }
         return response()->json([
             'return_code'=>'SUCCESS',
             'count'=>$count,

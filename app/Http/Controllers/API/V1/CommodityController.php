@@ -883,6 +883,7 @@ class CommodityController extends Controller
         $pass = Input::get('pass');
         if ($pass==1){
             $commodity->pass = 1;
+            $commodity->enable = 1;
             $passlist = new PassList();
             $passlist -> commodity_id = $commodity->id;
             $passlist ->user_id = Auth::id();
