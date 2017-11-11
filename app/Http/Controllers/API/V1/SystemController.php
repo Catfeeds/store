@@ -351,9 +351,9 @@ class SystemController extends Controller
             'data'=>$qrcode
         ]);
     }
-    public function addQrCode()
+    public function addQrCode($id)
     {
-        $qrcode = Qrcode::first();
+        $qrcode = Qrcode::find($id);
         if (empty($qrcode)){
             $qrcode = new Qrcode();
         }
