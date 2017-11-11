@@ -16,7 +16,11 @@ use App\Models\CommodityType;
 use App\Models\Description;
 use App\Models\DescriptionList;
 use App\Models\Member;
+use App\Models\Message;
 use App\Models\PartTime;
+use App\Models\PassList;
+use App\Models\RefuseList;
+use App\Models\RefuseReasen;
 use App\Models\Reject;
 use App\Models\Report;
 use App\Models\SysConfig;
@@ -26,6 +30,7 @@ use App\User;
 use function GuzzleHttp\Psr7\uri_for;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use League\Flysystem\Config;
@@ -59,6 +64,8 @@ class CommodityController extends Controller
             ]);
         }
         $commodity->read();
+        $entry = Input::get('entry');
+
         $needPay = SysConfig::first();
         $fixdata = getAround($commodity->latitude,$commodity->longitude,500);
         $commodities = Commodity::where('id','!=',$id)->where([
@@ -69,6 +76,10 @@ class CommodityController extends Controller
         $commodity->around = $data;
         $city = City::find($commodity->city_id);
         $commodity->district = empty($city)?'未知':$city->name;
+        if($entry=='qrcode'){
+            $commodity->pictures = $commodity->pictures()->get();
+
+        }
         if ($needPay->need_pay){
             $uid = getUserToken(Input::get('token'));
             if (!$uid){
@@ -804,6 +815,18 @@ class CommodityController extends Controller
             $count = $commodity->count();
         }
         $data = $commodity->limit($limit)->offset(($page-1)*$limit)->get();
+        if (!empty($data)){
+            for ($i=0;$i<count($data);$i++){
+                $type = CommodityType::find($data[$i]->type);
+                $data[$i]->type = empty($type)?'':$type->title;
+                $data[$i]->report_count = $data[$i]->report()->count();
+                $user = User::find($data[$i]->user_id);
+                $data[$i]->username = empty($user)?'':$user->username;
+                $pass = PassList::where('commodity_id','=',$data[$i]->id)->first();
+                $data[$i]->passName = empty($pass)?'':User::find($pass->user_id)->name;
+                $data[$i]->pictures = $data[$i]->pictures()->get();
+            }
+        }
         return response()->json([
             'return_code'=>'SUCCESS',
             'count'=>$count,
@@ -839,10 +862,69 @@ class CommodityController extends Controller
             $count = $commodity->count();
         }
         $data = $commodity->limit($limit)->offset(($page-1)*$limit)->get();
+        if (!empty($data)){
+            for ($i=0;$i<count($data);$i++){
+                $type = CommodityType::find($data[$i]->type);
+                $data[$i]->type = empty($type)?'':$type->title;
+                $user = User::find($data[$i]->user_id);
+                $data[$i]->username = empty($user)?'':$user->username;
+                $data[$i]->pictures = $data[$i]->pictures()->get();
+            }
+        }
         return response()->json([
             'return_code'=>'SUCCESS',
             'count'=>$count,
             'data'=>$data
+        ]);
+    }
+    public function passCommodity($id)
+    {
+        $commodity = Commodity::find($id);
+        $pass = Input::get('pass');
+        if ($pass==1){
+            $commodity->pass = 1;
+            $passlist = new PassList();
+            $passlist -> commodity_id = $commodity->id;
+            $passlist ->user_id = Auth::id();
+            $passlist->save();
+            $commodity->save();
+            $smsContent = [
+                'date'=>$commodity->created_at
+            ];
+            $user = User::find($commodity->user_id);
+            sendSMS($user->phone,\config('alisms.Pass'),$smsContent);
+            $msg = new Message();
+            $msg->receive_id = $commodity->user_id;
+            $msg->title ='消息审核通过';
+            $msg->content = '消息审核通过';
+            $msg->save();
+//            push();
+        }else{
+            $reason = Input::get('reason');
+
+            $commodity->pass = 2;
+            $commodity->save();
+            $smsContent = [
+                'date'=>$commodity->created_at
+            ];
+            $user = User::find($commodity->user_id);
+            sendSMS($user->phone,\config('alisms.Fail'),$smsContent);
+            $msg = new Message();
+            $msg->receive_id = $commodity->user_id;
+            $msg->title ='消息审核不通过';
+            $msg->content = '消息审核不通过，原因：'.$reason->title;
+            $msg->save();
+            foreach ($reason as $item){
+                $reason = RefuseReasen::find($item);
+                $list = new RefuseList();
+                $list->commodity_id = $id;
+                $list->reason = $reason->id;
+                $list->save();
+            }
+
+        }
+        return response()->json([
+            'return_code'=>'SUCCESS'
         ]);
     }
 }

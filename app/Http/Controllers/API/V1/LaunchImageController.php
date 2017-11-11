@@ -22,7 +22,13 @@ class LaunchImageController extends Controller
     }
     public function addLaunchImage()
     {
-        $image = new LaunchImage();
+        $id = Input::get('id');
+        if ($id){
+            $image = LaunchImage::find($id);
+        }else{
+            $image = new LaunchImage();
+        }
+
         $image->title = Input::get('title');
         $image->url = Input::get('url');
         $image->link_url = Input::get('link_url');

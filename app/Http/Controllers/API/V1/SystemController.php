@@ -383,8 +383,10 @@ class SystemController extends Controller
     public function getReportReasons()
     {
         $reasons = ReportReason::all();
+        $count = ReportReason::count();
         return response()->json([
             'return_code'=>'SUCCESS',
+            'count'=>$count,
             'data'=>$reasons
         ]);
     }
@@ -448,34 +450,7 @@ class SystemController extends Controller
             'data'=>$config
         ]);
     }
-    public function addShareActivity()
-    {
-        $id = Input::get('id');
-        $start = strtotime(Input::get('start'));
-        $end = strtotime(Input::get('end'));
-        if ($start>$end || $end<time()){
-            return response()->json([
-                'return_code'=>"FAIL",
-                'return_msg'=>'时间错误！'
-            ]);
-        }
-        if ($id){
-            $activity = ShareActivity::find($id);
-        }else{
-            $activity = new ShareActivity();
-        }
-        $activity->start = $start;
-        $activity->end = $end;
-        $activity->score = Input::get('score');
-        $activity->content = Input::get('content');
-        $activity->rule = Input::get('rule');
-        $activity->state = Input::get('state',0);
-        if ($activity->save()){
-            return response()->json([
-                'return_code'=>'SUCCESS'
-            ]);
-        }
-    }
+
     public function getArticles()
     {
         $articles = Article::all();
@@ -679,6 +654,48 @@ class SystemController extends Controller
                     'score'=>8,
                     'link'=>formatUrl('activity/'.$code),
                 ]
+            ]);
+        }
+    }
+    public function delRefuseReason($id)
+    {
+        $reason = RefuseReasen::find($id);
+        if ($reason->delete()){
+            return response()->json([
+                'return_code'=>'SUCCESS'
+            ]);
+        }
+    }
+    public function getShareActivities()
+    {
+        $activity = ShareActivity::first();
+        return response()->json([
+            'return_code'=>'SUCCESS',
+            'data'=>$activity
+        ]);
+    }
+    public function addShareActivity()
+    {
+
+        $start = strtotime(Input::get('start'));
+        $end = strtotime(Input::get('end'));
+        if ($start>$end || $end<time()){
+            return response()->json([
+                'return_code'=>"FAIL",
+                'return_msg'=>'时间错误！'
+            ]);
+        }
+        $activity = ShareActivity::first();
+        $activity->start = $start;
+        $activity->end = $end;
+        $activity->score = Input::get('score');
+        $activity->content = Input::get('content');
+        $activity->rule = Input::get('rule');
+        $activity->type = Input::get('type');
+        $activity->daily_max = Input::get('daily_max');
+        if ($activity->save()){
+            return response()->json([
+                'return_code'=>'SUCCESS'
             ]);
         }
     }

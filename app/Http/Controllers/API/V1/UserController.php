@@ -513,6 +513,30 @@ class UserController extends Controller
             ]);
         }
     }
+    public function OauthSearch()
+    {
+        $open_id = Input::get('open_id');
+        $type = Input::get('type');
+        if ($type==1){
+            $bind = QQBind::where('open_id','=',$open_id)->first();
+        }else{
+            $bind = WechatBind::where('open_id','=',$open_id)->first();
+        }
+        if (!empty($bind)){
+            return response()->json([
+                'return_code'=>'SUCCESS',
+                'data'=>[
+                    'bind'=>1
+                ]
+            ]);
+        }
+        return response()->json([
+            'return_code'=>'SUCCESS',
+            'data'=>[
+                'bind'=>0
+            ]
+        ]);
+    }
     public function scan()
     {
         $uid = getUserToken(Input::get('token'));

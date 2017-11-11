@@ -133,3 +133,11 @@ if (!function_exists('getRandCode')){
         return rand(pow(10,($length-1)), pow(10,$length)-1);
     }
 }
+if (!function_exists('push')){
+    function push($key,$value)
+    {
+        \Illuminate\Support\Facades\Redis::set($key,$value);
+        \Illuminate\Support\Facades\Redis::expire($key,300);
+
+    }
+}

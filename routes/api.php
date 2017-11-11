@@ -68,6 +68,7 @@ Route::group(['prefix'=>'v1','middleware'=>'cross'],function (){
     Route::get('guides','API\V1\SystemController@getUserGuides');
     Route::get('config','API\V1\SystemController@getSystemConfig');
     Route::post('oauth/login','API\V1\UserController@OauthLogin');
+    Route::get('oauth/search','API\V1\UserController@OauthSearch');
     Route::post('bind/qq','API\V1\UserController@bindQQ');
     Route::post('bind/wechat','API\V1\UserController@bindWeChat');
     Route::get('scan','API\V1\UserController@scan');
