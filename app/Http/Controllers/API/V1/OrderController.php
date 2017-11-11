@@ -373,7 +373,8 @@ class OrderController extends Controller
         $data = $orderDb->limit($limit)->offset(($page-1)*$limit)->orderBy('id','DESC')->get();
         if (!empty($data)){
             for ($i=0;$i<count($data);$i++){
-                $data[$i]->username = User::find($data[$i]->user_id)->username;
+                $user = User::find($data[$i]->user_id);
+                $data[$i]->username = empty($user)?'':$user->username;
             }
         }
         return response()->json([
