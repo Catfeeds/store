@@ -38,6 +38,7 @@ class UserController extends Controller
     public function register(RegisterPost $request)
     {
         $code = $request->get('code');
+        $open_id = $request->get('open_id');
         $type = $request->get('type');
         $data = getCode($request->get('phone'));
         if (empty($data)||$data['type']!='register'){
@@ -52,14 +53,30 @@ class UserController extends Controller
                 'return_msg'=>'验证码错误！'
             ]);
         }
-        User::create([
-            'username' =>  $request->get('username'),
-            'phone' => $request->get('phone'),
-            'password' => bcrypt($request->get('password')),
-        ]);
-        return response()->json([
-            'return_code'=>'SUCCESS'
-        ]);
+        $user = new User();
+        $user->username = Input::get('username');
+        $user->phone = Input::get('phone');
+        $user->password = bcrypt($request->get('password'));
+        $user->avatar = Input::get('avatar','');
+        if ($user->save()){
+            if ($open_id){
+                if ($type==1){
+                    $bind = new QQBind();
+                    $bind->user_id = $user->id;
+                    $bind->open_id = $open_id;
+                    $bind->save();
+                }else{
+                    $bind = new WechatBind();
+                    $bind->user_id = $user->id;
+                    $bind->open_id = $open_id;
+                    $bind->save();
+                }
+            }
+            return response()->json([
+                'return_code'=>'SUCCESS'
+            ]);
+        }
+
 
     }
     public function login(LoginPost $loginPost)
