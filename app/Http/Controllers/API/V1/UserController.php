@@ -290,6 +290,7 @@ class UserController extends Controller
         $user->commodities = $user->commodities()->count();
         $user->wechat = WechatBind::where('user_id','=',$user->id)->count();
         $user->qq = QQBind::where('user_id','=',$user->id)->count();
+        $user->qrcode = $user->commodities()->where('pass','=',1)->where('enable','=',1)->count();
         return response()->json([
             'return_code'=>'SUCCESS',
             'data'=>$user
