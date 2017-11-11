@@ -554,10 +554,7 @@ class SystemController extends Controller
     }
     public function getSignActivity()
     {
-        $activity = SignActivity::where('state','=',1)->first();
-        if (empty($activity)){
-            $activity = new SignActivity();
-        }
+        $activity = SignActivity::first();
         return response()->json([
             'return_code'=>'SUCCESS',
             'data'=>$activity
@@ -565,7 +562,7 @@ class SystemController extends Controller
     }
     public function addSignActivity()
     {
-        $activity = SignActivity::where('state','=',1)->first();
+        $activity = SignActivity::first();
         if (empty($activity)){
             $activity = new SignActivity();
         }
@@ -574,13 +571,14 @@ class SystemController extends Controller
         $activity->score = Input::get('score');
         if ($activity->save()){
             return response()->json([
-                'return_code'=>'SUCCESS'
+                'return_code'=>'SUCCESS',
+                'data'=>$activity
             ]);
         }
     }
     public function getScanActivity()
     {
-        $activity = ScanActivity::where('state','=',1)->first();
+        $activity = ScanActivity::first();
         if (empty($activity)){
             $activity = new ScanActivity();
         }
@@ -591,16 +589,18 @@ class SystemController extends Controller
     }
     public function addScanActivity()
     {
-        $activity = ScanActivity::where('state','=',1)->first();
+        $activity = ScanActivity::first();
         if (empty($activity)){
             $activity = new ScanActivity();
         }
         $activity->start = strtotime(Input::get('start'));
         $activity->end = strtotime(Input::get('end'));
         $activity->score = Input::get('score');
+        dd($activity);
         if ($activity->save()){
             return response()->json([
-                'return_code'=>'SUCCESS'
+                'return_code'=>'SUCCESS',
+                'data'=>$activity
             ]);
         }
     }

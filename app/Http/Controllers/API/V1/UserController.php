@@ -95,7 +95,9 @@ class UserController extends Controller
             setUserToken($key,$user->id);
             return response()->json([
                 'return_code'=>"SUCCESS",
-                'token'=>$key
+                'data' =>[
+                    'token'=>$key
+                ]
             ]);
         }else{
             if (Auth::attempt(['phone'=>$username,'password'=>$password],true)){
@@ -640,5 +642,15 @@ class UserController extends Controller
     public function modifyUser($id)
     {
         $user = User::find($id);
+        $state = Input::get('state');
+        if ($state==0){
+            $user->state = 0;
+        }else{
+            $user->state = 1;
+        }
+        $user->save();
+        return response()->json([
+            'return_code'=>'SUCCESS'
+        ]);
     }
 }

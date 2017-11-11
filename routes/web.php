@@ -58,31 +58,31 @@ Route::group(['middleware'=>'cross'],function (){
         Route::get('guides','API\V1\SystemController@getUserGuides');
         Route::get('del/guide/{id}','API\V1\SystemController@delUserGuides');
         Route::get('orders','API\V1\OrderController@getAllOrders');
-
+        Route::get('reports','API\V1\SystemController@getReports');
+        Route::get('parttimes','API\V1\SystemController@listPartTime');
+        Route::get('modify/report/{id}','API\V1\SystemController@modifyReport');
+        Route::get('modify/parttime/{id}','API\V1\SystemController@modifyPartTime');
+        Route::get('activity/sign','API\V1\SystemController@getSignActivity');
+        Route::get('activity/scan','API\V1\SystemController@getScanActivity');
+        Route::post('activity/sign','API\V1\SystemController@addSignActivity');
+        Route::post('activity/scan','API\V1\SystemController@addScanActivity');
+        Route::get('config','API\V1\SystemController@getSystemConfig');
+        Route::post('config','API\V1\SystemController@modifySystemConfig');
+        Route::get('users','API\V1\UserController@getAllUsers');
+        Route::get('refuses','API\V1\SystemController@getRefuseReasons');
+        Route::post('refuse','API\V1\SystemController@addRefuseReasen');
+        Route::get('del/refuse/{id}','API\V1\SystemController@delRefuseReason');
+        Route::get('report/reasons','API\V1\SystemController@getReportReasons');
+        Route::post('report/reason','API\V1\SystemController@addReportReason');
+        Route::post('share/activity','API\V1\SystemController@getShareActivities');
+        Route::get('share/activity','API\V1\SystemController@getShareActivities');
+        Route::get('pass/commodities','API\V1\CommodityController@getPassCommodities');
+        Route::get('unpass/commodities','API\V1\CommodityController@getUnPassCommodities');
+        Route::get('pass/commodity/{id}','API\V1\CommodityController@passCommodity');
+        Route::get('modify/user/{id}','API\V1\UserController@modifyUser');
 
     });
 
-    Route::get('reports','API\V1\SystemController@getReports');
-    Route::get('parttimes','API\V1\SystemController@listPartTime');
-    Route::get('modify/report/{id}','API\V1\SystemController@modifyReport');
-    Route::get('modify/parttime/{id}','API\V1\SystemController@modifyPartTime');
-    Route::get('activity/sign','API\V1\SystemController@getSignActivity');
-    Route::get('activity/scan','API\V1\SystemController@getScanActivity');
-    Route::post('activity/sign','API\V1\SystemController@addSignActivity');
-    Route::post('activity/scan','API\V1\SystemController@addScanActivity');
-    Route::get('config','API\V1\SystemController@getSystemConfig');
-    Route::post('config','API\V1\SystemController@modifySystemConfig');
-    Route::get('users','API\V1\UserController@getAllUsers');
-    Route::get('refuses','API\V1\SystemController@getRefuseReasons');
-    Route::post('refuse','API\V1\SystemController@addRefuseReasen');
-    Route::get('del/refuse/{id}','API\V1\SystemController@delRefuseReason');
-    Route::get('report/reasons','API\V1\SystemController@getReportReasons');
-    Route::post('report/reason','API\V1\SystemController@addReportReason');
-    Route::post('share/activity','API\V1\SystemController@getShareActivities');
-    Route::get('share/activity','API\V1\SystemController@getShareActivities');
-    Route::get('pass/commodities','API\V1\CommodityController@getPassCommodities');
-    Route::get('unpass/commodities','API\V1\CommodityController@getUnPassCommodities');
-    Route::get('pass/commodity/{id}','API\V1\CommodityController@passCommodity');
-    Route::get('modify/user/{id}','API\V1\CommodityController@getUnPassCommodities');
+
 
 });
