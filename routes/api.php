@@ -19,7 +19,7 @@ Route::group(['prefix'=>'v1','middleware'=>'cross'],function (){
     Route::post('reset/password','API\V1\UserController@resetPassword');
     Route::get('token','API\V1\UserController@getToken');
     Route::post('modify/phone','API\V1\UserController@modifyPhone');
-    Route::get('modify/phone/verify','API\V1\sendModifySMS@sendModifySMS');
+    Route::get('modify/phone/verify','API\V1\SmsController@sendModifySMS');
     Route::get('commodities','API\V1\CommodityController@getCommodities');
     Route::get('types','API\V1\CommodityController@getCommodityTypes');
     Route::post('commodity','API\V1\CommodityController@addCommodity');
