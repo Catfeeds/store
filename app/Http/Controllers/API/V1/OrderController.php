@@ -7,6 +7,7 @@ use App\Models\Commodity;
 use App\Models\Member;
 use App\Models\MemberLevel;
 use App\Models\Order;
+use App\Models\SysConfig;
 use App\Models\UserBuy;
 use App\PublishRecord;
 use App\User;
@@ -45,6 +46,7 @@ class OrderController extends Controller
             'user_id'=>$uid,
             'commodity_id'=>$commodity_id
         ])->first();
+        $config = SysConfig::first();
         if (empty($buy)){
             $buy = new UserBuy();
             $buy->user_id = $uid;
@@ -55,7 +57,7 @@ class OrderController extends Controller
             $title = '即时查看-'.$title.'-图片';
             switch ($type){
                 case 1:
-                    $bool = $this->scorePay($uid,$number,$title,3,2,$buy->id);
+                    $bool = $this->scorePay($uid,$number,$title,$config->pic_score,2,$buy->id);
                     if ($bool){
                         return response()->json([
                             'return_code'=>"SUCCESS",
@@ -69,14 +71,14 @@ class OrderController extends Controller
                     }
                     break;
                 case 2:
-                    if ($this->makeOrder($uid,$number,0.3,$title,2,2,$commodity_id)){
-                        $data = $this->aliPay($number,$title,0.3);
+                    if ($this->makeOrder($uid,$number,$config->pic_price,$title,2,2,$commodity_id)){
+                        $data = $this->aliPay($number,$title,$config->pic_price);
                     }
                     break;
                 case 3:
-                    if ($this->makeOrder($uid,$number,0.3,$title,2,3,$commodity_id)){
+                    if ($this->makeOrder($uid,$number,$config->pic_price,$title,2,3,$commodity_id)){
                         $ip = $request->getClientIp();
-                        $data = $this->wxPay($number,$title,0.3,$ip);
+                        $data = $this->wxPay($number,$title,$config->pic_price,$ip);
                     }
                     break;
             }
@@ -87,7 +89,7 @@ class OrderController extends Controller
                 $title = '即时查看-'.$title.'-图片';
                 switch ($type){
                     case 1:
-                        $bool = $this->scorePay($uid,$number,$title,3,2,$buy->id);
+                        $bool = $this->scorePay($uid,$number,$title,$config->pic_score,2,$buy->id);
                         if ($bool){
                             return response()->json([
                                 'return_code'=>"SUCCESS",
@@ -101,14 +103,14 @@ class OrderController extends Controller
                         }
                         break;
                     case 2:
-                        if ($this->makeOrder($uid,$number,0.3,$title,2,2,$commodity_id,$buy->id)){
-                            $data = $this->aliPay($number,$title,0.3);
+                        if ($this->makeOrder($uid,$number,$config->pic_price,$title,2,2,$commodity_id,$buy->id)){
+                            $data = $this->aliPay($number,$title,$config->pic_price);
                         }
                         break;
                     case 3:
-                        if ($this->makeOrder($uid,$number,0.3,$title,3,3,$commodity_id,$buy->id)){
+                        if ($this->makeOrder($uid,$number,$config->pic_price,$title,3,3,$commodity_id,$buy->id)){
                             $ip = $request->getClientIp();
-                            $data = $this->wxPay($number,$title,0.3,$ip);
+                            $data = $this->wxPay($number,$title,$config->pic_price,$ip);
                         }
                         break;
                 }
@@ -129,6 +131,7 @@ class OrderController extends Controller
             'user_id'=>$uid,
             'commodity_id'=>$commodity_id
         ])->first();
+        $config = SysConfig::first();
         if (empty($buy)){
             $buy = new UserBuy();
             $buy->user_id = $uid;
@@ -139,7 +142,7 @@ class OrderController extends Controller
             $title = '即时查看-'.$title.'-联系方式';
             switch ($type){
                 case 1:
-                    $bool = $this->scorePay($uid,$number,$title,3,3,$buy->id);
+                    $bool = $this->scorePay($uid,$number,$title,$config->phone_score,3,$buy->id);
                     if ($bool){
                         return response()->json([
                             'return_code'=>"SUCCESS",
@@ -153,14 +156,14 @@ class OrderController extends Controller
                     }
                     break;
                 case 2:
-                    if ($this->makeOrder($uid,$number,0.3,$title,2,2,$buy->id)){
-                        $data = $this->aliPay($number,$title,0.3);
+                    if ($this->makeOrder($uid,$number,$config->phone_price,$title,2,2,$buy->id)){
+                        $data = $this->aliPay($number,$title,$config->phone_price);
                     }
                     break;
                 case 3:
-                    if ($this->makeOrder($uid,$number,0.3,$title,3,3,$buy->id)){
+                    if ($this->makeOrder($uid,$number,$config->phone_price,$title,3,3,$buy->id)){
                         $ip = $request->getClientIp();
-                        $data = $this->wxPay($number,$title,0.3,$ip);
+                        $data = $this->wxPay($number,$title,$config->phone_price,$ip);
                     }
                     break;
             }
@@ -171,7 +174,7 @@ class OrderController extends Controller
                 $title = '即时查看-'.$title.'-联系方式';
                 switch ($type){
                     case 1:
-                        $bool = $this->scorePay($uid,$number,$title,3,3,$buy->id);
+                        $bool = $this->scorePay($uid,$number,$title,$config->phone_score,3,$buy->id);
                         if ($bool){
                             return response()->json([
                                 'return_code'=>"SUCCESS",
@@ -185,14 +188,14 @@ class OrderController extends Controller
                         }
                         break;
                     case 2:
-                        if ($this->makeOrder($uid,$number,0.3,$title,2,2,$buy->id)){
-                            $data = $this->aliPay($number,$title,0.3);
+                        if ($this->makeOrder($uid,$number,$config->phone_price,$title,2,2,$buy->id)){
+                            $data = $this->aliPay($number,$title,$config->phone_price);
                         }
                         break;
                     case 3:
-                        if ($this->makeOrder($uid,$number,0.3,$title,3,3,$buy->id)){
+                        if ($this->makeOrder($uid,$number,$config->phone_price,$title,3,3,$buy->id)){
                             $ip = $request->getClientIp();
-                            $data = $this->wxPay($number,$title,0.3,$ip);
+                            $data = $this->wxPay($number,$title,$config->phone_price,$ip);
                         }
                         break;
                 }
