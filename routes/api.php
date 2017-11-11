@@ -72,8 +72,8 @@ Route::group(['prefix'=>'v1','middleware'=>'cross'],function (){
     Route::post('bind/qq','API\V1\UserController@bindQQ');
     Route::post('bind/wechat','API\V1\UserController@bindWeChat');
     Route::get('scan','API\V1\UserController@scan');
-    Route::post('pay/notify','API\V1\UserController@pay_notify');
-    Route::any('alipay/notify','API\V1\UserController@alipayNotify');
+    Route::post('pay/notify','API\V1\OrderController@pay_notify');
+    Route::any('alipay/notify','API\V1\OrderController@alipayNotify');
     Route::get('share/activity','API\V1\SystemController@getShareActivity');
     Route::get('article','API\V1\SystemController@getArticle');
 });
