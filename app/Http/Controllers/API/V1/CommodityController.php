@@ -666,7 +666,10 @@ class CommodityController extends Controller
         $city_group = City::where('pid','=',$cid)->get();
         if (!empty($city_group)){
             for ($i=0;$i<count($city_group);$i++){
-                $city_group[$i]->count = Commodity::where('city_id','=',$city_group[$i]->id)->count();
+                $city_group[$i]->count = Commodity::where('city_id','=',$city_group[$i]->id)->where([
+                    'pass'=>1,
+                    'enable'=>1
+                ])->count();
             }
         }
         return response()->json([
