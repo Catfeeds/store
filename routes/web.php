@@ -14,7 +14,7 @@
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('article','API\V1\SystemController@getArticle');
+//Route::get('article','API\V1\SystemController@getArticle');
 
 Route::group(['middleware'=>'cross'],function (){
     Route::any('upload','API\V1\UploadController@uploadImage');

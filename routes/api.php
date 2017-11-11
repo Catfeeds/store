@@ -75,4 +75,5 @@ Route::group(['prefix'=>'v1','middleware'=>'cross'],function (){
     Route::post('pay/notify','API\V1\UserController@pay_notify');
     Route::any('alipay/notify','API\V1\UserController@alipayNotify');
     Route::get('share/activity','API\V1\SystemController@getShareActivity');
+    Route::get('article','API\V1\SystemController@getArticle');
 });

@@ -479,8 +479,9 @@ class SystemController extends Controller
     {
         $type = Input::get('type');
         $article = Article::where('type','=',$type)->first();
-        return view('article',[
-            'article'=>$article
+        return response()->json([
+            'return_code'=>'SUCCESS',
+            'data'=>$article
         ]);
     }
     public function getReports()
