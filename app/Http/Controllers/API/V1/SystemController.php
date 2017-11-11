@@ -530,7 +530,7 @@ class SystemController extends Controller
         $state = Input::get('state');
         $parttime = DB::table('part_times');
         $count = $parttime->count();
-        if ($state){
+        if (isset($state)){
             $parttime->where('state','=',$state);
             $count  = $parttime->count();
         }
@@ -596,7 +596,6 @@ class SystemController extends Controller
         $activity->start = strtotime(Input::get('start'));
         $activity->end = strtotime(Input::get('end'));
         $activity->score = Input::get('score');
-        dd($activity);
         if ($activity->save()){
             return response()->json([
                 'return_code'=>'SUCCESS',
