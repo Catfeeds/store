@@ -89,6 +89,10 @@ class CommodityController extends Controller
                 $list = DescriptionList::where('commodity_id','=',$commodity->id)->pluck('desc_id');
                 $commodity->description = Description::whereIn('id',$list)->get();
                 $commodity->type = CommodityType::find($commodity->type);
+                return response()->json([
+                    'return_code'=>'SUCCESS',
+                    'data'=>$commodity
+                ]);
             }else{
                 $collect = Collect::where([
                     'user_id'=>$uid,
