@@ -509,7 +509,7 @@ class SystemController extends Controller
         if (!empty($data)){
             for ($i=0;$i<count($data);$i++) {
                 $commodity = Commodity::find($data[$i]->commodity_id);
-                $data[$i]->commodity_name = $commodity->title;
+                $data[$i]->commodity = $commodity;
                 $data[$i]->read_number = $commodity->read_number;
                 $data[$i]->report_number = $commodity->report()->count();
                 $user = User::find($data[$i]->user_id);
