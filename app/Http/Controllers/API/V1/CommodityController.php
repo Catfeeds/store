@@ -43,7 +43,8 @@ class CommodityController extends Controller
         $report = new Report();
         $report->user_id = getUserToken($request->get('token'));
         $report->commodity_id = $request->get('commodity_id');
-        $report->type_id =  $request->get('type_id');
+        $type_id =  $request->get('type_id');
+        $report->type_id =  implode(',',$type_id);
         $report->phone = $request->get('phone');
         $report->contact = $request->get('contact');
         $report->description = $request->get('description');
@@ -88,20 +89,25 @@ class CommodityController extends Controller
                 'user_id'=>$uid,
                 'commodity_id'=>$id
             ])->count();
-            $member = Member::where('user_id','=',$uid)->first();
-            if (empty($member)){
+            if ($uid == $commodity->user_id){
                 $need_pay = 0;
             }else{
-                if ($member->level==0){
-                    $need_pay = 1;
+                $member = Member::where('user_id','=',$uid)->first();
+                if (empty($member)){
+                    $need_pay = 0;
                 }else{
-                    if ($member->end_time<time()){
+                    if ($member->level==0){
                         $need_pay = 1;
                     }else{
-                        $need_pay = 0;
+                        if ($member->end_time<time()){
+                            $need_pay = 1;
+                        }else{
+                            $need_pay = 0;
+                        }
                     }
                 }
             }
+
         }
         $commodity->collect = $collect;
         $commodity->need_pay = $need_pay;

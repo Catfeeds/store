@@ -493,7 +493,7 @@ class SystemController extends Controller
         $page = Input::get('page',1);
         $limit = Input::get('limit',10);
         $state = Input::get('state');
-        $reports = DB::table('reports');
+        $reports = DB::table('reports')->where('state','!=','2');
         $count = $reports->count();
         $username = Input::get('username');
         $user_id = Input::get('user_id');
