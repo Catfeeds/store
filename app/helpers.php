@@ -136,26 +136,31 @@ if (!function_exists('getRandCode')){
 if (!function_exists('push')){
     function push($uid,$alias_type,$title,$content,$subtitle='')
     {
-        $android_predefined = [
-            'ticker' => 'android ticker',
-            'title' => $title,
-            'text' => $content,
-            'play_vibrate' => 'true',
-            'play_lights' => 'true',
-            'play_sound' => 'true',
-            'after_open' => 'go_activity',
-            'activity' => 'com.sennki.flybrid.main.user.UserMyMessageActivity'
-        ];
-        $customField = array(); //oth
-        \Zzl\Umeng\Facades\Umeng::android()->sendCustomizedcast($uid,$alias_type,$android_predefined,$customField);
+        try{
+            $android_predefined = [
+                'ticker' => 'android ticker',
+                'title' => $title,
+                'text' => $content,
+                'play_vibrate' => 'true',
+                'play_lights' => 'true',
+                'play_sound' => 'true',
+                'after_open' => 'go_activity',
+                'activity' => 'com.sennki.flybrid.main.user.UserMyMessageActivity'
+            ];
+            $customField = array(); //oth
+            \Zzl\Umeng\Facades\Umeng::android()->sendCustomizedcast($uid,$alias_type,$android_predefined,$customField);
 //        dd($data);
-        $predefined = [
-            'alert'=>[
-                'title'=>$title,
-                'subtitle'=>$subtitle,
-                'body'=>$content
-            ]
-        ];
-        \Zzl\Umeng\Facades\Umeng::ios()->sendCustomizedcast($uid,$alias_type,$predefined,$customField);
+            $predefined = [
+                'alert'=>[
+                    'title'=>$title,
+                    'subtitle'=>$subtitle,
+                    'body'=>$content
+                ]
+            ];
+            \Zzl\Umeng\Facades\Umeng::ios()->sendCustomizedcast($uid,$alias_type,$predefined,$customField);
+        }catch (\Zzl\Umeng\Exception\UmengException $exception){
+
+        }
+
     }
 }
