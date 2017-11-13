@@ -523,6 +523,7 @@ class SystemController extends Controller
                 $user = User::find($data[$i]->user_id);
                 $data[$i]->username = empty($user)?'':$user->username;
                 $reason = $data[$i]->type_id;
+                $reason = explode(',',$reason);
                 $data[$i]->reports = ReportReason::whereIn('id',$reason)->pluck('title');
             }
         }
