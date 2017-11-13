@@ -688,6 +688,7 @@ class CommodityController extends Controller
 //        dd(Input::all());
         $id = Input::get('id');
         $title = Input::get('title');
+        $sort = Input::get('sort',0);
         $desc = Input::get('desc');
         if (!empty($id)){
             $count = CommodityType::where('title','=',$title)->where('id','!=',$id)->count();
@@ -705,6 +706,7 @@ class CommodityController extends Controller
                 ]);
             }
             $type->title = $title;
+            $type->sort = $sort;
             if ($type->save()){
                 if (!empty($desc)){
                     Description::where('type_id','=',$type->id)->delete();
@@ -729,6 +731,7 @@ class CommodityController extends Controller
             }
             $type = new CommodityType();
             $type->title = $title;
+            $type->sort = $sort;
             if ($type->save()){
                 if (!empty($desc)){
                     foreach ($desc as $item){
@@ -752,7 +755,7 @@ class CommodityController extends Controller
         $count = CommodityType::count();
         $limit = Input::get('limit',10);
         $page = Input::get('page',1);
-        $type = CommodityType::limit($limit)->offset(($page-1)*$limit)->get();
+        $type = CommodityType::limit($limit)->offset(($page-1)*$limit)->orderBy('state','DESC')->orderBy('sort','DESC')->get();
         if (!empty($type)){
             for ($i=0;$i<count($type);$i++){
                 $type[$i]->descript = Description::where('type_id','=',$type[$i]->id)->get();
@@ -903,7 +906,7 @@ class CommodityController extends Controller
             $passlist->save();
             $commodity->save();
             $smsContent = [
-                'date'=>$commodity->created_at
+                'date'=>$commodity->created_at->format('Y-m-d')
             ];
             $user = User::find($commodity->user_id);
             $data = sendSMS($user->phone,\config('alisms.Pass'),$smsContent);
@@ -920,7 +923,7 @@ class CommodityController extends Controller
             $commodity->pass = 2;
             $commodity->save();
             $smsContent = [
-                'date'=>$commodity->created_at
+                'date'=>$commodity->created_at->format('Y-m-d')
             ];
             $user = User::find($commodity->user_id);
             $data = sendSMS($user->phone,\config('alisms.Fail'),$smsContent);
