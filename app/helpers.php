@@ -70,6 +70,7 @@ if (!function_exists('sendSMS')) {
             }
             dd($data);
         }
+        echo 'NotSend';
         return false;
     }
 }
