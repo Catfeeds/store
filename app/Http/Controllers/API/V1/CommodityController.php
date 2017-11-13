@@ -64,8 +64,8 @@ class CommodityController extends Controller
             ]);
         }
         $commodity->read();
-        $entry = Input::get('entry');
-
+//        $entry = Input::get('entry');
+        $uid = getUserToken(Input::get('token'));
         $needPay = SysConfig::first();
         $fixdata = getAround($commodity->latitude,$commodity->longitude,500);
         $commodities = Commodity::where('id','!=',$id)->where([
@@ -76,65 +76,90 @@ class CommodityController extends Controller
         $commodity->around = $data;
         $city = City::find($commodity->city_id);
         $commodity->district = empty($city)?'未知':$city->name;
-        if($entry=='qrcode'){
-            $commodity->pictures = $commodity->pictures()->get();
-
-        }
-        if ($needPay->need_pay){
-            $uid = getUserToken(Input::get('token'));
-            if (!$uid){
-                $commodity->phone = '***********';
-                $picture = $commodity->pictures()->first();
-                $commodity->pictures =[$picture];
-                $commodity->collect = 0;
-                $list = DescriptionList::where('commodity_id','=',$commodity->id)->pluck('desc_id');
-                $commodity->description = Description::whereIn('id',$list)->get();
-                $commodity->type = CommodityType::find($commodity->type);
-                return response()->json([
-                    'return_code'=>'SUCCESS',
-                    'data'=>$commodity
-                ]);
-            }else{
-                $collect = Collect::where([
-                    'user_id'=>$uid,
-                    'commodity_id'=>$id
-                ])->count();
-                $commodity->collect = $collect;
-                if ($commodity->user_id == $uid){
-
-//                    $list = TypeList::where('commodity_id','=',$commodity->id)->pluck('type_id');
-                    $list = DescriptionList::where('commodity_id','=',$commodity->id)->pluck('desc_id');
-                    $commodity->description = Description::whereIn('id',$list)->get();
-                    $commodity->type = CommodityType::find($commodity->type);
-                    $commodity->pictures = $commodity->pictures()->get();
-                    return response()->json([
-                        'return_code'=>'SUCCESS',
-                        'data'=>$commodity
-                    ]);
-                }
-                $member = Member::where('user_id','=',$uid)->first();
-                if (empty($member)||$member->end_time<time()){
-                    $record = UserBuy::where('user_id','=',$uid)->where('commodity_id','=',$id)->first();
-                    if (empty($record)){
-                        $commodity->phone = '***********';
-                        $picture = $commodity->pictures()->first();
-                        $commodity->pictures =[$picture];
-                    }else{
-                        $commodity->phone = ($record->phone==1)?$commodity->phone:'***********';
-                        if ($record->pic==1){
-                            $commodity->pictures = $commodity->pictures()->get();
-                        }
-                    }
-                }else{
-                    $commodity->pictures = $commodity->pictures()->get();
-                }
-            }
-        }else{
-            $commodity->pictures = $commodity->pictures()->get();
-        }
+        $commodity->pictures = $commodity->pictures()->get();
         $list = DescriptionList::where('commodity_id','=',$commodity->id)->pluck('desc_id');
         $commodity->description = Description::whereIn('id',$list)->get();
         $commodity->type = CommodityType::find($commodity->type);
+        if (!$uid){
+            $collect = 0;
+            $need_pay = 1;
+        }else{
+            $collect = Collect::where([
+                'user_id'=>$uid,
+                'commodity_id'=>$id
+            ])->count();
+            $member = Member::where('user_id','=',$uid)->first();
+            if (empty($member)){
+                $need_pay = 0;
+            }else{
+                if ($member->level==0){
+                    $need_pay = 1;
+                }else{
+                    if ($member->end_time<time()){
+                        $need_pay = 1;
+                    }else{
+                        $need_pay = 0;
+                    }
+                }
+            }
+        }
+        $commodity->collect = $collect;
+        $commodity->need_pay = $need_pay;
+//        if ($needPay->need_pay){
+//            $uid = getUserToken(Input::get('token'));
+//            if (!$uid){
+//                $commodity->phone = '***********';
+//                $picture = $commodity->pictures()->first();
+//                $commodity->pictures =[$picture];
+//                $commodity->collect = 0;
+//                $list = DescriptionList::where('commodity_id','=',$commodity->id)->pluck('desc_id');
+//                $commodity->description = Description::whereIn('id',$list)->get();
+//                $commodity->type = CommodityType::find($commodity->type);
+//                return response()->json([
+//                    'return_code'=>'SUCCESS',
+//                    'data'=>$commodity
+//                ]);
+//            }else{
+//                $collect = Collect::where([
+//                    'user_id'=>$uid,
+//                    'commodity_id'=>$id
+//                ])->count();
+//                $commodity->collect = $collect;
+//                if ($commodity->user_id == $uid){
+//
+////                    $list = TypeList::where('commodity_id','=',$commodity->id)->pluck('type_id');
+//                    $list = DescriptionList::where('commodity_id','=',$commodity->id)->pluck('desc_id');
+//                    $commodity->description = Description::whereIn('id',$list)->get();
+//                    $commodity->type = CommodityType::find($commodity->type);
+//                    $commodity->pictures = $commodity->pictures()->get();
+//                    return response()->json([
+//                        'return_code'=>'SUCCESS',
+//                        'data'=>$commodity
+//                    ]);
+//                }
+//                $member = Member::where('user_id','=',$uid)->first();
+//                if (empty($member)||$member->end_time<time()){
+//                    $record = UserBuy::where('user_id','=',$uid)->where('commodity_id','=',$id)->first();
+//                    if (empty($record)){
+//                        $commodity->phone = '***********';
+//                        $picture = $commodity->pictures()->first();
+//                        $commodity->pictures =[$picture];
+//                    }else{
+//                        $commodity->phone = ($record->phone==1)?$commodity->phone:'***********';
+//                        if ($record->pic==1){
+//                            $commodity->pictures = $commodity->pictures()->get();
+//                        }
+//                    }
+//                }else{
+//                    $commodity->pictures = $commodity->pictures()->get();
+//                }
+//            }
+//        }else{
+//            $commodity->pictures = $commodity->pictures()->get();
+//        }
+//        $list = DescriptionList::where('commodity_id','=',$commodity->id)->pluck('desc_id');
+//        $commodity->description = Description::whereIn('id',$list)->get();
+//        $commodity->type = CommodityType::find($commodity->type);
         return response()->json([
             'return_code'=>'SUCCESS',
             'data'=>$commodity

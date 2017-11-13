@@ -304,7 +304,7 @@ class UserController extends Controller
         $case = Input::get('case');
         switch ($case){
             case 1:
-                $commodities = Commodity::where('user_id','=',$uid)->where('pass','!=','0')
+                $commodities = Commodity::where('user_id','=',$uid)->where('pass','=','1')
                 ->limit($limit)->offset(($page-1)*$limit)->get();
                 break;
             case 2:
