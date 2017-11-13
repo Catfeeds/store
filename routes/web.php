@@ -19,11 +19,7 @@ Route::get('/', function () {
 Route::group(['middleware'=>'cross'],function (){
     Route::any('upload','API\V1\UploadController@uploadImage');
     Route::post('login','API\V1\UserController@adminLogin');
-    Route::get('test',function (){
-        echo strtotime('2017-11-1');
-        echo "<br/>";
-       echo strtotime('2017-11-25');
-    });
+    Route::get('test','API\V1\UserController@push');
     Route::group(['middleware'=>'auth'],function (){
 
         Route::get('launcher/images','API\V1\LaunchImageController@getLaunchImages');

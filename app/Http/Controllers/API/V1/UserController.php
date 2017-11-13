@@ -418,9 +418,17 @@ class UserController extends Controller
             'activity' => 'com.sennki.flybrid.main.user.UserMyMessageActivity'
         ];
         $customField = array(); //oth
-        $data =Umeng::android()->sendCustomizedcast($uid,$alias_type,$android_predefined,$customField);
+        Umeng::android()->sendCustomizedcast($uid,$alias_type,$android_predefined,$customField);
+//        dd($data);
+        $predefined = [
+            'alert'=>[
+                'title'=>'title',
+                'subtitle'=>'subtitle',
+                'body'=>'body'
+            ]
+        ];
+        $data = Umeng::ios()->sendCustomizedcast($uid,$alias_type,$predefined,$customField);
         dd($data);
-//        Umeng::ios()->sendCustomizedcast($uid,$alias_type,$predefined,$customField);
     }
     public function findUser()
     {
