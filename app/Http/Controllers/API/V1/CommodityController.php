@@ -749,7 +749,7 @@ class CommodityController extends Controller
     }
     public function getTypes()
     {
-        $count = CommodityType::where('state','=',1)->count();
+        $count = CommodityType::count();
         $limit = Input::get('limit',10);
         $page = Input::get('page',1);
         $type = CommodityType::limit($limit)->offset(($page-1)*$limit)->get();
@@ -913,6 +913,7 @@ class CommodityController extends Controller
             $msg->content = '消息审核通过';
             $msg->save();
 //            push();
+            push($user->id,'flybrid','消息审核不通过','消息审核不通过');
         }else{
             $reason = Input::get('reason');
 
@@ -922,12 +923,14 @@ class CommodityController extends Controller
                 'date'=>$commodity->created_at
             ];
             $user = User::find($commodity->user_id);
-            sendSMS($user->phone,\config('alisms.Fail'),$smsContent);
+            $data = sendSMS($user->phone,\config('alisms.Fail'),$smsContent);
+
             $msg = new Message();
             $msg->receive_id = $commodity->user_id;
             $msg->title ='消息审核不通过';
             $msg->content = '消息审核不通过';
             $msg->save();
+            push($user->id,'flybrid','消息审核不通过','消息审核不通过');
             foreach ($reason as $item){
                 $reason = RefuseReasen::find($item);
                 $list = new RefuseList();
@@ -938,7 +941,8 @@ class CommodityController extends Controller
 
         }
         return response()->json([
-            'return_code'=>'SUCCESS'
+            'return_code'=>'SUCCESS',
+            'data'=>$data
         ]);
     }
 }
