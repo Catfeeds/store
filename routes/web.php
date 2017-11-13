@@ -20,10 +20,8 @@ Route::group(['middleware'=>'cross'],function (){
     Route::any('upload','API\V1\UploadController@uploadImage');
     Route::post('login','API\V1\UserController@adminLogin');
     Route::get('test',function (){
-        $d = [
-            'date'=>'2017-11-6'
-        ];
-        $data = sendSMS('18664894928','SMS_109450243',$d);
+        $data = \App\Models\Commodity::find(1);
+        $data->created_at = date('Y-m-d',$data->created_at);
         dd($data);
     });
     Route::group(['middleware'=>'auth'],function (){
