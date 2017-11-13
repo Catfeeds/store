@@ -68,9 +68,8 @@ if (!function_exists('sendSMS')) {
             if ($data->success=='true'){
                 return true;
             }
-            dd($data);
+            return false;
         }
-        echo 'NotSend';
         return false;
     }
 }
