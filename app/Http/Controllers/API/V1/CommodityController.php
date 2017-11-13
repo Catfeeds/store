@@ -906,7 +906,7 @@ class CommodityController extends Controller
                 'date'=>$commodity->created_at
             ];
             $user = User::find($commodity->user_id);
-            sendSMS($user->phone,\config('alisms.Pass'),$smsContent);
+            $data = sendSMS($user->phone,\config('alisms.Pass'),$smsContent);
             $msg = new Message();
             $msg->receive_id = $commodity->user_id;
             $msg->title ='消息审核通过';
