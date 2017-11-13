@@ -84,7 +84,8 @@ class CommodityController extends Controller
             $uid = getUserToken(Input::get('token'));
             if (!$uid){
                 $commodity->phone = '***********';
-                $commodity->pictures =$commodity->pictures()->first();
+                $picture = $commodity->pictures()->first();
+                $commodity->pictures =[$picture];
                 $commodity->collect = 0;
                 $list = DescriptionList::where('commodity_id','=',$commodity->id)->pluck('desc_id');
                 $commodity->description = Description::whereIn('id',$list)->get();
@@ -116,7 +117,8 @@ class CommodityController extends Controller
                     $record = UserBuy::where('user_id','=',$uid)->where('commodity_id','=',$id)->first();
                     if (empty($record)){
                         $commodity->phone = '***********';
-                        $commodity->pictures =$commodity->pictures()->first();
+                        $picture = $commodity->pictures()->first();
+                        $commodity->pictures =[$picture];
                     }else{
                         $commodity->phone = ($record->phone==1)?$commodity->phone:'***********';
                         if ($record->pic==1){
