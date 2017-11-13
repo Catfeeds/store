@@ -94,7 +94,7 @@ class CommodityController extends Controller
             }else{
                 $member = Member::where('user_id','=',$uid)->first();
                 if (empty($member)){
-                    $need_pay = 0;
+                    $need_pay = 1;
                 }else{
                     if ($member->level==0){
                         $need_pay = 1;
