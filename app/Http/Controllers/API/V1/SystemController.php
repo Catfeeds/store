@@ -522,7 +522,8 @@ class SystemController extends Controller
                 $data[$i]->report_number = $commodity->report()->count();
                 $user = User::find($data[$i]->user_id);
                 $data[$i]->username = empty($user)?'':$user->username;
-
+                $reason = $data[$i]->type_id;
+                $data[$i]->reports = ReportReason::whereIn('id',$reason)->pluck('title');
             }
         }
         return response()->json([
