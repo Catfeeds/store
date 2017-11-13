@@ -511,11 +511,14 @@ class SystemController extends Controller
             for ($i=0;$i<count($data);$i++) {
                 $commodity = Commodity::find($data[$i]->commodity_id);
                 $commodity->pictures = $commodity->pictures()->get();
+                $list = DescriptionList::where('commodity_id','=',$commodity->id)->pluck('desc_id');
+                $commodity->descriptions = Description::whereIn('id',$list)->pluck('title');
                 $data[$i]->commodity = $commodity;
                 $data[$i]->read_number = $commodity->read_number;
                 $data[$i]->report_number = $commodity->report()->count();
                 $user = User::find($data[$i]->user_id);
                 $data[$i]->username = empty($user)?'':$user->username;
+
             }
         }
         return response()->json([
