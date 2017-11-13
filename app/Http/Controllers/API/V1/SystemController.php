@@ -524,7 +524,7 @@ class SystemController extends Controller
                 $data[$i]->username = empty($user)?'':$user->username;
                 $reason = $data[$i]->type_id;
                 $reason = explode(',',$reason);
-                $data[$i]->reports = ReportReason::whereIn('id',$reason)->pluck('title');
+                $data[$i]->reports = ReportReason::whereIn('id',$reason)->pluck('content');
             }
         }
         return response()->json([
