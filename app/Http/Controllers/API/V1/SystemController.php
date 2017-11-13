@@ -7,6 +7,8 @@ use App\Models\Advert;
 use App\Models\Article;
 use App\Models\City;
 use App\Models\Commodity;
+use App\Models\Description;
+use App\Models\DescriptionList;
 use App\Models\MemberLevel;
 use App\Models\Message;
 use App\Models\PartTime;
