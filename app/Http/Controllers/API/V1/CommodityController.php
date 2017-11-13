@@ -920,7 +920,7 @@ class CommodityController extends Controller
             $msg = new Message();
             $msg->receive_id = $commodity->user_id;
             $msg->title ='消息审核不通过';
-            $msg->content = '消息审核不通过，原因：'.$reason->title;
+            $msg->content = '消息审核不通过';
             $msg->save();
             foreach ($reason as $item){
                 $reason = RefuseReasen::find($item);
