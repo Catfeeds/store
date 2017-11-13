@@ -909,7 +909,7 @@ class CommodityController extends Controller
                 'date'=>$commodity->created_at->format('Y-m-d')
             ];
             $user = User::find($commodity->user_id);
-            $data = sendSMS($user->phone,\config('alisms.Pass'),$smsContent);
+             sendSMS($user->phone,\config('alisms.Pass'),$smsContent);
             $msg = new Message();
             $msg->receive_id = $commodity->user_id;
             $msg->title ='消息审核通过';
@@ -926,7 +926,7 @@ class CommodityController extends Controller
                 'date'=>$commodity->created_at->format('Y-m-d')
             ];
             $user = User::find($commodity->user_id);
-            $data = sendSMS($user->phone,\config('alisms.Fail'),$smsContent);
+             sendSMS($user->phone,\config('alisms.Fail'),$smsContent);
 
             $msg = new Message();
             $msg->receive_id = $commodity->user_id;
@@ -944,8 +944,7 @@ class CommodityController extends Controller
 
         }
         return response()->json([
-            'return_code'=>'SUCCESS',
-            'data'=>$data
+            'return_code'=>'SUCCESS'
         ]);
     }
 }
