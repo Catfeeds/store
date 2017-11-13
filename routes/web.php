@@ -22,7 +22,7 @@ Route::group(['middleware'=>'cross'],function (){
     Route::get('test',function (){
         $commodity = \App\Models\Commodity::find(1);
         $d = [
-            'date'=>$commodity->created_at
+            'date'=>$commodity->created_at->format('Y-m-d')
         ];
         $data = sendSMS('18664894928','SMS_109450243',$d);
         dd($data);
