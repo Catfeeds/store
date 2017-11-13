@@ -37,7 +37,7 @@ Route::group(['prefix'=>'v1','middleware'=>'cross'],function (){
     Route::post('member','API\V1\OrderController@addMember');
     Route::get('launch/image','API\V1\LaunchImageController@getLaunchImage');
     Route::post('buy/picture','API\V1\OrderController@buyCommodityPicture');
-    Route::get('buy/contact','API\V1\OrderController@buyCommodityPhone');
+    Route::post('buy/contact','API\V1\OrderController@buyCommodityPhone');
     Route::post('picture/{id}','API\V1\CommodityController@addPicture');
     Route::get('del/picture/{id}','API\V1\CommodityController@delPicture');
     Route::post('user','API\V1\UserController@setUserInfo');
