@@ -308,7 +308,7 @@ class UserController extends Controller
                 ->limit($limit)->offset(($page-1)*$limit)->get();
                 break;
             case 2:
-                $commodities = Commodity::where('user_id','=',$uid)->where('pass','=','0')->orWhere('pass','=','2')
+                $commodities = Commodity::where('user_id','=',$uid)->whereIn('pass',[0,2])
                     ->limit($limit)->offset(($page-1)*$limit)->get();
                 break;
             case 3:
