@@ -172,7 +172,7 @@ class CommodityController extends Controller
     }
     public function getCommodityTypes()
     {
-        $commodityTypes = CommodityType::all();
+        $commodityTypes = CommodityType::where('state','=',1)->get();
         return response()->json([
             'return_code'=>'SUCCESS',
             'data'=>$commodityTypes
