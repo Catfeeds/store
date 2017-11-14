@@ -340,14 +340,14 @@ class OrderController extends Controller
         $number = self::makePaySn($uid);
         switch ($type){
             case 2:
-                if ($this->makeOrder($uid,$number,$level->price,'升级会员',1,2,$level->level)){
-                    $data = $this->aliPay($number,'升级会员',$level->price);
+                if ($this->makeOrder($uid,$number,$level->price,'升级'.$level->level.'星会员',1,2,$level->level)){
+                    $data = $this->aliPay($number,'升级'.$level->level.'星会员',$level->price);
                 }
                 break;
             case 3:
                 $ip = $request->getClientIp();
-                if ($this->makeOrder($uid,$number,$level->price,'升级会员',1,3,$level->level)){
-                    $data = $this->wxPay($number,'升级会员',$level->price,$ip);
+                if ($this->makeOrder($uid,$number,$level->price,'升级'.$level->level.'星会员',1,3,$level->level)){
+                    $data = $this->wxPay($number,'升级'.$level->level.'星会员',$level->price,$ip);
                 }
         }
 
