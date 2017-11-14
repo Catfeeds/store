@@ -446,6 +446,7 @@ class OrderController extends Controller
             for ($i=0;$i<count($data);$i++){
                 $user = User::find($data[$i]->user_id);
                 $data[$i]->username = empty($user)?'':$user->username;
+                $data[$i]->member = Member::where('user_id','=',$data[$i]->user_id)->first();
             }
         }
         return response()->json([
