@@ -48,7 +48,7 @@ class CommodityController extends Controller
         $report->type_id =  implode(',',$type_id);
         $report->phone = $request->get('phone');
         $report->contact = $request->get('contact');
-        $report->description = $request->get('description');
+        $report->description = $request->get('description','');
         if ($report->save()){
             return response()->json([
                 'return_code'=>"SUCCESS"
