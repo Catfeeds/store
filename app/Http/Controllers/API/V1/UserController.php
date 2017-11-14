@@ -670,7 +670,7 @@ class UserController extends Controller
         if (!empty($data)){
             for ($i=0;$i<count($data);$i++){
                 $data[$i]->member = Member::where('user_id','=',$data[$i]->id)->first();
-                $data[$i]->commodity_count = $data[$i]->commodities()->count();
+                $data[$i]->commodity_count = Commodity::where('user_id','=',$data[$i]->id)->count();
             }
         }
         return response()->json([
