@@ -861,7 +861,7 @@ class CommodityController extends Controller
             $commodity->where('created_at','>',$start)->where('created_at','<',$end);
             $count = $commodity->count();
         }
-        $data = $commodity->limit($limit)->offset(($page-1)*$limit)->get();
+        $data = $commodity->limit($limit)->offset(($page-1)*$limit)->orderBy('id','DESC')->get();
         if (!empty($data)){
             for ($i=0;$i<count($data);$i++){
                 $type = CommodityType::find($data[$i]->type);
@@ -910,7 +910,7 @@ class CommodityController extends Controller
             $commodity->where('created_at','>',$start)->where('created_at','<',$end);
             $count = $commodity->count();
         }
-        $data = $commodity->limit($limit)->offset(($page-1)*$limit)->get();
+        $data = $commodity->limit($limit)->offset(($page-1)*$limit)->orderBy('id','DESC')->get();
         if (!empty($data)){
             for ($i=0;$i<count($data);$i++){
                 $type = CommodityType::find($data[$i]->type);
