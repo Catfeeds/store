@@ -53,7 +53,7 @@ class SystemController extends Controller
             }
             $member->level = Input::get('level');
 //            $member->title = Input::get('title');
-            $member->description = Input::get('title');
+            $member->description = Input::get('description');
             $member->price = Input::get('price');
             $member->time = Input::get('time');
             $member->send_daily = Input::get('send_daily');
@@ -69,7 +69,7 @@ class SystemController extends Controller
             }
             $member->level = Input::get('level');
 //            $member->title = Input::get('title');
-            $member->description = Input::get('title');
+            $member->description = Input::get('description');
             $member->price = Input::get('price');
             $member->time = Input::get('time');
             $member->send_daily = Input::get('send_daily');
