@@ -300,6 +300,7 @@ class UserController extends Controller
         }else{
             if ($member->end_time>=time()){
                 $level = $member->level;
+                dd($level);
             }else{
                 $level = 0;
             }
