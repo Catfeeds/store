@@ -22,7 +22,7 @@ Route::group(['prefix'=>'v1','middleware'=>'cross'],function (){
     Route::get('modify/phone/verify','API\V1\SmsController@sendModifySMS');
     Route::get('commodities','API\V1\CommodityController@getCommodities');
     Route::get('types','API\V1\CommodityController@getCommodityTypes');
-    Route::post('commodity','API\V1\CommodityController@addCommodity');
+    Route::post('commodity','API\V1\CommodityController@addCommodity')->middleware('limitSend');
     Route::get('commodity/{id}','API\V1\CommodityController@getCommodity');
     Route::delete('commodity/{id}','API\V1\CommodityController@deleteCommodity');
     Route::any('upload','API\V1\UploadController@uploadImage');

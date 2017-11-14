@@ -26,6 +26,7 @@ use App\Models\Report;
 use App\Models\SysConfig;
 use App\Models\TypeList;
 use App\Models\UserBuy;
+use App\PublishRecord;
 use App\User;
 use function GuzzleHttp\Psr7\uri_for;
 use Illuminate\Http\Request;
@@ -260,6 +261,9 @@ class CommodityController extends Controller
             $commodity->city_id = $cid;
             $commodity->user_id = $uid;
             $commodity->type = $commodityPost->get('type');
+            $record = new PublishRecord();
+            $record->user_id = $uid;
+            $record->save();
         }
         if ($commodity->save()){
             $description = $commodityPost->get('description');
