@@ -304,7 +304,7 @@ class UserController extends Controller
                 echo '2';
             }else{
                 $level = 0;
-                echo '3';
+                echo $member->end_time."--".time();
             }
         }
         $user->level = $level;
