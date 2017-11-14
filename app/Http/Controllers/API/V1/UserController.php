@@ -296,15 +296,12 @@ class UserController extends Controller
         $user = User::find($uid);
         $member = Member::where('user_id','=',$user->id)->first();
         if (empty($member)){
-            echo '1';
             $level = 0;
         }else{
             if ($member->end_time >= time()){
                 $level = $member->level;
-                echo '2';
             }else{
                 $level = 0;
-                echo $member->end_time."--".time();
             }
         }
         $user->level = $level;
