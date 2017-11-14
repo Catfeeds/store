@@ -83,6 +83,13 @@ class UserController extends Controller
                     $bind->save();
                 }
             }
+            $level = MemberLevel::where('level','=',0)->first();
+            $member = new Member();
+            $member->level = $level->level;
+            $member->end_time = $level->time+time();
+            $member->send_max = $level->send_max;
+            $member->send_daily = $level->send_daily;
+            $member->save();
             return response()->json([
                 'return_code'=>'SUCCESS'
             ]);

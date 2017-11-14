@@ -375,12 +375,14 @@ class OrderController extends Controller
                             $member->level = $level->level;
                             $member->end_time = time()+$member->time;
                             $member->send_max = $level->send_max;
+                            $member->send_daily = $level->send_daily;
                             $member->user_id = $order->user_id;
                             PublishRecord::where('user_id','=',$order->user_id)->delete();
                         }else{
                             $member->level = $level->level;
                             $member->end_time = time()+$member->time;
                             $member->send_max = $level->send_max;
+                            $member->send_daily = $level->send_daily;
                             PublishRecord::where('user_id','=',$order->user_id)->delete();
                         }
                         $member->save();
@@ -479,11 +481,22 @@ class OrderController extends Controller
                         $level = MemberLevel::find($order->content);
                         $member = Member::where('user_id','=',$order->user_id)->first();
                         if (empty($member)){
+                            $member = new Member();
                             $member->level = $level->level;
+                            $member->end_time = time()+$member->time;
+                            $member->send_max = $level->send_max;
+                            $member->send_daily = $level->send_daily;
+                            $member->user_id = $order->user_id;
+                            PublishRecord::where('user_id','=',$order->user_id)->delete();
                         }else{
                             $member->level = $level->level;
+                            $member->end_time = time()+$member->time;
+                            $member->send_max = $level->send_max;
+                            $member->send_daily = $level->send_daily;
                             PublishRecord::where('user_id','=',$order->user_id)->delete();
                         }
+                        $member->save();
+                        $order->state = 1;
                         break;
                     case 2:
                         $buy = UserBuy::find($order->content);
