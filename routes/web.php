@@ -75,6 +75,7 @@ Route::group(['middleware'=>'cross'],function (){
         Route::get('refuses','API\V1\SystemController@getRefuseReasons');
         Route::post('refuse','API\V1\SystemController@addRefuseReasen');
         Route::get('del/refuse/{id}','API\V1\SystemController@delRefuseReason');
+        Route::get('del/report/{id}','API\V1\SystemController@delReportReason');
         Route::get('report/reasons','API\V1\SystemController@getReportReasons');
         Route::post('report/reason','API\V1\SystemController@addReportReason');
         Route::post('share/activity','API\V1\SystemController@getShareActivities');

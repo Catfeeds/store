@@ -698,6 +698,15 @@ class SystemController extends Controller
             ]);
         }
     }
+    public function delReportReason($id)
+    {
+        $reason = ReportReason::find($id);
+        if ($reason->delete()){
+            return response()->json([
+                'return_code'=>'SUCCESS'
+            ]);
+        }
+    }
     public function getShareActivities()
     {
         $activity = ShareActivity::first();
