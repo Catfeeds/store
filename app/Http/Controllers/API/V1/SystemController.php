@@ -373,6 +373,7 @@ class SystemController extends Controller
         }
         $qrcode->logo = Input::get('logo');
         $qrcode->content = Input::get('content');
+        $qrcode->name = Input::get('name');
         if ($qrcode->save()){
             return response()->json([
                 'return_code'=>'SUCCESS'
