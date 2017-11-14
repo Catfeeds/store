@@ -55,7 +55,7 @@ class SystemController extends Controller
 //            $member->title = Input::get('title');
             $member->description = Input::get('description');
             $member->price = Input::get('price');
-            $member->time = Input::get('time');
+            $member->time = (Input::get('time'))*3600;
             $member->send_daily = Input::get('send_daily');
             $member->send_max = Input::get('send_max');
         }else{
@@ -71,7 +71,7 @@ class SystemController extends Controller
 //            $member->title = Input::get('title');
             $member->description = Input::get('description');
             $member->price = Input::get('price');
-            $member->time = Input::get('time');
+            $member->time = (Input::get('time'))*3600;
             $member->send_daily = Input::get('send_daily');
             $member->send_max = Input::get('send_max');
         }

@@ -18,6 +18,7 @@ class CreateMembersTable extends Migration
             $table->unsignedInteger('user_id')->unique();
             $table->tinyInteger('level');
             $table->integer('end_time');
+            $table->unsignedInteger('send_max');
             $table->timestamps();
         });
     }
