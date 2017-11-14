@@ -261,6 +261,7 @@ class SystemController extends Controller
     {
         $message = Message::find($id);
         $message->read = 1;
+        $message->save();
         return response()->json([
             'return_code'=>'SUCCESS',
             'data'=>$message
@@ -270,6 +271,7 @@ class SystemController extends Controller
     {
         $message = Message::find($id);
         $message->read = 1;
+        $message->save();
         return response()->json([
             'return_code'=>'SUCCESS',
             'data'=>$message
