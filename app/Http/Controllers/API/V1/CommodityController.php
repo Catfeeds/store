@@ -85,7 +85,12 @@ class CommodityController extends Controller
         if (!$uid){
             $collect = 0;
             $need_pay = 1;
+            $msg_num = 0;
         }else{
+            $msg_num = Message::where([
+                'receive_id'=>$uid,
+                'read'=>0
+            ])->count();
             $collect = Collect::where([
                 'user_id'=>$uid,
                 'commodity_id'=>$id
@@ -112,6 +117,7 @@ class CommodityController extends Controller
         }
         $commodity->collect = $collect;
         $commodity->need_pay = $need_pay;
+        $commodity->msg_num = $msg_num;
 //        if ($needPay->need_pay){
 //            $uid = getUserToken(Input::get('token'));
 //            if (!$uid){

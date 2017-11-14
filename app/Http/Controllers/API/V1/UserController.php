@@ -12,6 +12,7 @@ use App\Models\Description;
 use App\Models\DescriptionList;
 use App\Models\Member;
 use App\Models\MemberLevel;
+use App\Models\Message;
 use App\Models\QQBind;
 use App\Models\ScanActivity;
 use App\Models\ScanRecord;
@@ -295,6 +296,10 @@ class UserController extends Controller
         $uid = getUserToken(Input::get('token'));
         $user = User::find($uid);
         $member = Member::where('user_id','=',$user->id)->first();
+        $msg_num = Message::where([
+            'receive_id'=>$uid,
+            'read'=>0
+        ])->count();
         if (empty($member)){
             $level = 0;
         }else{
@@ -305,6 +310,7 @@ class UserController extends Controller
             }
         }
         $user->level = $level;
+        $user->msg_num = $msg_num;
         $user->commodities = $user->commodities()->count();
         $user->wechat = WechatBind::where('user_id','=',$user->id)->count();
         $user->qq = QQBind::where('user_id','=',$user->id)->count();
