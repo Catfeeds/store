@@ -951,7 +951,7 @@ class CommodityController extends Controller
             $msg->content = '消息审核通过';
             $msg->save();
 //            push();
-            push($user->id,'flybrid','消息审核不通过','消息审核不通过');
+            push($user->id,'flybrid','消息审核通过','消息审核通过');
         }else{
             $reason = Input::get('reason');
 
