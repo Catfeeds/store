@@ -164,3 +164,21 @@ if (!function_exists('push')){
 
     }
 }
+if (!function_exists('setInviteCode')){
+    function setInviteCode($key,$value,$time)
+    {
+        \Illuminate\Support\Facades\Redis::set($key,$value);
+        \Illuminate\Support\Facades\Redis::expire($key,$time);
+
+    }
+}
+if (!function_exists('getInviteCode')) {
+    function getInviteCode($key)
+    {
+        $code = \Illuminate\Support\Facades\Redis::get($key);
+        if (!isset($code)){
+            return false;
+        }
+        return $code;
+    }
+}

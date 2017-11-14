@@ -665,7 +665,9 @@ class SystemController extends Controller
         }else{
             $code = createNonceStr(5);
             $code .=$uid;
-            setUserToken($code,$uid);
+            $time = $activity->end - time();
+//            setUserToken($code,$uid);
+            setInviteCode($code,$uid,$time);
             return response()->json([
                 'return_code'=>'SUCCESS',
                 'data'=>[

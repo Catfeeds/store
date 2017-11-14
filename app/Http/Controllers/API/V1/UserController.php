@@ -58,6 +58,17 @@ class UserController extends Controller
         $user->phone = Input::get('phone');
         $user->password = bcrypt($request->get('password'));
         $user->avatar = Input::get('avatar','');
+        $inviteCode = Input::get('');
+        $inviteUid = getInviteCode($inviteCode);
+        if($inviteUid){
+            $activity =  ShareActivity::where('end','>',time())->where('state','=','1')->first();
+            $user->score = $activity->score;
+            $inviteUser = User::find($inviteUid);
+            if ($inviteUser){
+                $inviteUser -> score += $activity->score;
+                $inviteUser->save();
+            }
+        }
         if ($user->save()){
             if ($open_id){
                 if ($type==1){

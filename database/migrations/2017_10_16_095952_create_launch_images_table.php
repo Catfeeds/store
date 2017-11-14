@@ -17,7 +17,7 @@ class CreateLaunchImagesTable extends Migration
             $table->increments('id');
             $table->string('title');
             $table->string('url');
-            $table->string('link_url');
+//            $table->string('link_url');
             $table->tinyInteger('state')->default(0);
             $table->timestamps();
         });

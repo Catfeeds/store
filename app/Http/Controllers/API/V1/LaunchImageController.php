@@ -31,7 +31,7 @@ class LaunchImageController extends Controller
 
         $image->title = Input::get('title');
         $image->url = Input::get('url');
-        $image->link_url = Input::get('link_url');
+//        $image->link_url = Input::get('link_url');
         if ($image->save()){
             return response()->json([
                 'return_code'=>"SUCCESS"
