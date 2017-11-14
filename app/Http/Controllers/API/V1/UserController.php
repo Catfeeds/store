@@ -370,6 +370,7 @@ class UserController extends Controller
         if (empty($member)||$member->endtime<time()){
             $levels = MemberLevel::orderBy('level','DESC')->get();
         }else{
+            echo 'dd';
             $levels = MemberLevel::where('level','>',$member->level)->orderBy('level','DESC')->get();
         }
 
