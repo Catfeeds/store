@@ -60,7 +60,7 @@ class SystemController extends Controller
             $member->send_max = Input::get('send_max');
         }else{
             $member = MemberLevel::find($id);
-            $count = MemberLevel::where('level','=',$level)->count();
+            $count = MemberLevel::where('id','!=',$id)->where('level','=',$level)->count();
             if ($count>=1){
                 return response()->json([
                     'return_code'=>'FAIL',
