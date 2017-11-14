@@ -667,6 +667,12 @@ class UserController extends Controller
             $count = $userDB->count();
         }
         $data = $userDB->limit($limit)->offset(($page-1)*$limit)->get();
+        if (!empty($data)){
+            for ($i=0;$i<count($data);$i++){
+                $data[$i]->member = Member::where('user_id','=',$data[$i]->id)->first();
+                $data[$i]->commodity_count = $data[$i]->commodities()->count();
+            }
+        }
         return response()->json([
             'return_code'=>'SUCCESS',
             'data'=>$data,
