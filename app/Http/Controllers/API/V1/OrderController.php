@@ -373,14 +373,14 @@ class OrderController extends Controller
                         if (empty($member)){
                             $member = new Member();
                             $member->level = $level->level;
-                            $member->end_time = intval(time()+$member->time);
+                            $member->end_time = intval(time()+$level->time);
                             $member->send_max = $level->send_max;
                             $member->send_daily = $level->send_daily;
                             $member->user_id = $order->user_id;
                             PublishRecord::where('user_id','=',$order->user_id)->delete();
                         }else{
                             $member->level = $level->level;
-                            $member->end_time = intval(time()+$member->time);
+                            $member->end_time = intval(time()+$level->time);
                             $member->send_max = $level->send_max;
                             $member->send_daily = $level->send_daily;
                             PublishRecord::where('user_id','=',$order->user_id)->delete();
@@ -483,14 +483,14 @@ class OrderController extends Controller
                         if (empty($member)){
                             $member = new Member();
                             $member->level = $level->level;
-                            $member->end_time = intval(time()+$member->time);
+                            $member->end_time = intval(time()+$level->time);
                             $member->send_max = $level->send_max;
                             $member->send_daily = $level->send_daily;
                             $member->user_id = $order->user_id;
                             PublishRecord::where('user_id','=',$order->user_id)->delete();
                         }else{
                             $member->level = $level->level;
-                            $member->end_time = intval(time()+$member->time);
+                            $member->end_time = intval(time()+$level->time);
                             $member->send_max = $level->send_max;
                             $member->send_daily = $level->send_daily;
                             PublishRecord::where('user_id','=',$order->user_id)->delete();
