@@ -34,7 +34,10 @@ use Zizaco\Entrust\EntrustRole;
 
 class SystemController extends Controller
 {
-    //
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     * 添加会员等级
+     */
     public function addMemberLevel()
     {
         $id = Input::get('id');
@@ -49,7 +52,7 @@ class SystemController extends Controller
                 ]);
             }
             $member->level = Input::get('level');
-            $member->title = Input::get('title');
+//            $member->title = Input::get('title');
             $member->description = Input::get('title');
             $member->price = Input::get('price');
             $member->time = Input::get('time');
@@ -65,7 +68,7 @@ class SystemController extends Controller
                 ]);
             }
             $member->level = Input::get('level');
-            $member->title = Input::get('title');
+//            $member->title = Input::get('title');
             $member->description = Input::get('title');
             $member->price = Input::get('price');
             $member->time = Input::get('time');
@@ -79,6 +82,11 @@ class SystemController extends Controller
             ]);
         }
     }
+
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     * 获取会员等级列表
+     */
     public function getMemberLevels()
     {
         $level = MemberLevel::all();
@@ -87,6 +95,7 @@ class SystemController extends Controller
             'data'=>$level
         ]);
     }
+
     public function getMemberLevel($id)
     {
         $level = MemberLevel::find($id);

@@ -19,9 +19,10 @@ use Yansongda\Pay\Pay;
 
 class OrderController extends Controller
 {
-    //
-
-
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     * 获取单个用户的订单数据
+     */
     public function getOrders()
     {
         $uid = getUserToken(Input::get('token'));
@@ -37,6 +38,11 @@ class OrderController extends Controller
         ]);
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * 购买图片
+     */
     public function buyCommodityPicture(Request $request)
     {
         $uid = getUserToken($request->get('token'));
@@ -122,6 +128,12 @@ class OrderController extends Controller
             'data'=>$data
         ]);
     }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * 购买联系方式
+     */
     public function buyCommodityPhone(Request $request)
     {
         $uid = getUserToken($request->get('token'));
@@ -207,6 +219,19 @@ class OrderController extends Controller
             'data'=>$data
         ]);
     }
+
+    /**
+     * @param $uid
+     * @param $number
+     * @param $price
+     * @param $title
+     * @param $type
+     * @param $pay_type
+     * @param $content
+     * @param int $state
+     * @return bool
+     * 创建订单
+     */
     public function makeOrder($uid,$number,$price,$title,$type,$pay_type,$content,$state=0)
     {
         $order = new Order();
@@ -223,10 +248,15 @@ class OrderController extends Controller
         }
         return false;
     }
-    public function doPay()
-    {
 
-    }
+    /**
+     * @param $number
+     * @param $title
+     * @param $price
+     * @param $ip
+     * @return mixed
+     * 微信支付
+     */
     public function wxPay($number,$title,$price,$ip)
     {
         $config = config('wxxcx');
@@ -239,6 +269,14 @@ class OrderController extends Controller
         ];
         return $pay->driver('wechat')->gateway('app')->pay($config_biz);
     }
+
+    /**
+     * @param $number
+     * @param $title
+     * @param $price
+     * @return mixed
+     * 支付宝支付
+     */
     public function aliPay($number,$title,$price)
     {
         $alipay = app('alipay.mobile');
@@ -250,6 +288,17 @@ class OrderController extends Controller
         // 返回签名后的支付参数给支付宝移动端的SDK。
         return $alipay->getPayPara();
     }
+
+    /**
+     * @param $uid
+     * @param $number
+     * @param $title
+     * @param $price
+     * @param $type
+     * @param $content
+     * @return bool
+     * 积分支付
+     */
     public function scorePay($uid,$number,$title,$price,$type,$content)
     {
         $user = User::find($uid);
@@ -274,6 +323,12 @@ class OrderController extends Controller
             }
         }
     }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * 升级会员
+     */
     public function addMember(Request $request)
     {
         $type = $request->get('pay_type');
@@ -283,13 +338,13 @@ class OrderController extends Controller
         $number = self::makePaySn($uid);
         switch ($type){
             case 2:
-                if ($this->makeOrder($uid,$number,$level->price,'升级会员',3,2,$level->level)){
+                if ($this->makeOrder($uid,$number,$level->price,'升级会员',1,2,$level->level)){
                     $data = $this->aliPay($number,'升级会员',$level->price);
                 }
                 break;
             case 3:
                 $ip = $request->getClientIp();
-                if ($this->makeOrder($uid,$number,$level->price,'升级会员',3,3,$level->level)){
+                if ($this->makeOrder($uid,$number,$level->price,'升级会员',1,3,$level->level)){
                     $data = $this->wxPay($number,'升级会员',$level->price,$ip);
                 }
         }
