@@ -365,7 +365,14 @@ class UserController extends Controller
     }
     public function getLevels()
     {
-        $levels = MemberLevel::orderBy('level','DESC')->get();
+        $uid = getUserToken(Input::get('token'));
+        $member = Member::where('user_id','=',$uid)->first();
+        if (empty($member)||$member->endtime<time()){
+            $levels = MemberLevel::orderBy('level','DESC')->get();
+        }else{
+            $levels = MemberLevel::where('level','>',$member->level)->orderBy('level','DESC')->get();
+        }
+
         return response()->json([
             'return_code'=>'SUCCESS',
             'data'=>$levels
