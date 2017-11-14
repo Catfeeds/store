@@ -367,6 +367,7 @@ class UserController extends Controller
     {
         $uid = getUserToken(Input::get('token'));
         $member = Member::where('user_id','=',$uid)->first();
+        dd($member);
         if (empty($member)||$member->endtime<time()){
             $levels = MemberLevel::orderBy('level','DESC')->get();
         }else{
