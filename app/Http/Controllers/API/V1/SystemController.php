@@ -324,6 +324,21 @@ class SystemController extends Controller
             'city_id'=>$city_id,
             'state'=>'1'
         ])->orderByRaw('Rand()')->limit($limit)->offset(($page-1)*$limit)->first();
+        if (empty($adverts)){
+            $pid = City::where('id','=',$city_id)->pluck('pid')->first();
+            $adverts = Advert::where([
+                'type'=>$type,
+                'city_id'=>$pid,
+                'state'=>'1'
+            ])->orderByRaw('Rand()')->limit($limit)->offset(($page-1)*$limit)->first();
+        }
+        if (empty($adverts)){
+            $adverts = Advert::where([
+                'type'=>$type,
+                'city_id'=>0,
+                'state'=>'1'
+            ])->orderByRaw('Rand()')->limit($limit)->offset(($page-1)*$limit)->first();
+        }
         return response()->json([
             'return_code'=>'SUCCESS',
             'data'=>$adverts
