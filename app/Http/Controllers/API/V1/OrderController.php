@@ -336,7 +336,7 @@ class OrderController extends Controller
         $type = $request->get('pay_type');
         $uid = getUserToken($request->get('token'));
         $level_id = $request->get('level');
-        $level = MemberLevel::find($level_id);
+        $level = MemberLevel::where('level','=',$level_id)->first();
         $number = self::makePaySn($uid);
         switch ($type){
             case 2:
