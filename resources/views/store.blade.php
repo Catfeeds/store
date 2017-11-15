@@ -13,11 +13,10 @@
         html {
             font-size: 12px;
         }
-
-        html,
+        /* html,
         body {
-            min-height: 100vh;
-        }
+          height: 100vh;
+        } */
 
         h1,
         body,
@@ -35,7 +34,7 @@
 
         .container {
             background-color: #eee;
-            min-height: 100vh;
+            height: 100vh;
         }
 
         .title {
@@ -51,12 +50,16 @@
             flex-direction: row;
         }
 
-        .fix-wrap {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
+        .flex-column {
+            display: flex;
+            flex-direction: column;
         }
+        /* .fix-wrap {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+        } */
 
         .commodity-item {
             background-color: #fff;
@@ -66,7 +69,6 @@
 
         .commodity-item-img {
             width: 25%;
-            /* height: 100%; */
         }
 
         .commodity-item-infos {
@@ -112,8 +114,11 @@
         /* 列表样式 */
 
         .commodities-list {
-            padding-top: 190px;
-            padding-bottom: 20px;
+            /* padding-top: 190px;
+            padding-bottom: 20px; */
+            flex: 1;
+            overflow-y: scroll;
+            margin: 10px 0;
         }
 
         .commodities-item {
@@ -186,7 +191,7 @@
 </head>
 
 <body>
-<section class="container">
+<section class="container flex-column">
     <div class="fix-wrap">
         <h1 class="title">{{$user->name}}的消息</h1>
 
@@ -200,30 +205,32 @@
                     <span class="commodity-item-num">{{$count}}</span>
                 </p>
             </div>
-            {{--<div class="commodity-item-btn">关注</div>--}}
+            <!-- <div class="commodity-item-btn">关注</div> -->
         </div>
         <!-- /第一个商品信息 -->
     </div>
     <!-- 商品列表 -->
     <ul class="commodities-list">
-        @foreach($commodities as $commodity)
         <!-- 循环的商品项 -->
-        <li class="commodities-item">
-            <h3 class="commodities-item-id">编号 {{$commodity->id}}</h3>
-            <div class="commodities-item-infos flex-row">
-                <img class="commodities-item-img" src="{{$commodity->pictures()->pluck('thumb_url')->first()}}" alt="商品图片">
-                <div class="commodities-item-info">
-                    <h4 class="commodities-item-info-title">{{$commodity->title}}</h4>
-                    <p class="commodities-item-info-address">{{$commodity->address}}</p>
-                    <p class="commodities-item-info-time">{{$commodity->created_at}}</p>
+    @foreach($commodities as $commodity)
+            <li class="commodities-item">
+                <h3 class="commodities-item-id">编号 {{$commodity->id}}</h3>
+                <div class="commodities-item-infos flex-row">
+                    <img class="commodities-item-img" src="{{$commodity->pictures()->pluck('thumb_url')->first()}}" alt="商品图片">
+                    <div class="commodities-item-info">
+                        <h4 class="commodities-item-info-title">{{$commodity->title}}</h4>
+                        <p class="commodities-item-info-address">{{$commodity->address}}</p>
+                        <p class="commodities-item-info-time">{{$commodity->created_at}}</p>
+                    </div>
+                    <div class="commodities-item-price">￥{{$commodity->price}}</div>
                 </div>
-                <div class="commodities-item-price">￥{{$commodity->price}}</div>
-            </div>
-        </li>
+            </li>
+
+        @endforeach
+
         <!-- /循环的商品项 -->
-            @endforeach
     </ul>
-    <!-- /商品列表 -->
+
     <div class="download-wrap flex-row">
         <a class="down-btn" href="#">
             IOS 下载

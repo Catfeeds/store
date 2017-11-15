@@ -971,7 +971,6 @@ class CommodityController extends Controller
             $user = User::find($commodity->user_id);
             $content = RefuseReasen::whereIn('id',$reason)->pluck('title')->toArray();
             $content = implode(',',$content);
-            dd($content);
             sendSMS($user->phone,\config('alisms.Fail'),$smsContent);
 
             $msg = new Message();
