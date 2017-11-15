@@ -758,4 +758,18 @@ class SystemController extends Controller
             ]);
         }
     }
+    public function showStore($id)
+    {
+        $user = User::find($id);
+        $count = $user->commodities()->where([
+            'pass'=>1,
+            'enable'=>1
+        ])->count();
+        $commodities = $user->commodities()->limit(5)->get();
+        return view('store',[
+            'user'=>$user,
+            'count'=>$count,
+            'commodities'=>$commodities
+        ]);
+    }
 }
