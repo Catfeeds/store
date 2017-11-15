@@ -765,7 +765,10 @@ class SystemController extends Controller
             'pass'=>1,
             'enable'=>1
         ])->count();
-        $commodities = $user->commodities()->limit(5)->get();
+        $commodities = $user->commodities()->where([
+            'pass'=>1,
+            'enable'=>1
+        ])->limit(5)->get();
         return view('store',[
             'user'=>$user,
             'count'=>$count,
