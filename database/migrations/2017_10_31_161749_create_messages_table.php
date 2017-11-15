@@ -20,6 +20,7 @@ class CreateMessagesTable extends Migration
             $table->string('title');
             $table->string('content',1000);
             $table->tinyInteger('read')->default(0);
+            $table->tinyInteger('type')->default(1);
             $table->timestamps();
         });
     }
