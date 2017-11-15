@@ -202,6 +202,15 @@
             @endforeach
     </ul>
     <!-- /商品列表 -->
+    <div class="download-wrap flex-row">
+        <a class="down-btn" href="#">
+            IOS 下载
+        </a>
+        <a class="down-btn" href="#">
+            Android 下载
+        </a>
+    </div>
+    <!-- /商品列表 -->
 </section>
 </body>
 
