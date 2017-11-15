@@ -775,4 +775,11 @@ class SystemController extends Controller
             'commodities'=>$commodities
         ]);
     }
+    public function showShareActivity($code)
+    {
+        $activity = ShareActivity::where('state','=','1')->first();
+        return view('share',[
+            'code'=>$code
+        ]);
+    }
 }

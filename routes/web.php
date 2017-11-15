@@ -16,6 +16,8 @@ Route::get('/', function () {
 });
 //Route::get('article','API\V1\SystemController@getArticle');
 Route::get('qrcode/{id}','API\V1\SystemController@showStore');
+Route::get('activity/{code}','API\V1\SystemController@showShareActivity');
+
 Route::group(['middleware'=>'cross'],function (){
     Route::any('upload','API\V1\UploadController@uploadImage');
     Route::post('login','API\V1\UserController@adminLogin');
