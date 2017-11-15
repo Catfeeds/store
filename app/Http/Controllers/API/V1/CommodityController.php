@@ -953,7 +953,7 @@ class CommodityController extends Controller
              sendSMS($user->phone,\config('alisms.Pass'),$smsContent);
             $msg = new Message();
             $msg->receive_id = $commodity->user_id;
-            $msg->title ='消息审核通过';
+            $msg->title ='消息审核结果通知';
             $msg->content = '消息审核通过';
             $msg->save();
 //            push();
@@ -971,7 +971,7 @@ class CommodityController extends Controller
 
             $msg = new Message();
             $msg->receive_id = $commodity->user_id;
-            $msg->title ='消息审核不通过';
+            $msg->title ='消息审核结果通知';
             $msg->content = '消息审核不通过';
             $msg->save();
             push($user->id,'flybrid','消息审核不通过','消息审核不通过');
