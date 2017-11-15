@@ -424,6 +424,12 @@ class CommodityController extends Controller
         $collect->user_id = $uid;
         $collect->commodity_id = $commodity_id;
         if ($collect->save()){
+            $commodity = Commodity::find($commodity_id);
+            $msg = new Message();
+            $msg->receive_id = $commodity->user_id;
+            $msg->type = 3;
+            $msg->title = '你的信息"'.$commodity->title.'"被收藏';
+            $msg->save();
             return response()->json([
                 'return_code'=>'SUCCESS'
             ]);
@@ -499,6 +505,11 @@ class CommodityController extends Controller
         $attention->user_id = $uid;
         $attention->attention_id = $attention_id;
         if ($attention->save()){
+            $msg = new Message();
+            $msg->receive_id = $attention_id;
+            $msg->type = 4;
+            $msg->title = '你的店铺被关注！';
+            $msg->save();
             return response()->json([
                 'return_code'=>'SUCCESS'
             ]);
@@ -956,7 +967,7 @@ class CommodityController extends Controller
             $msg->receive_id = $commodity->user_id;
             $msg->title =$commodity->title.'已通过';
 //            $msg->content = '消息审核通过';
-            $msg->type = 2;
+            $msg->type = 1;
             $msg->save();
 //            push();
             push($user->id,'flybrid','消息审核通过','消息审核通过');
