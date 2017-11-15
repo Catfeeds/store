@@ -969,8 +969,8 @@ class CommodityController extends Controller
                 'date'=>$commodity->created_at->format('Y-m-d')
             ];
             $user = User::find($commodity->user_id);
-            $content = RefuseReasen::whereIn('id',$reason)->pluck('title');
-//            $content = implode(',',$content);
+            $content = RefuseReasen::whereIn('id',$reason)->pluck('title')->toArray();
+            $content = implode(',',$content);
             dd($content);
             sendSMS($user->phone,\config('alisms.Fail'),$smsContent);
 
