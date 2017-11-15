@@ -23,6 +23,7 @@ use App\Models\RefuseList;
 use App\Models\RefuseReasen;
 use App\Models\Reject;
 use App\Models\Report;
+use App\Models\ReportReason;
 use App\Models\SysConfig;
 use App\Models\TypeList;
 use App\Models\UserBuy;
@@ -953,8 +954,9 @@ class CommodityController extends Controller
              sendSMS($user->phone,\config('alisms.Pass'),$smsContent);
             $msg = new Message();
             $msg->receive_id = $commodity->user_id;
-            $msg->title ='消息审核结果通知';
-            $msg->content = '消息审核通过';
+            $msg->title =$commodity->title.'已通过';
+//            $msg->content = '消息审核通过';
+            $msg->type = 2;
             $msg->save();
 //            push();
             push($user->id,'flybrid','消息审核通过','消息审核通过');
@@ -967,12 +969,14 @@ class CommodityController extends Controller
                 'date'=>$commodity->created_at->format('Y-m-d')
             ];
             $user = User::find($commodity->user_id);
-             sendSMS($user->phone,\config('alisms.Fail'),$smsContent);
-
+            sendSMS($user->phone,\config('alisms.Fail'),$smsContent);
+            $content = RefuseReasen::whereIn('id',$reason)->pluck('title');
+            $content = implode(',',$content);
             $msg = new Message();
             $msg->receive_id = $commodity->user_id;
-            $msg->title ='消息审核结果通知';
-            $msg->content = '消息审核不通过';
+            $msg->title =$commodity->title.'审核不通过';
+            $msg->content = '原因：'.$content.'。';
+            $msg->type = 2;
             $msg->save();
             push($user->id,'flybrid','消息审核不通过','消息审核不通过');
             foreach ($reason as $item){
