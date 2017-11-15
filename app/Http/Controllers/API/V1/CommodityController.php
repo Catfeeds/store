@@ -969,9 +969,11 @@ class CommodityController extends Controller
                 'date'=>$commodity->created_at->format('Y-m-d')
             ];
             $user = User::find($commodity->user_id);
-            sendSMS($user->phone,\config('alisms.Fail'),$smsContent);
             $content = RefuseReasen::whereIn('id',$reason)->pluck('title');
-            $content = implode(',',$content);
+//            $content = implode(',',$content);
+            dd($content);
+            sendSMS($user->phone,\config('alisms.Fail'),$smsContent);
+
             $msg = new Message();
             $msg->receive_id = $commodity->user_id;
             $msg->title =$commodity->title.'审核不通过';
