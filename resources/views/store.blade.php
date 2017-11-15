@@ -159,6 +159,28 @@
             font-size: 1.2rem;
             font-weight: 600;
         }
+
+        .download-wrap {
+            justify-content: center;
+            padding-bottom: 10px;
+        }
+
+        .down-btn {
+            font-size: 1.2rem;
+            /* border: 1px solid #6bd897; */
+            border-radius: 5px;
+            margin: 0 20px;
+            padding: 10px 0;
+            width: 150rem;
+            text-align: center;
+            background-color: #6bd897;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .down-btn:active {
+            background-color: #5fc187;
+        }
     </style>
     <title>{{$user->name}}的消息</title>
 </head>
