@@ -68,8 +68,8 @@ Route::group(['middleware'=>'cross'],function (){
         Route::get('parttimes','API\V1\SystemController@listPartTime');
         Route::get('modify/report/{id}','API\V1\SystemController@modifyReport');
         Route::get('modify/parttime/{id}','API\V1\SystemController@modifyPartTime');
-        Route::get('activity/sign','API\V1\SystemController@getSignActivity');
-        Route::get('activity/scan','API\V1\SystemController@getScanActivity');
+        Route::get('sign/activity','API\V1\SystemController@getSignActivity');
+        Route::get('scan/activity','API\V1\SystemController@getScanActivity');
         Route::post('activity/sign','API\V1\SystemController@addSignActivity');
         Route::post('activity/scan','API\V1\SystemController@addScanActivity');
         Route::get('config','API\V1\SystemController@getSystemConfig');
