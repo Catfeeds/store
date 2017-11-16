@@ -539,7 +539,7 @@ class SystemController extends Controller
             $reports->where('state','!=','2');
         }
         $count = $reports->count();
-        $data = $reports->limit($limit)->offset(($page-1)*$limit)->get();
+        $data = $reports->limit($limit)->offset(($page-1)*$limit)->orderBy('id','DESC')->get();
         if (!empty($data)){
             for ($i=0;$i<count($data);$i++) {
                 $commodity = Commodity::find($data[$i]->commodity_id);
