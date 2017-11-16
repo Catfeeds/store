@@ -520,7 +520,7 @@ class SystemController extends Controller
         $page = Input::get('page',1);
         $limit = Input::get('limit',10);
         $state = Input::get('state');
-        $reports = DB::table('reports')->where('state','!=','2');
+        $reports = DB::table('reports');
         $count = $reports->count();
         $username = Input::get('username');
         $user_id = Input::get('user_id');
@@ -536,6 +536,8 @@ class SystemController extends Controller
         if($state){
             $reports->where('state','=',$state);
             $count = $reports->count();
+        }else{
+            $reports->where('state','!=','2');
         }
         $data = $reports->limit($limit)->offset(($page-1)*$limit)->get();
         if (!empty($data)){
