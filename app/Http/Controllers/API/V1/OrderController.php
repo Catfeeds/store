@@ -463,7 +463,7 @@ class OrderController extends Controller
     {
         // 验证请求。
         $handle  = fopen('alipay.txt','a+');
-        fwrite($handle,var_dump(Input::all(),true));
+        fwrite($handle,var_dump(Request::instance()->getContent(),true));
         fclose($handle);
 
         if (! app('alipay.mobile')->verify()) {
