@@ -743,4 +743,24 @@ class UserController extends Controller
             }
         }
     }
+    public function modifyUserLevel()
+    {
+        $uid = Input::get('user_id');
+        $level_id = Input::get('level');
+        $level = MemberLevel::where('level','=',$level_id)->first();
+        $member = Member::where('user_id','=',$uid)->first();
+        if (empty($member)){
+            $member = new Member();
+            $member->user_id = $uid;
+        }
+        $member->level = $level->level;
+        $member->end_time = $level->time+time();
+        $member->send_daily = $level->send_daily;
+        $member->send_max = $level->send_max;
+        if ($member->save()){
+            return response()->json([
+               'return_code'=>"SUCCESS"
+            ]);
+        }
+    }
 }

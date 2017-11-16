@@ -80,6 +80,7 @@ Route::group(['middleware'=>'cross'],function (){
         Route::get('unpass/commodities','API\V1\CommodityController@getUnPassCommodities');
         Route::get('pass/commodity/{id}','API\V1\CommodityController@passCommodity');
         Route::get('modify/user/{id}','API\V1\UserController@modifyUser');
+        Route::post('user/level','API\V1\UserController@modifyUserLevel');
 
     });
 
