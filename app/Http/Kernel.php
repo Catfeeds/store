@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use App\Http\Middleware\limitSend;
+use App\Http\Middleware\TestParam;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -62,5 +63,6 @@ class Kernel extends HttpKernel
         'permission' => \Zizaco\Entrust\Middleware\EntrustPermission::class,
         'ability' => \Zizaco\Entrust\Middleware\EntrustAbility::class,
         'limitSend' => limitSend::class,
+        'test' => TestParam::class,
     ];
 }

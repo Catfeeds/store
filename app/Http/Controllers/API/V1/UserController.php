@@ -395,6 +395,16 @@ class UserController extends Controller
         $username = Input::get('username');
         $password = Input::get('password');
         if (Auth::attempt(['username'=>$username,'password'=>$password],true)){
+//            $roles = EntrustRole::all();
+//            dd($roles);
+            $role = EntrustRole::find(4);
+//            dd($role)
+            $user = Auth::user();
+//            $user->attachRole($role);
+            $role = $user->roles()->get();
+            dd($role);
+            $pres = $role->perms()->get();
+            dd($pres);
             return response()->json([
                 'return_code'=>"SUCCESS"
             ]);

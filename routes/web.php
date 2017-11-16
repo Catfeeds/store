@@ -21,14 +21,7 @@ Route::get('activity/{code}','API\V1\SystemController@showShareActivity');
 Route::group(['middleware'=>'cross'],function (){
     Route::any('upload','API\V1\UploadController@uploadImage');
     Route::post('login','API\V1\UserController@adminLogin');
-    Route::get('test',function (){
-        $commodity = \App\Models\Commodity::find(1);
-        $d = [
-            'date'=>$commodity->created_at->format('Y-m-d')
-        ];
-        $data = sendSMS('18664894928','SMS_109450243',$d);
-        dd($data);
-    });
+//    Route::get('test','')->middleware('test:test');
     Route::group(['middleware'=>'auth'],function (){
 
         Route::get('launcher/images','API\V1\LaunchImageController@getLaunchImages');
