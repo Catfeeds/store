@@ -463,12 +463,16 @@ class OrderController extends Controller
     {
         // 验证请求。
         $handle  = fopen('alipay.txt','a+');
-        fwrite($handle,Input::all());
+        fwrite($handle,var_dump(Input::all(),true));
         fclose($handle);
+
         if (! app('alipay.mobile')->verify()) {
 //            Log::notice('Alipay notify post data verification fail.', [
 //                'data' => Request::instance()->getContent()
 //            ]);
+            $handle  = fopen('alipay2.txt','a+');
+            fwrite($handle,var_dump(Request::instance()->getContent(),true));
+            fclose($handle);
             return 'fail';
         }
 
