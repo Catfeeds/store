@@ -482,7 +482,7 @@ class OrderController extends Controller
             if ($order->state==0){
                 switch ($order->type){
                     case 1:
-                        $level = MemberLevel::find($order->content);
+                        $level = MemberLevel::where('level','=',$order->content)->first();
                         $member = Member::where('user_id','=',$order->user_id)->first();
                         if (empty($member)){
                             $member = new Member();
