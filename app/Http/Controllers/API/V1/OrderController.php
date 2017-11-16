@@ -470,6 +470,9 @@ class OrderController extends Controller
         }
 
         // 判断通知类型。
+        $handle  = fopen('alipay.txt','a+');
+        fwrite($handle,Input::all());
+        fclose($handle);
         switch (Input::get('trade_status')) {
             case 'TRADE_SUCCESS':
             case 'TRADE_FINISHED':
