@@ -48,82 +48,84 @@ class OrderController extends Controller
         $uid = getUserToken($request->get('token'));
         $commodity_id = $request->get('commodity_id');
         $type = $request->get('pay_type');
-        $buy = UserBuy::where([
-            'user_id'=>$uid,
-            'commodity_id'=>$commodity_id
-        ])->first();
         $config = SysConfig::first();
-        if (empty($buy)){
-            $buy = new UserBuy();
-            $buy->user_id = $uid;
-            $buy->commodity_id = $commodity_id;
-            $buy->save();
-            $number = self::makePaySn($uid);
-            $title = Commodity::find($commodity_id)->title;
-            $title = '即时查看-'.$title.'-图片';
-            switch ($type){
-                case 1:
-                    $bool = $this->scorePay($uid,$number,$title,$config->pic_score,2,$buy->id);
-                    if ($bool){
-                        return response()->json([
-                            'return_code'=>"SUCCESS",
-                            'data'=>[]
-                        ]);
-                    }else{
-                        return response()->json([
-                            'return_code'=>"FAIL",
-                            'return_msg'=>'积分余额不足！'
-                        ]);
-                    }
-                    break;
-                case 2:
-                    if ($this->makeOrder($uid,$number,$config->pic_price,$title,2,2,$commodity_id)){
-                        $data = $this->aliPay($number,$title,$config->pic_price);
-                    }
-                    break;
-                case 3:
-                    if ($this->makeOrder($uid,$number,$config->pic_price,$title,2,3,$commodity_id)){
-                        $ip = $request->getClientIp();
-                        $data = $this->wxPay($number,$title,$config->pic_price,$ip);
-                    }
-                    break;
-            }
-        }else{
-            if ($buy->pic ==0){
-                $number = self::makePaySn($uid);
-                $title = Commodity::find($commodity_id)->title;
-                $title = '即时查看-'.$title.'-图片';
-                switch ($type){
-                    case 1:
-                        $bool = $this->scorePay($uid,$number,$title,$config->pic_score,2,$buy->id);
-                        if ($bool){
-                            return response()->json([
-                                'return_code'=>"SUCCESS",
-                                'data'=>[]
-                            ]);
-                        }else{
-                            return response()->json([
-                                'return_code'=>"FAIL",
-                                'return_msg'=>'积分余额不足！'
-                            ]);
-                        }
-                        break;
-                    case 2:
-                        if ($this->makeOrder($uid,$number,$config->pic_price,$title,2,2,$commodity_id,$buy->id)){
-                            $data = $this->aliPay($number,$title,$config->pic_price);
-                        }
-                        break;
-                    case 3:
-                        if ($this->makeOrder($uid,$number,$config->pic_price,$title,3,3,$commodity_id,$buy->id)){
-                            $ip = $request->getClientIp();
-                            $data = $this->wxPay($number,$title,$config->pic_price,$ip);
-                        }
-                        break;
+        $number = self::makePaySn($uid);
+        $title = Commodity::find($commodity_id)->title;
+        $title = '即时查看-'.$title.'-图片';
+        switch ($type){
+            case 1:
+                $bool = $this->scorePay($uid,$number,$title,$config->pic_score,2,$commodity_id);
+                if ($bool){
+                    return response()->json([
+                        'return_code'=>"SUCCESS",
+                        'data'=>[]
+                    ]);
+                }else{
+                    return response()->json([
+                        'return_code'=>"FAIL",
+                        'return_msg'=>'积分余额不足！'
+                    ]);
                 }
-            }
-
+                break;
+            case 2:
+                if ($this->makeOrder($uid,$number,$config->pic_price,$title,2,2,$commodity_id)){
+                    $data = $this->aliPay($number,$title,$config->pic_price);
+                }
+                break;
+            case 3:
+                if ($this->makeOrder($uid,$number,$config->pic_price,$title,2,3,$commodity_id)){
+                    $ip = $request->getClientIp();
+                    $data = $this->wxPay($number,$title,$config->pic_price,$ip);
+                }
+                break;
         }
-        $data = empty($data)?[]:$data;
+//        $buy = UserBuy::where([
+//            'user_id'=>$uid,
+//            'commodity_id'=>$commodity_id
+//        ])->first();
+//        $config = SysConfig::first();
+//        if (empty($buy)){
+//            $buy = new UserBuy();
+//            $buy->user_id = $uid;
+//            $buy->commodity_id = $commodity_id;
+//            $buy->save();
+//
+//        }else{
+//            if ($buy->pic ==0){
+//                $number = self::makePaySn($uid);
+//                $title = Commodity::find($commodity_id)->title;
+//                $title = '即时查看-'.$title.'-图片';
+//                switch ($type){
+//                    case 1:
+//                        $bool = $this->scorePay($uid,$number,$title,$config->pic_score,2,$buy->id);
+//                        if ($bool){
+//                            return response()->json([
+//                                'return_code'=>"SUCCESS",
+//                                'data'=>[]
+//                            ]);
+//                        }else{
+//                            return response()->json([
+//                                'return_code'=>"FAIL",
+//                                'return_msg'=>'积分余额不足！'
+//                            ]);
+//                        }
+//                        break;
+//                    case 2:
+//                        if ($this->makeOrder($uid,$number,$config->pic_price,$title,2,2,$commodity_id,$buy->id)){
+//                            $data = $this->aliPay($number,$title,$config->pic_price);
+//                        }
+//                        break;
+//                    case 3:
+//                        if ($this->makeOrder($uid,$number,$config->pic_price,$title,3,3,$commodity_id,$buy->id)){
+//                            $ip = $request->getClientIp();
+//                            $data = $this->wxPay($number,$title,$config->pic_price,$ip);
+//                        }
+//                        break;
+//                }
+//            }
+//
+//        }
+//        $data = empty($data)?[]:$data;
         return response()->json([
             'return_code'=>'SUCCESS',
             'data'=>$data
@@ -140,82 +142,83 @@ class OrderController extends Controller
         $uid = getUserToken($request->get('token'));
         $commodity_id = $request->get('commodity_id');
         $type = $request->get('pay_type');
-        $buy = UserBuy::where([
-            'user_id'=>$uid,
-            'commodity_id'=>$commodity_id
-        ])->first();
+//        $buy = UserBuy::where([
+//            'user_id'=>$uid,
+//            'commodity_id'=>$commodity_id
+//        ])->first();
         $config = SysConfig::first();
-        if (empty($buy)){
-            $buy = new UserBuy();
-            $buy->user_id = $uid;
-            $buy->commodity_id = $commodity_id;
-            $buy->save();
-            $number = self::makePaySn($uid);
-            $title = Commodity::find($commodity_id)->title;
-            $title = '即时查看-'.$title.'-联系方式';
-            switch ($type){
-                case 1:
-                    $bool = $this->scorePay($uid,$number,$title,$config->phone_score,3,$buy->id);
-                    if ($bool){
-                        return response()->json([
-                            'return_code'=>"SUCCESS",
-                            'data'=>[]
-                        ]);
-                    }else{
-                        return response()->json([
-                            'return_code'=>"FAIL",
-                            'return_msg'=>'积分余额不足！'
-                        ]);
-                    }
-                    break;
-                case 2:
-                    if ($this->makeOrder($uid,$number,$config->phone_price,$title,2,2,$buy->id)){
-                        $data = $this->aliPay($number,$title,$config->phone_price);
-                    }
-                    break;
-                case 3:
-                    if ($this->makeOrder($uid,$number,$config->phone_price,$title,3,3,$buy->id)){
-                        $ip = $request->getClientIp();
-                        $data = $this->wxPay($number,$title,$config->phone_price,$ip);
-                    }
-                    break;
-            }
-        }else{
-            if ($buy->phone ==0){
-                $number = self::makePaySn($uid);
-                $title = Commodity::find($commodity_id)->title;
-                $title = '即时查看-'.$title.'-联系方式';
-                switch ($type){
-                    case 1:
-                        $bool = $this->scorePay($uid,$number,$title,$config->phone_score,3,$buy->id);
-                        if ($bool){
-                            return response()->json([
-                                'return_code'=>"SUCCESS",
-                                'data'=>[]
-                            ]);
-                        }else{
-                            return response()->json([
-                                'return_code'=>"FAIL",
-                                'return_msg'=>'积分余额不足！'
-                            ]);
-                        }
-                        break;
-                    case 2:
-                        if ($this->makeOrder($uid,$number,$config->phone_price,$title,2,2,$buy->id)){
-                            $data = $this->aliPay($number,$title,$config->phone_price);
-                        }
-                        break;
-                    case 3:
-                        if ($this->makeOrder($uid,$number,$config->phone_price,$title,3,3,$buy->id)){
-                            $ip = $request->getClientIp();
-                            $data = $this->wxPay($number,$title,$config->phone_price,$ip);
-                        }
-                        break;
+        $number = self::makePaySn($uid);
+        $title = Commodity::find($commodity_id)->title;
+        $title = '即时查看-'.$title.'-联系方式';
+        switch ($type){
+            case 1:
+                $bool = $this->scorePay($uid,$number,$title,$config->phone_score,3,$commodity_id);
+                if ($bool){
+                    return response()->json([
+                        'return_code'=>"SUCCESS",
+                        'data'=>[]
+                    ]);
+                }else{
+                    return response()->json([
+                        'return_code'=>"FAIL",
+                        'return_msg'=>'积分余额不足！'
+                    ]);
                 }
-            }
-
+                break;
+            case 2:
+                if ($this->makeOrder($uid,$number,$config->phone_price,$title,2,2,$commodity_id)){
+                    $data = $this->aliPay($number,$title,$config->phone_price);
+                }
+                break;
+            case 3:
+                if ($this->makeOrder($uid,$number,$config->phone_price,$title,3,3,$commodity_id)){
+                    $ip = $request->getClientIp();
+                    $data = $this->wxPay($number,$title,$config->phone_price,$ip);
+                }
+                break;
         }
-        $data = empty($data)?[]:$data;
+//        if (empty($buy)){
+//            $buy = new UserBuy();
+//            $buy->user_id = $uid;
+//            $buy->commodity_id = $commodity_id;
+//            $buy->save();
+//
+//        }else{
+//            if ($buy->phone ==0){
+//                $number = self::makePaySn($uid);
+//                $title = Commodity::find($commodity_id)->title;
+//                $title = '即时查看-'.$title.'-联系方式';
+//                switch ($type){
+//                    case 1:
+//                        $bool = $this->scorePay($uid,$number,$title,$config->phone_score,3,$buy->id);
+//                        if ($bool){
+//                            return response()->json([
+//                                'return_code'=>"SUCCESS",
+//                                'data'=>[]
+//                            ]);
+//                        }else{
+//                            return response()->json([
+//                                'return_code'=>"FAIL",
+//                                'return_msg'=>'积分余额不足！'
+//                            ]);
+//                        }
+//                        break;
+//                    case 2:
+//                        if ($this->makeOrder($uid,$number,$config->phone_price,$title,2,2,$buy->id)){
+//                            $data = $this->aliPay($number,$title,$config->phone_price);
+//                        }
+//                        break;
+//                    case 3:
+//                        if ($this->makeOrder($uid,$number,$config->phone_price,$title,3,3,$buy->id)){
+//                            $ip = $request->getClientIp();
+//                            $data = $this->wxPay($number,$title,$config->phone_price,$ip);
+//                        }
+//                        break;
+//                }
+//            }
+//
+//        }
+//        $data = empty($data)?[]:$data;
         return response()->json([
             'return_code'=>'SUCCESS',
             'data'=>$data
