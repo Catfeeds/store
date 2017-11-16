@@ -541,7 +541,9 @@ class SystemController extends Controller
         if (!empty($data)){
             for ($i=0;$i<count($data);$i++) {
                 $commodity = Commodity::find($data[$i]->commodity_id);
-                $commodity->pictures = $commodity->pictures()->get();
+                if (!empty($commodity)){
+                    $commodity->pictures = $commodity->pictures()->get();
+                }
                 $list = DescriptionList::where('commodity_id','=',$commodity->id)->pluck('desc_id');
                 $commodity->descriptions = Description::whereIn('id',$list)->pluck('title');
                 $data[$i]->commodity = $commodity;

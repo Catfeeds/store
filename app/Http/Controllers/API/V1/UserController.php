@@ -28,6 +28,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Validation\Rules\In;
 use League\Flysystem\Config;
 use Symfony\Component\CssSelector\Parser\Token;
 use Zizaco\Entrust\EntrustRole;
@@ -698,5 +699,38 @@ class UserController extends Controller
         return response()->json([
             'return_code'=>'SUCCESS'
         ]);
+    }
+    public function unbind()
+    {
+        $uid = getUserToken(Input::get('token'));
+        $type = Input::get('type');
+        $open_id = Input::get('open_id');
+        if ($type==1){
+            $qqbind = QQBind::where('open_id','=',$open_id)->first();
+            if ($qqbind->user_id != $uid){
+                return response()->json([
+                    'return_code'=>'FAIL',
+                    'return_msg'=>'无权操作！'
+                ]);
+            }
+            if ($qqbind->delete()){
+                return response()->json([
+                    'return_code'=>'SUCCESS'
+                ]);
+            }
+        }else{
+            $wechat = WechatBind::where('open_id','=',$open_id)->first();
+            if ($wechat->user_id != $uid){
+                return response()->json([
+                    'return_code'=>'FAIL',
+                    'return_msg'=>'无权操作！'
+                ]);
+            }
+            if ($wechat->delete()){
+                return response()->json([
+                    'return_code'=>'SUCCESS'
+                ]);
+            }
+        }
     }
 }
