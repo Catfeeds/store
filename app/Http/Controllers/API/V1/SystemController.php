@@ -533,7 +533,7 @@ class SystemController extends Controller
 //            $count = $reports->count();
         }
         if($state){
-            $reports->where('state','=',$state);
+            $reports->where('state','=',($state-1));
 //            $count = $reports->count();
         }else{
             $reports->where('state','!=','2');
