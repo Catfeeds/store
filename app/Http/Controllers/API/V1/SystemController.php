@@ -521,24 +521,24 @@ class SystemController extends Controller
         $limit = Input::get('limit',10);
         $state = Input::get('state');
         $reports = DB::table('reports');
-        $count = $reports->count();
         $username = Input::get('username');
         $user_id = Input::get('user_id');
         if ($username){
             $user = User::where('username','like','%'.$username.'%')->pluck('id');
             $reports->whereIn('user_id',$user);
-            $count = $reports->count();
+//            $count = $reports->count();
         }
         if ($user_id){
             $reports->where('user_id','=',$user_id);
-            $count = $reports->count();
+//            $count = $reports->count();
         }
         if($state){
             $reports->where('state','=',$state);
-            $count = $reports->count();
+//            $count = $reports->count();
         }else{
             $reports->where('state','!=','2');
         }
+        $count = $reports->count();
         $data = $reports->limit($limit)->offset(($page-1)*$limit)->get();
         if (!empty($data)){
             for ($i=0;$i<count($data);$i++) {
