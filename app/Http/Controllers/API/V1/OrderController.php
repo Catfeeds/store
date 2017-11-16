@@ -459,11 +459,11 @@ class OrderController extends Controller
             'data'=>$data
         ]);
     }
-    public function alipayNotify()
+    public function alipayNotify(Request $request)
     {
         // 验证请求。
         $handle  = fopen('alipay.txt','a+');
-        fwrite($handle,var_dump(Request::instance()->getContent(),true));
+        fwrite($handle,var_dump($request->getContent(),true));
         fclose($handle);
 
         if (! app('alipay.mobile')->verify()) {
@@ -471,7 +471,7 @@ class OrderController extends Controller
 //                'data' => Request::instance()->getContent()
 //            ]);
             $handle  = fopen('alipay2.txt','a+');
-            fwrite($handle,var_dump(Request::instance()->getContent(),true));
+            fwrite($handle,var_dump($request->getContent(),true));
             fclose($handle);
             return 'fail';
         }
