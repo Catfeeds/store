@@ -754,7 +754,7 @@ class SystemController extends Controller
         $activity->score = Input::get('score');
         $activity->content = Input::get('content');
         $activity->rule = Input::get('rule');
-        $activity->type = Input::get('type');
+//        $activity->type = Input::get('type');
         $activity->daily_max = Input::get('daily_max');
         $activity->image = Input::get('image');
         if ($activity->save()){
