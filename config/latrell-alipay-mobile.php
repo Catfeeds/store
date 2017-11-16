@@ -11,7 +11,7 @@ return [
 	'private_key_path' => __DIR__ . '/key/private_key.pem',
 
 	// 阿里公钥。
-	'public_key_path' => __DIR__ . '/key/public_kxdey.pem',
+	'public_key_path' => __DIR__ . '/key/public_key.pem',
 
 	// 异步通知连接。
 	'notify_url' => 'http://admin.sennkisystem.cn/api/v1/alipay/notify'
