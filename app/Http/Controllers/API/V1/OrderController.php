@@ -392,15 +392,15 @@ class OrderController extends Controller
                         $order->state = 1;
                         break;
                     case 2:
-                        $buy = UserBuy::find($order->content);
-                        $buy->pic = 1;
-                        $buy->save();
+//                        $buy = UserBuy::find($order->content);
+//                        $buy->pic = 1;
+//                        $buy->save();
                         $order->state = 1;
                         break;
                     case 3:
-                        $buy = UserBuy::find($order->content);
-                        $buy->phone = 1;
-                        $buy->save();
+//                        $buy = UserBuy::find($order->content);
+//                        $buy->phone = 1;
+//                        $buy->save();
                         $order->state = 1;
                         break;
                     case 4:
@@ -503,15 +503,15 @@ class OrderController extends Controller
                         $order->state = 1;
                         break;
                     case 2:
-                        $buy = UserBuy::find($order->content);
-                        $buy->pic = 1;
-                        $buy->save();
+//                        $buy = UserBuy::find($order->content);
+//                        $buy->pic = 1;
+//                        $buy->save();
                         $order->state = 1;
                         break;
                     case 3:
-                        $buy = UserBuy::find($order->content);
-                        $buy->phone = 1;
-                        $buy->save();
+//                        $buy = UserBuy::find($order->content);
+//                        $buy->phone = 1;
+//                        $buy->save();
                         $order->state = 1;
                         break;
                     case 4:
