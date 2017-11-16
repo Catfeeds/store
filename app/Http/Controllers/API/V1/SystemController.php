@@ -543,12 +543,12 @@ class SystemController extends Controller
                 $commodity = Commodity::find($data[$i]->commodity_id);
                 if (!empty($commodity)){
                     $commodity->pictures = $commodity->pictures()->get();
+                    $list = DescriptionList::where('commodity_id','=',$commodity->id)->pluck('desc_id');
+                    $commodity->descriptions = Description::whereIn('id',$list)->pluck('title');
+                    $data[$i]->commodity = $commodity;
+                    $data[$i]->read_number = $commodity->read_number;
+                    $data[$i]->report_number = $commodity->report()->count();
                 }
-                $list = DescriptionList::where('commodity_id','=',$commodity->id)->pluck('desc_id');
-                $commodity->descriptions = Description::whereIn('id',$list)->pluck('title');
-                $data[$i]->commodity = $commodity;
-                $data[$i]->read_number = $commodity->read_number;
-                $data[$i]->report_number = $commodity->report()->count();
                 $user = User::find($data[$i]->user_id);
                 $data[$i]->username = empty($user)?'':$user->username;
                 $reason = $data[$i]->type_id;
