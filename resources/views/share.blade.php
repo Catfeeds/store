@@ -95,14 +95,14 @@
 <body>
 <section class="container flex-column">
     <div>
-        <h3 class="code-title">Hi 我是 xxx，邀请你来加入 xxx。</h3>
-        <p class="code-content">使用我的邀请码注册，即可xxx</p>
+        {{--<h3 class="code-title">Hi 我是 xxx，邀请你来加入 xxx。</h3>--}}
+        <p class="code-content">{{$activity->content}}</p>
     </div>
     <div class="code-number-wrap flex-row">
         <span>邀请码</span>
         <span>{{$code}}</span>
     </div>
-    <img class="code-image" src="http://seopic.699pic.com/photo/00026/7248.jpg_wh1200.jpg" alt="图片">
+    <img class="code-image" src="{{$activity->image}}" alt="图片">
     <a class="code-btn" href="#">下载xxx,发现xxx</a>
 </section>
 </body>

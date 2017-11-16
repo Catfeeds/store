@@ -756,6 +756,7 @@ class SystemController extends Controller
         $activity->rule = Input::get('rule');
         $activity->type = Input::get('type');
         $activity->daily_max = Input::get('daily_max');
+        $activity->image = Input::get('image');
         if ($activity->save()){
             return response()->json([
                 'return_code'=>'SUCCESS'
@@ -783,7 +784,8 @@ class SystemController extends Controller
     {
         $activity = ShareActivity::where('state','=','1')->first();
         return view('share',[
-            'code'=>$code
+            'code'=>$code,
+            'activity'=>$activity
         ]);
     }
 }
