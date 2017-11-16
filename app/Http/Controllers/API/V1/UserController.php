@@ -362,7 +362,7 @@ class UserController extends Controller
                 $desc = DescriptionList::where('commodity_id','=',$commodities[$i]->id)->pluck('desc_id');
                 $desc = Description::whereIn('id',$desc)->pluck('title');
                 $commodities[$i]->description =  $desc;
-                $commodities[$i]->report_count = $commodities[$i]->report()->count();
+                $commodities[$i]->report_count = $commodities[$i]->report()->where('state','=',0)->count();
             }
         }
         return response()->json([
