@@ -5,7 +5,7 @@ return [
 	'key' => '63ndriYCEMDEoImmC2BWWw==',
 
 	// 签名方式
-	'sign_type' => 'RSA2',
+	'sign_type' => 'RSA',
 
 	// 商户私钥。
 	'private_key_path' => __DIR__ . '/key/private_key.pem',
