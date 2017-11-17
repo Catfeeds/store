@@ -18,6 +18,7 @@ use App\Models\Report;
 use App\Models\ReportReason;
 use App\Models\ScanActivity;
 use App\Models\ShareActivity;
+use App\Models\Sign;
 use App\Models\SignActivity;
 use App\Models\SysConfig;
 use App\Models\UserGuide;
@@ -638,10 +639,8 @@ class SystemController extends Controller
     }
     public function addSignActivity()
     {
-        $activity = SignActivity::first();
-        if (empty($activity)){
-            $activity = new SignActivity();
-        }
+        SignActivity::where('state','=',1)->update(['state'=>0]);
+        $activity = new SignActivity();
         $activity->start = strtotime(Input::get('start'));
         $activity->end = strtotime(Input::get('end'));
         $activity->score = Input::get('score');
@@ -672,10 +671,8 @@ class SystemController extends Controller
     }
     public function addScanActivity()
     {
-        $activity = ScanActivity::first();
-        if (empty($activity)){
-            $activity = new ScanActivity();
-        }
+        ScanActivity::where('state','=',1)->update(['state'=>'0']);
+        $activity = new ScanActivity();
         $activity->start = strtotime(Input::get('start'));
         $activity->end = strtotime(Input::get('end'));
         $activity->score = Input::get('score');

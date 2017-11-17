@@ -432,20 +432,36 @@ class UserController extends Controller
 //
             $pres = $role->perms()->pluck('name')->toArray();
 
-            $pre = EntrustPermission::select('name')->get();
-//            dd($pre);
+            $pre = EntrustPermission::pluck('name')->toArray();
+
             if (!empty($pre)){
+                $data = [];
                 for ($i=0;$i<count($pre);$i++){
-                    if (in_array($pre[$i]->name,$pres)){
-                        $pre[$i]->enable = 1;
+                    if (in_array($pre[$i],$pres)){
+                        $data[$pre[$i]] = 1;
                     }else{
-                        $pre[$i]->enable = 0;
+                        $data[$pre[$i]] = 0;
                     }
                 }
+//                foreach ($pre as $item){
+////                    dd($item);
+//                    if (in_array($item,$pres)){
+////                        $item = 1;
+//                        $data[$i] = [
+//                            "$item"=>1
+//                        ];
+//                    }else{
+//                        $swap = [
+//                            "$item"=>0
+//                        ];
+//                    }
+//                    array_push($data,$swap);
+//                }
             }
+//            array_column($data);
             return response()->json([
                 'return_code'=>"SUCCESS",
-                'data'=>$pre
+                'data'=>$data
             ]);
         }else{
             return response()->json([
