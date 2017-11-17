@@ -471,7 +471,7 @@ class OrderController extends Controller
     {
         // 验证请求。
         $config = config('alipay');
-        $pay = new Pay($this->config);
+        $pay = new Pay($config);
 
         if ($pay->driver('alipay')->gateway('app')->verify($request->all())) {
             // 请自行对 trade_status 进行判断及其它逻辑进行判断，在支付宝的业务通知中，只有交易通知状态为 TRADE_SUCCESS 或 TRADE_FINISHED 时，支付宝才会认定为买家付款成功。
