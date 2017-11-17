@@ -624,6 +624,12 @@ class SystemController extends Controller
         $limit = Input::get('limit',10);
         $count = SignActivity::count();
         $activity = SignActivity::limit($limit)->offset(($page-1)*$limit)->orderBy('state','DESC')->orderBy('id','DESC')->get();
+        if (!empty($activity)){
+            for ($i=0;$i<count($activity);$i++){
+                $activity[$i]->start = date('Y-m-d H:i:s',$activity[$i]->start);
+                $activity[$i]->end = date('Y-m-d H:i:s',$activity[$i]->end);
+            }
+        }
         return response()->json([
             'return_code'=>'SUCCESS',
             'count'=>$count,
@@ -652,6 +658,12 @@ class SystemController extends Controller
         $limit = Input::get('limit',10);
         $count = ScanActivity::count();
         $activity = ScanActivity::limit($limit)->offset(($page-1)*$limit)->orderBy('state','DESC')->orderBy('id','DESC')->get();
+        if (!empty($activity)){
+            for ($i=0;$i<count($activity);$i++){
+                $activity[$i]->start = date('Y-m-d H:i:s',$activity[$i]->start);
+                $activity[$i]->end = date('Y-m-d H:i:s',$activity[$i]->end);
+            }
+        }
         return response()->json([
             'return_code'=>'SUCCESS',
             'count'=>$count,
@@ -753,6 +765,12 @@ class SystemController extends Controller
         $limit = Input::get('limit',10);
         $count = ShareActivity::count();
         $activity = ShareActivity::limit($limit)->offset(($page-1)*$limit)->orderBy('state','DESC')->orderBy('id','DESC')->get();
+        if (!empty($activity)){
+            for ($i=0;$i<count($activity);$i++){
+                $activity[$i]->start = date('Y-m-d H:i:s',$activity[$i]->start);
+                $activity[$i]->end = date('Y-m-d H:i:s',$activity[$i]->end);
+            }
+        }
         return response()->json([
             'return_code'=>'SUCCESS',
             'count'=>$count,
