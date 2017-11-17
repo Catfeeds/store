@@ -105,8 +105,8 @@ class UserController extends Controller
         $username = $loginPost->get('username');
         $password = $loginPost->get('password');
         $code = $loginPost->get('code');
-        $data = getCode($loginPost->get('phone'));
-        if (empty($data)||$data['type']!='register'){
+        $data = getCode($username);
+        if (empty($data)||$data['type']!='login'){
             return response()->json([
                 'return_code'=>"FAIL",
                 'return_msg'=>'验证码已失效！'
