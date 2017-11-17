@@ -107,7 +107,7 @@ class UserController extends Controller
         $password = $loginPost->get('password');
         $code = $loginPost->get('code');
         $data = getCode($username);
-        dd($data);
+//        dd($data);
         if (empty($data)||$data['type']!='login'){
             return response()->json([
                 'return_code'=>"FAIL",
