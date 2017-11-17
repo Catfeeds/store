@@ -302,7 +302,7 @@ class UserController extends Controller
         $count = Sign::where([
             'user_id'=>$uid,
             'activity_id'=>$activity->id
-        ])->whereMonth('created_at',date('m',time()))->whereYear('created_at',date('Y',time()))->count();
+        ])->where('created_at','>=',date('Y-m-d H:i:s',$activity->start))->where('created_at','<=',date('Y-m-d H:i:s',$activity->end))->count();
         return response()->json([
             'return_code'=>'SUCCESS',
             'data'=>[
@@ -434,36 +434,20 @@ class UserController extends Controller
 
             $pre = EntrustPermission::pluck('name')->toArray();
 
-            if (!empty($pre)){
+            if (!empty($pre)) {
                 $data = [];
-                for ($i=0;$i<count($pre);$i++){
-                    if (in_array($pre[$i],$pres)){
+                for ($i = 0; $i < count($pre); $i++) {
+                    if (in_array($pre[$i], $pres)) {
                         $data[$pre[$i]] = 1;
-                    }else{
+                    } else {
                         $data[$pre[$i]] = 0;
                     }
                 }
-//                foreach ($pre as $item){
-////                    dd($item);
-//                    if (in_array($item,$pres)){
-////                        $item = 1;
-//                        $data[$i] = [
-//                            "$item"=>1
-//                        ];
-//                    }else{
-//                        $swap = [
-//                            "$item"=>0
-//                        ];
-//                    }
-//                    array_push($data,$swap);
-//                }
-            }
-//            array_column($data);
-            return response()->json([
-                'return_code'=>"SUCCESS",
-                'data'=>$data
-            ]);
-        }else{
+                return response()->json([
+                    'return_code' => "SUCCESS",
+                    'data' => $data
+                ]);
+            }}else{
             return response()->json([
                 'return_code'=>"FAIL",
                 'return_msg'=>'用户不存在或密码错误！'
