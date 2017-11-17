@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use App\Http\Middleware\limitSend;
+use App\Http\Middleware\PermissionCheck;
 use App\Http\Middleware\TestParam;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
@@ -60,9 +61,10 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'cross'=>Middleware\cross::class,
         'role' => \Zizaco\Entrust\Middleware\EntrustRole::class,
-        'permission' => \Zizaco\Entrust\Middleware\EntrustPermission::class,
+//        'permission' => \Zizaco\Entrust\Middleware\EntrustPermission::class,
         'ability' => \Zizaco\Entrust\Middleware\EntrustAbility::class,
         'limitSend' => limitSend::class,
         'test' => TestParam::class,
+        'permission' => PermissionCheck::class,
     ];
 }

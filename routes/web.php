@@ -21,7 +21,10 @@ Route::get('activity/{code}','API\V1\SystemController@showShareActivity');
 Route::group(['middleware'=>'cross'],function (){
     Route::any('upload','API\V1\UploadController@uploadImage');
     Route::post('login','API\V1\UserController@adminLogin');
-//    Route::get('test','')->middleware('test:test');
+    Route::get('logout','API\V1\UserController@adminLogout');
+    Route::get('test',function (){
+        return 'success';
+    })->middleware('permission:test');
     Route::group(['middleware'=>'auth'],function (){
 
         Route::get('launcher/images','API\V1\LaunchImageController@getLaunchImages');

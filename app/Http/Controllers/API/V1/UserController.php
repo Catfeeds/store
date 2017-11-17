@@ -763,4 +763,12 @@ class UserController extends Controller
             ]);
         }
     }
+
+    public function adminLogout()
+    {
+        Auth::logout();
+        return response()->json([
+            'return_code'=>'SUCCESS'
+        ]);
+    }
 }
