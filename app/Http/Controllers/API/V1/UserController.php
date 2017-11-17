@@ -771,6 +771,15 @@ class UserController extends Controller
             'return_code'=>'SUCCESS'
         ]);
     }
+    public function getRoleUsers($id)
+    {
+        $role = EntrustRole::find($id);
+        $users = $role->users()->get();
+        return response()->json([
+            'return_code'=>'SUCCESS',
+            'data'=>$users
+        ]);
+    }
 //    public function listRoleUser()
 //    {
 //        $page = Input::get('page',1);
@@ -781,4 +790,5 @@ class UserController extends Controller
 //        $uid = DB::table('role_user');
 //        if ()
 //    }
+
 }
