@@ -147,7 +147,9 @@ class SystemController extends Controller
     }
     public function getRoles()
     {
-        $roles = EntrustRole::all();
+        $page = Input::get('page',1);
+        $limit = Input::get('limit',10);
+        $roles = EntrustRole::limit($limit)->offset(($page-1)*$limit)->get();
         $count = EntrustRole::count();
         for ($i=0;$i<count($roles);$i++){
             $roles[$i]->perms = $roles[$i]->perms()->get();
