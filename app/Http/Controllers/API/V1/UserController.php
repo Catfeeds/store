@@ -403,10 +403,10 @@ class UserController extends Controller
 ////            $user->attachRole($role);
             $role = $user->roles()->first();
 ////            dd($role);
-            $pres = $role->perms()->get();
-            dd($pres);
+            $pres = $role->perms()->pluck('name')->toArray();
             return response()->json([
-                'return_code'=>"SUCCESS"
+                'return_code'=>"SUCCESS",
+                'data'=>$pres
             ]);
         }else{
             return response()->json([
