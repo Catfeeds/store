@@ -24,7 +24,7 @@ Route::group(['middleware'=>'cross'],function (){
     Route::get('logout','API\V1\UserController@adminLogout');
     Route::get('test',function (){
         return 'success';
-    })->middleware('permission:test');
+    })->middleware('permission:logo');
     Route::group(['middleware'=>'auth'],function (){
 
         Route::get('launcher/images','API\V1\LaunchImageController@getLaunchImages');
