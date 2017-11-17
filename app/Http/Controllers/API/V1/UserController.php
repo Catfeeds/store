@@ -399,12 +399,12 @@ class UserController extends Controller
 //            dd($roles);
 //            $role = EntrustRole::find(4);
 ////            dd($role)
-//            $user = Auth::user();
+            $user = Auth::user();
 ////            $user->attachRole($role);
-////            $role = $user->roles()->get();
+            $role = $user->roles()->first();
 ////            dd($role);
-//            $pres = $role->perms()->get();
-//            dd($pres);
+            $pres = $role->perms()->get();
+            dd($pres);
             return response()->json([
                 'return_code'=>"SUCCESS"
             ]);
