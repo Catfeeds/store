@@ -195,6 +195,19 @@ class SystemController extends Controller
     {
 
     }
+
+    public function attachRole()
+    {
+        $role = Input::get('role_id');
+        $uid = Input::get('user_id');
+        DB::table('role_user')->where('user_id','=',$uid)->delete();
+        $user = User::find($uid);
+        $role = EntrustRole::find($role);
+        $user->attachRole($role);
+        return response()->json([
+            'return_code'=>'SUCCESS'
+        ]);
+    }
     public function test()
     {
         $user = User::find(7);

@@ -42,7 +42,7 @@ Route::group(['middleware'=>'cross'],function (){
         Route::get('del/role/{id}','API\V1\SystemController@delRole');
         Route::get('permissions','API\V1\SystemController@getPermissions');
         Route::post('permission','API\V1\SystemController@addPermission');
-        Route::post('attach/permission','API\V1\SystemController@attachPermission');
+        Route::post('attach/role','API\V1\SystemController@attachRole');
         Route::post('type','API\V1\CommodityController@addCommodityType');
         Route::get('types','API\V1\CommodityController@getTypes');
         Route::get('modify/type/{id}','API\V1\CommodityController@delType');
