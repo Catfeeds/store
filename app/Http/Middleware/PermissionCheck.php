@@ -23,7 +23,7 @@ class PermissionCheck
             ]);
         }
         $user = Auth::user();
-        if ($user->can('logo')){
+        if ($user->can($permission)){
             return $next($request);
         }
         return response()->json([
