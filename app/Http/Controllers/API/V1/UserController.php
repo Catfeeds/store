@@ -418,17 +418,20 @@ class UserController extends Controller
 //            $roles = EntrustRole::all();
 //            dd($roles);
 //            $role = EntrustRole::find(4);
+            return response()->json([
+                'return_code' => "SUCCESS"
+            ]);
 ////            dd($role)
             $user = Auth::user();
 ////            $user->attachRole($role);
             $role = $user->roles()->first();
-            if (empty($role)){
-                Auth::logout();
-                return response()->json([
-                    'return_code'=>'FAIL',
-                    'return_msg'=>"无权访问！"
-                ]);
-        }
+//            if (empty($role)){
+//                Auth::logout();
+//                return response()->json([
+//                    'return_code'=>'FAIL',
+//                    'return_msg'=>"无权访问！"
+//                ]);
+//        }
 //
             $pres = $role->perms()->pluck('name')->toArray();
 
