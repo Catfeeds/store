@@ -403,16 +403,16 @@ class UserController extends Controller
             $user = Auth::user();
 ////            $user->attachRole($role);
             $role = $user->roles()->first();
-////            dd($role);
-//
-            $pres = $role->perms()->pluck('name')->toArray();
-            if (empty($pres)){
+            if (empty($role)){
                 Auth::logout();
                 return response()->json([
                     'return_code'=>'FAIL',
                     'return_msg'=>"无权访问！"
                 ]);
-            }
+        }
+//
+            $pres = $role->perms()->pluck('name')->toArray();
+
             $pre = EntrustPermission::select('name')->get();
 //            dd($pre);
             if (!empty($pre)){
