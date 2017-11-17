@@ -93,6 +93,7 @@ class UserController extends Controller
             $member->send_max = $level->send_max;
             $member->send_daily = $level->send_daily;
             $member->save();
+            $member->save();
             return response()->json([
                 'return_code'=>'SUCCESS'
             ]);
@@ -106,6 +107,7 @@ class UserController extends Controller
         $password = $loginPost->get('password');
         $code = $loginPost->get('code');
         $data = getCode($username);
+        dd($data);
         if (empty($data)||$data['type']!='login'){
             return response()->json([
                 'return_code'=>"FAIL",
