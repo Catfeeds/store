@@ -31,6 +31,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Validation\Rules\In;
 use League\Flysystem\Config;
 use Symfony\Component\CssSelector\Parser\Token;
+use Zizaco\Entrust\EntrustPermission;
 use Zizaco\Entrust\EntrustRole;
 use Zzl\Umeng\Facades\Umeng;
 
@@ -403,10 +404,29 @@ class UserController extends Controller
 ////            $user->attachRole($role);
             $role = $user->roles()->first();
 ////            dd($role);
+//
             $pres = $role->perms()->pluck('name')->toArray();
+            if (empty($pres)){
+                Auth::logout();
+                return response()->json([
+                    'return_code'=>'FAIL',
+                    'return_msg'=>"无权访问！"
+                ]);
+            }
+            $pre = EntrustPermission::select('name')->get();
+//            dd($pre);
+            if (!empty($pre)){
+                for ($i=0;$i<count($pre);$i++){
+                    if (in_array($pre[$i]->name,$pres)){
+                        $pre[$i]->enable = 1;
+                    }else{
+                        $pre[$i]->enable = 0;
+                    }
+                }
+            }
             return response()->json([
                 'return_code'=>"SUCCESS",
-                'data'=>$pres
+                'data'=>$pre
             ]);
         }else{
             return response()->json([
