@@ -50,6 +50,13 @@ class SmsController extends Controller
                     'code'=>$code
                 ];
                 break;
+            case 6:
+                $data = [
+                    'type'=>'login',
+                    'code'=>$code
+                ];
+                break;
+
         }
         if (sendSMS($number,config('alisms.VerificationCode'),$smsContent)) {
             $data = serialize($data);

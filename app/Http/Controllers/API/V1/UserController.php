@@ -104,6 +104,20 @@ class UserController extends Controller
     {
         $username = $loginPost->get('username');
         $password = $loginPost->get('password');
+        $code = $loginPost->get('code');
+        $data = getCode($loginPost->get('phone'));
+        if (empty($data)||$data['type']!='register'){
+            return response()->json([
+                'return_code'=>"FAIL",
+                'return_msg'=>'验证码已失效！'
+            ]);
+        }
+        if ($data['code']!=$code){
+            return response()->json([
+                'return_code'=>"FAIL",
+                'return_msg'=>'验证码错误！'
+            ]);
+        }
         if (Auth::attempt(['username'=>$username,'password'=>$password],true)){
             $user = Auth::user();
             if ($user->state!=1){
@@ -734,28 +748,15 @@ class UserController extends Controller
     {
         $uid = getUserToken(Input::get('token'));
         $type = Input::get('type');
-        $open_id = Input::get('open_id');
         if ($type==1){
-            $qqbind = QQBind::where('open_id','=',$open_id)->first();
-            if ($qqbind->user_id != $uid){
-                return response()->json([
-                    'return_code'=>'FAIL',
-                    'return_msg'=>'无权操作！'
-                ]);
-            }
+            $qqbind = QQBind::where('user_id','=',$uid)->first();
             if ($qqbind->delete()){
                 return response()->json([
                     'return_code'=>'SUCCESS'
                 ]);
             }
         }else{
-            $wechat = WechatBind::where('open_id','=',$open_id)->first();
-            if ($wechat->user_id != $uid){
-                return response()->json([
-                    'return_code'=>'FAIL',
-                    'return_msg'=>'无权操作！'
-                ]);
-            }
+            $wechat = WechatBind::where('user_id','=',$uid)->first();
             if ($wechat->delete()){
                 return response()->json([
                     'return_code'=>'SUCCESS'
@@ -800,15 +801,5 @@ class UserController extends Controller
             'data'=>$users
         ]);
     }
-//    public function listRoleUser()
-//    {
-//        $page = Input::get('page',1);
-//        $limit = Input::get('limit',10);
-//        $user_id = Input::get('user_id');
-//        $username = Input::get('username');
-//        $role = Input::get('role');
-//        $uid = DB::table('role_user');
-//        if ()
-//    }
 
 }
