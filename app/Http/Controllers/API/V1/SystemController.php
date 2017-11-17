@@ -605,9 +605,11 @@ class SystemController extends Controller
             ]);
         }
     }
-    public function getSignActivity()
+    public function getSignActivities()
     {
-        $activity = SignActivity::first();
+        $page = Input::get('page',1);
+        $limit = Input::get('limit',10);
+        $activity = SignActivity::limit($limit)->offset(($page-1)*$limit)->orderBy('state','DESC')->orderBy('id','DESC')->get();
         return response()->json([
             'return_code'=>'SUCCESS',
             'data'=>$activity
@@ -629,12 +631,11 @@ class SystemController extends Controller
             ]);
         }
     }
-    public function getScanActivity()
+    public function getScanActivities()
     {
-        $activity = ScanActivity::first();
-        if (empty($activity)){
-            $activity = new ScanActivity();
-        }
+        $page = Input::get('page',1);
+        $limit = Input::get('limit',10);
+        $activity = ScanActivity::limit($limit)->offset(($page-1)*$limit)->orderBy('state','DESC')->orderBy('id','DESC')->get();
         return response()->json([
             'return_code'=>'SUCCESS',
             'data'=>$activity
@@ -731,7 +732,9 @@ class SystemController extends Controller
     }
     public function getShareActivities()
     {
-        $activity = ShareActivity::first();
+        $page = Input::get('page',1);
+        $limit = Input::get('limit',10);
+        $activity = ShareActivity::limit($limit)->offset(($page-1)*$limit)->orderBy('state','DESC')->orderBy('id','DESC')->get();
         return response()->json([
             'return_code'=>'SUCCESS',
             'data'=>$activity

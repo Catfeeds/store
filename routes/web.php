@@ -26,7 +26,6 @@ Route::group(['middleware'=>'cross'],function (){
         return 'success';
     })->middleware('permission:logo');
     Route::group(['middleware'=>'auth'],function (){
-
         Route::get('launcher/images','API\V1\LaunchImageController@getLaunchImages');
         Route::get('enable/launcher/image/{id}','API\V1\LaunchImageController@enableLauncherImage');
         Route::post('launcher/image','API\V1\LaunchImageController@addLaunchImage');
@@ -64,8 +63,8 @@ Route::group(['middleware'=>'cross'],function (){
         Route::get('parttimes','API\V1\SystemController@listPartTime');
         Route::get('modify/report/{id}','API\V1\SystemController@modifyReport');
         Route::get('modify/parttime/{id}','API\V1\SystemController@modifyPartTime');
-        Route::get('sign/activity','API\V1\SystemController@getSignActivity');
-        Route::get('scan/activity','API\V1\SystemController@getScanActivity');
+        Route::get('sign/activities','API\V1\SystemController@getSignActivities');
+        Route::get('scan/activities','API\V1\SystemController@getScanActivities');
         Route::post('activity/sign','API\V1\SystemController@addSignActivity');
         Route::post('activity/scan','API\V1\SystemController@addScanActivity');
         Route::get('config','API\V1\SystemController@getSystemConfig');
@@ -78,7 +77,7 @@ Route::group(['middleware'=>'cross'],function (){
         Route::get('report/reasons','API\V1\SystemController@getReportReasons');
         Route::post('report/reason','API\V1\SystemController@addReportReason');
         Route::post('share/activity','API\V1\SystemController@getShareActivities');
-        Route::get('share/activity','API\V1\SystemController@getShareActivities');
+        Route::get('share/activities','API\V1\SystemController@getShareActivities');
         Route::get('pass/commodities','API\V1\CommodityController@getPassCommodities');
         Route::get('unpass/commodities','API\V1\CommodityController@getUnPassCommodities');
         Route::get('pass/commodity/{id}','API\V1\CommodityController@passCommodity');

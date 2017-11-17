@@ -771,4 +771,14 @@ class UserController extends Controller
             'return_code'=>'SUCCESS'
         ]);
     }
+//    public function listRoleUser()
+//    {
+//        $page = Input::get('page',1);
+//        $limit = Input::get('limit',10);
+//        $user_id = Input::get('user_id');
+//        $username = Input::get('username');
+//        $role = Input::get('role');
+//        $uid = DB::table('role_user');
+//        if ()
+//    }
 }
