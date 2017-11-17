@@ -94,12 +94,15 @@ class UserController extends Controller
             $member->send_daily = $level->send_daily;
             $member->save();
             $member->save();
+            $key = createNonceStr();
+            setUserToken($key,$user->id);
             return response()->json([
-                'return_code'=>'SUCCESS'
+                'return_code'=>"SUCCESS",
+                'data' =>[
+                    'token'=>$key
+                ]
             ]);
         }
-
-
     }
     public function login(LoginPost $loginPost)
     {
@@ -752,6 +755,11 @@ class UserController extends Controller
         $type = Input::get('type');
         if ($type==1){
             $qqbind = QQBind::where('user_id','=',$uid)->first();
+            if (empty($qqbind)){
+                return response()->json([
+                    'return_code'=>'SUCCESS'
+                ]);
+            }
             if ($qqbind->delete()){
                 return response()->json([
                     'return_code'=>'SUCCESS'
@@ -759,6 +767,11 @@ class UserController extends Controller
             }
         }else{
             $wechat = WechatBind::where('user_id','=',$uid)->first();
+            if (empty($wechat)){
+                return response()->json([
+                    'return_code'=>'SUCCESS'
+                ]);
+            }
             if ($wechat->delete()){
                 return response()->json([
                     'return_code'=>'SUCCESS'
