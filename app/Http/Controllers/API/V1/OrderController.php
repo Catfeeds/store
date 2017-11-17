@@ -284,14 +284,22 @@ class OrderController extends Controller
      */
     public function aliPay($number,$title,$price)
     {
-        $alipay = app('alipay.mobile');
-        $alipay->setOutTradeNo($number);
-        $alipay->setTotalFee($price);
-        $alipay->setSubject($title);
-        $alipay->setBody($title);
-
-        // 返回签名后的支付参数给支付宝移动端的SDK。
-        return $alipay->getPayPara();
+//        $alipay = app('alipay.mobile');
+//        $alipay->setOutTradeNo($number);
+//        $alipay->setTotalFee($price);
+//        $alipay->setSubject($title);
+//        $alipay->setBody($title);
+//
+//        // 返回签名后的支付参数给支付宝移动端的SDK。
+//        return $alipay->getPayPara();
+        $config = config('alipay');
+        $config_biz = [
+            'out_trade_no' => $number,                 // 订单号
+            'total_amount' => $price,                 // 订单金额，单位：元
+            'subject' => $title,   // 订单商品标题
+        ];
+        $pay = new Pay($config);
+        return $pay->driver('alipay')->gateway('app')->pay($config_biz);
     }
 
     /**
@@ -462,82 +470,103 @@ class OrderController extends Controller
     public function alipayNotify(Request $request)
     {
         // 验证请求。
-        $handle  = fopen('alipay.txt','a+');
-        fwrite($handle,var_export($request->getContent(),true));
-        fclose($handle);
+        $config = config('alipay');
+        $pay = new Pay($this->config);
 
-        if (! app('alipay.mobile')->verify()) {
-//            Log::notice('Alipay notify post data verification fail.', [
-//                'data' => Request::instance()->getContent()
-//            ]);
-            $handle  = fopen('alipay2.txt','a+');
-            fwrite($handle,var_export($request->getContent(),true));
-            fclose($handle);
-            return 'fail';
-        }
-
-        // 判断通知类型。
-
-        switch (Input::get('trade_status')) {
-            case 'TRADE_SUCCESS':
-            case 'TRADE_FINISHED':
-                // TODO: 支付成功，取得订单号进行其它相关操作。
+        if ($pay->driver('alipay')->gateway('app')->verify($request->all())) {
+            // 请自行对 trade_status 进行判断及其它逻辑进行判断，在支付宝的业务通知中，只有交易通知状态为 TRADE_SUCCESS 或 TRADE_FINISHED 时，支付宝才会认定为买家付款成功。
+            // 1、商户需要验证该通知数据中的out_trade_no是否为商户系统中创建的订单号；
+            // 2、判断total_amount是否确实为该订单的实际金额（即商户订单创建时的金额）；
+            // 3、校验通知中的seller_id（或者seller_email) 是否为out_trade_no这笔单据的对应的操作方（有的时候，一个商户可能有多个seller_id/seller_email）；
+            // 4、验证app_id是否为该商户本身。
+            // 5、其它业务逻辑情况
+            switch (Input::get('trade_status')) {
+                case 'TRADE_SUCCESS':
+                case 'TRADE_FINISHED':
+                    // TODO: 支付成功，取得订单号进行其它相关操作。
 //                Log::debug('Alipay notify get data verification success.', [
 //                    'out_trade_no' => Input::get('out_trade_no'),
 //                    'trade_no' => Input::get('trade_no')
 //                ]);
-            $order = Order::where(['number'=>Input::get('out_trade_no')])->first();
-            if ($order->state==0){
-                switch ($order->type){
-                    case 1:
-                        $level = MemberLevel::where('level','=',$order->content)->first();
-                        $member = Member::where('user_id','=',$order->user_id)->first();
-                        if (empty($member)){
-                            $member = new Member();
-                            $member->level = $level->level;
-                            $member->end_time = intval(time()+$level->time);
-                            $member->send_max = $level->send_max;
-                            $member->send_daily = $level->send_daily;
-                            $member->user_id = $order->user_id;
-                            PublishRecord::where('user_id','=',$order->user_id)->delete();
-                        }else{
-                            $member->level = $level->level;
-                            $member->end_time = intval(time()+$level->time);
-                            $member->send_max = $level->send_max;
-                            $member->send_daily = $level->send_daily;
-                            PublishRecord::where('user_id','=',$order->user_id)->delete();
-                        }
-                        $member->save();
-                        $order->state = 1;
-                        break;
-                    case 2:
+                    $order = Order::where(['number'=>Input::get('out_trade_no')])->first();
+                    if ($order->state==0){
+                        switch ($order->type){
+                            case 1:
+                                $level = MemberLevel::where('level','=',$order->content)->first();
+                                $member = Member::where('user_id','=',$order->user_id)->first();
+                                if (empty($member)){
+                                    $member = new Member();
+                                    $member->level = $level->level;
+                                    $member->end_time = intval(time()+$level->time);
+                                    $member->send_max = $level->send_max;
+                                    $member->send_daily = $level->send_daily;
+                                    $member->user_id = $order->user_id;
+                                    PublishRecord::where('user_id','=',$order->user_id)->delete();
+                                }else{
+                                    $member->level = $level->level;
+                                    $member->end_time = intval(time()+$level->time);
+                                    $member->send_max = $level->send_max;
+                                    $member->send_daily = $level->send_daily;
+                                    PublishRecord::where('user_id','=',$order->user_id)->delete();
+                                }
+                                $member->save();
+                                $order->state = 1;
+                                break;
+                            case 2:
 //                        $buy = UserBuy::find($order->content);
 //                        $buy->pic = 1;
 //                        $buy->save();
-                        $order->state = 1;
-                        break;
-                    case 3:
+                                $order->state = 1;
+                                break;
+                            case 3:
 //                        $buy = UserBuy::find($order->content);
 //                        $buy->phone = 1;
 //                        $buy->save();
-                        $order->state = 1;
-                        break;
-                    case 4:
-                        break;
-                }
-                if ($order->save()){
-                    return 'SUCCESS';
-                }
+                                $order->state = 1;
+                                break;
+                            case 4:
+                                break;
+                        }
+                        if ($order->save()){
+                            return 'SUCCESS';
+                        }
 //            file_put_contents('notify.txt', "收到来自微信的异步通知\r\n", FILE_APPEND);
 //            file_put_contents('notify.txt', '订单号：' . $verify['out_trade_no'] . "\r\n", FILE_APPEND);
-                //            file_put_contents('notify.txt', '订单金额：' . $verify['total_fee'] . "\r\n\r\n", FILE_APPEND);
-            } else {
-                //            file_put_contents(storage_path('notify.txt'), "收到异步通知\r\n", FILE_APPEND);
+                        //            file_put_contents('notify.txt', '订单金额：' . $verify['total_fee'] . "\r\n\r\n", FILE_APPEND);
+                    } else {
+                        //            file_put_contents(storage_path('notify.txt'), "收到异步通知\r\n", FILE_APPEND);
+                    }
+                    break;
             }
-                break;
+
+
+            file_put_contents(storage_path('notify.txt'), "收到来自支付宝的异步通知\r\n", FILE_APPEND);
+            file_put_contents(storage_path('notify.txt'), '订单号：' . $request->out_trade_no . "\r\n", FILE_APPEND);
+            file_put_contents(storage_path('notify.txt'), '订单金额：' . $request->total_amount . "\r\n\r\n", FILE_APPEND);
+        } else {
+            file_put_contents(storage_path('notify.txt'), "收到异步通知\r\n", FILE_APPEND);
         }
 
-        return 'success';
+        echo "success";
+//        $handle  = fopen('alipay.txt','a+');
+//        fwrite($handle,var_export($request->getContent(),true));
+//        fclose($handle);
+//
+//        if (! app('alipay.mobile')->verify()) {
+////            Log::notice('Alipay notify post data verification fail.', [
+////                'data' => Request::instance()->getContent()
+////            ]);
+//            $handle  = fopen('alipay2.txt','a+');
+//            fwrite($handle,var_export($request->getContent(),true));
+//            fclose($handle);
+//            return 'fail';
+//        }
+//
+//        // 判断通知类型。
+//
+//
+//
+//        return 'success';
     }
 }
 
