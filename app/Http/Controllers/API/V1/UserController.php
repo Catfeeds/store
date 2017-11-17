@@ -302,7 +302,7 @@ class UserController extends Controller
         $count = Sign::where([
             'user_id'=>$uid,
             'activity_id'=>$activity->id
-        ])->where('created_at','>=',date('Y-m-d H:i:s',$activity->start))->where('created_at','<=',date('Y-m-d H:i:s',$activity->end))->count();
+        ])->count();
         return response()->json([
             'return_code'=>'SUCCESS',
             'data'=>[
