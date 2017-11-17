@@ -84,6 +84,7 @@ Route::group(['middleware'=>'cross'],function (){
         Route::get('modify/user/{id}','API\V1\UserController@modifyUser');
         Route::post('user/level','API\V1\UserController@modifyUserLevel');
         Route::get('role/users/{id}','API\V1\UserController@getRoleUsers');
+        Route::get('del/users/role','API\V1\UserController@delRoleUser');
     });
 
 

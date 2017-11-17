@@ -801,4 +801,12 @@ class UserController extends Controller
             'data'=>$users
         ]);
     }
+    public function delRoleUser()
+    {
+        $user = Input::get('user_id');
+        DB::table('role_user')->where('user_id','=',$user)->delete();
+        return response()->json([
+            'return_code'=>'SUCCESS'
+        ]);
+    }
 }
