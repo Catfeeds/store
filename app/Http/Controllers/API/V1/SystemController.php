@@ -788,7 +788,7 @@ class SystemController extends Controller
                 'return_msg'=>'时间错误！'
             ]);
         }
-        $activity = ShareActivity::first();
+        $activity = new ShareActivity();
         $activity->start = $start;
         $activity->end = $end;
         $activity->score = Input::get('score');

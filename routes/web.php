@@ -76,7 +76,7 @@ Route::group(['middleware'=>'cross'],function (){
         Route::get('del/report/{id}','API\V1\SystemController@delReportReason');
         Route::get('report/reasons','API\V1\SystemController@getReportReasons');
         Route::post('report/reason','API\V1\SystemController@addReportReason');
-        Route::post('share/activity','API\V1\SystemController@getShareActivities');
+        Route::post('share/activity','API\V1\SystemController@addShareActivity');
         Route::get('share/activities','API\V1\SystemController@getShareActivities');
         Route::get('pass/commodities','API\V1\CommodityController@getPassCommodities');
         Route::get('unpass/commodities','API\V1\CommodityController@getUnPassCommodities');
