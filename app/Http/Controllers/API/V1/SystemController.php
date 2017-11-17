@@ -788,6 +788,7 @@ class SystemController extends Controller
                 'return_msg'=>'时间错误！'
             ]);
         }
+        ShareActivity::where('state','=','1')->update(['state'=>'0']);
         $activity = new ShareActivity();
         $activity->start = $start;
         $activity->end = $end;
