@@ -284,22 +284,22 @@ class OrderController extends Controller
      */
     public function aliPay($number,$title,$price)
     {
-//        $alipay = app('alipay.mobile');
-//        $alipay->setOutTradeNo($number);
-//        $alipay->setTotalFee($price);
-//        $alipay->setSubject($title);
-//        $alipay->setBody($title);
-//
-//        // 返回签名后的支付参数给支付宝移动端的SDK。
-//        return $alipay->getPayPara();
-        $config = config('alipay');
-        $config_biz = [
-            'out_trade_no' => $number,                 // 订单号
-            'total_amount' => $price,                 // 订单金额，单位：元
-            'subject' => $title,   // 订单商品标题
-        ];
-        $pay = new Pay($config);
-        return $pay->driver('alipay')->gateway('app')->pay($config_biz);
+        $alipay = app('alipay.mobile');
+        $alipay->setOutTradeNo($number);
+        $alipay->setTotalFee($price);
+        $alipay->setSubject($title);
+        $alipay->setBody($title);
+
+        // 返回签名后的支付参数给支付宝移动端的SDK。
+        return $alipay->getPayPara();
+//        $config = config('alipay');
+//        $config_biz = [
+//            'out_trade_no' => $number,                 // 订单号
+//            'total_amount' => $price,                 // 订单金额，单位：元
+//            'subject' => $title,   // 订单商品标题
+//        ];
+//        $pay = new Pay($config);
+//        return $pay->driver('alipay')->gateway('app')->pay($config_biz);
     }
 
     /**
