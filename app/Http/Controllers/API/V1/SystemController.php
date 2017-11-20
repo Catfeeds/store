@@ -723,7 +723,7 @@ class SystemController extends Controller
                 'return_msg'=>'当前没有活动！'
             ]);
         }else{
-            $code = createNonceStr(5);
+            $code = createNonceStrWithoutTime(5);
             $code .=$uid;
             $time = $activity->end - time();
 //            setUserToken($code,$uid);

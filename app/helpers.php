@@ -7,6 +7,16 @@ if (!function_exists('createNonceStr')){
         for ($i = 0; $i < $length; $i++) {
             $str .= substr($chars, mt_rand(0, strlen($chars) - 1), 1);
         }
+        return $str.time();
+    }
+}
+if (!function_exists('createNonceStrWithoutTime')){
+    function createNonceStrWithoutTime($length = 15) {
+        $chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+        $str = "";
+        for ($i = 0; $i < $length; $i++) {
+            $str .= substr($chars, mt_rand(0, strlen($chars) - 1), 1);
+        }
         return $str;
     }
 }
