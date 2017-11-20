@@ -431,12 +431,18 @@ class OrderController extends Controller
     {
         $page = Input::get('page',1);
         $limit = Input::get('limit',10);
-        $orderDb = Order::where('state','!=',0)->where('pay_type','!=',1);
+        $orderDb = Order::where('state','!=',0);
+        //->where('pay_type','!=',1)
         $sum = $orderDb->sum('price');
         $pay_type = Input::get('pay_type');
         $start = Input::get('start');
         $end = Input::get('end');
         $level = Input::get('level');
+        $uid = Input::get('user_id');
+        if ($uid){
+            $orderDb->where('user_id','=',$uid);
+            $sum = $orderDb->sum('price');
+        }
         if ($pay_type){
             $orderDb->where('pay_type','=',$pay_type);
             $sum = $orderDb->sum('price');
