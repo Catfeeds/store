@@ -59,35 +59,6 @@ Route::group(['middleware'=>'cross'],function (){
         Route::get('guides','API\V1\SystemController@getUserGuides')->middleware('permission:guide');
         Route::get('del/guide/{id}','API\V1\SystemController@delUserGuides')->middleware('permission:guide');
         Route::get('orders','API\V1\OrderController@getAllOrders');
-<<<<<<< HEAD
-        Route::get('reports','API\V1\SystemController@getReports');
-        Route::get('parttimes','API\V1\SystemController@listPartTime');
-        Route::get('modify/report/{id}','API\V1\SystemController@modifyReport');
-        Route::get('modify/parttime/{id}','API\V1\SystemController@modifyPartTime');
-        Route::get('sign/activities','API\V1\SystemController@getSignActivities');
-        Route::get('scan/activities','API\V1\SystemController@getScanActivities');
-        Route::post('activity/sign','API\V1\SystemController@addSignActivity');
-        Route::post('activity/scan','API\V1\SystemController@addScanActivity');
-        Route::get('config','API\V1\SystemController@getSystemConfig');
-        Route::post('config','API\V1\SystemController@modifySystemConfig');
-        Route::get('users','API\V1\UserController@getAllUsers');
-        Route::get('refuses','API\V1\SystemController@getRefuseReasons');
-        Route::post('refuse','API\V1\SystemController@addRefuseReasen');
-        Route::get('del/refuse/{id}','API\V1\SystemController@delRefuseReason');
-        Route::get('del/report/{id}','API\V1\SystemController@delReportReason');
-        Route::get('report/reasons','API\V1\SystemController@getReportReasons');
-        Route::post('report/reason','API\V1\SystemController@addReportReason');
-        Route::post('share/activity','API\V1\SystemController@addShareActivity');
-        Route::get('share/activities','API\V1\SystemController@getShareActivities');
-        Route::get('pass/commodities','API\V1\CommodityController@getPassCommodities');
-        Route::get('unpass/commodities','API\V1\CommodityController@getUnPassCommodities');
-        Route::get('pass/commodity/{id}','API\V1\CommodityController@passCommodity');
-        Route::get('modify/user/{id}','API\V1\UserController@modifyUser');
-        Route::post('user/level','API\V1\UserController@modifyUserLevel');
-        Route::get('role/users/{id}','API\V1\UserController@getRoleUsers');
-        Route::get('del/user/role','API\V1\UserController@delRoleUser');
-        Route::post('add/admin','API\V1\UserController@addAdmin');
-=======
         Route::get('reports','API\V1\SystemController@getReports')->middleware('permission:reportlist');
         Route::get('parttimes','API\V1\SystemController@listPartTime')->middleware('permission:parttimelist');
         Route::get('modify/report/{id}','API\V1\SystemController@modifyReport')->middleware('permission:reportlist');
@@ -110,13 +81,10 @@ Route::group(['middleware'=>'cross'],function (){
         Route::get('pass/commodities','API\V1\CommodityController@getPassCommodities')->middleware('permission:passlist');
         Route::get('unpass/commodities','API\V1\CommodityController@getUnPassCommodities')->middleware('permission:unpasslist');
         Route::get('pass/commodity/{id}','API\V1\CommodityController@passCommodity')->middleware('permission:pass');
-        Route::get('modify/user/{id}','API\V1\UserController@modifyUser')->middleware('permission:userlist');;
-        Route::post('user/level','API\V1\UserController@modifyUserLevel')->middleware('permission:userlist');;
-        Route::get('role/users/{id}','API\V1\UserController@getRoleUsers')->middleware('permission:attachRole');;
-        Route::get('del/user/role','API\V1\UserController@delRoleUser')->middleware('permission:attachRole');;
->>>>>>> 8607ba86b91ef9ff9d0081acb21bb08ec3625103
+        Route::get('modify/user/{id}','API\V1\UserController@modifyUser')->middleware('permission:userlist');
+        Route::post('user/level','API\V1\UserController@modifyUserLevel')->middleware('permission:userlist');
+        Route::get('role/users/{id}','API\V1\UserController@getRoleUsers')->middleware('permission:attachRole');
+        Route::get('del/user/role','API\V1\UserController@delRoleUser')->middleware('permission:attachRole');
+        Route::post('add/admin','API\V1\UserController@addAdmin');
     });
-
-
-
 });
