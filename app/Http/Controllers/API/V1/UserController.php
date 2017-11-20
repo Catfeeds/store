@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\V1;
 
 use App\Http\Requests\LoginPost;
+use App\Http\Requests\MakeAdmin;
 use App\Http\Requests\RegisterPost;
 use App\Http\Requests\ResetPasswordPost;
 use App\Models\Attention;
@@ -823,5 +824,19 @@ class UserController extends Controller
         return response()->json([
             'return_code'=>'SUCCESS'
         ]);
+    }
+    public function addAdmin(MakeAdmin $makeAdmin)
+    {
+        $user = new User();
+        $user->username = $makeAdmin->get('username');
+        $user->password = bcrypt($makeAdmin->get('password'));
+        $user->phone = $makeAdmin->get('phone');
+        if ($user->save()){
+            $role = EntrustRole::find($makeAdmin->get('role'));
+            $user->attachRole($role);
+            return response()->json([
+                'return_code'=>'SUCCESS'
+            ]);
+        }
     }
 }
