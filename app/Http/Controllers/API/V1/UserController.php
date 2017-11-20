@@ -419,6 +419,9 @@ class UserController extends Controller
 //            $roles = EntrustRole::all();
 //            dd($roles);
 //            $role = EntrustRole::find(4);
+//            return response()->json([
+//                'return_code' => "SUCCESS"
+//            ]);
 ////            dd($role)
             $user = Auth::user();
 ////            $user->attachRole($role);
@@ -429,7 +432,7 @@ class UserController extends Controller
                     'return_code'=>'FAIL',
                     'return_msg'=>"无权访问！"
                 ]);
-        }
+            }
 //
             $pres = $role->perms()->pluck('name')->toArray();
 
@@ -825,18 +828,5 @@ class UserController extends Controller
             'return_code'=>'SUCCESS'
         ]);
     }
-    public function addAdmin(MakeAdmin $makeAdmin)
-    {
-        $user = new User();
-        $user->username = $makeAdmin->get('username');
-        $user->password = bcrypt($makeAdmin->get('password'));
-        $user->phone = $makeAdmin->get('phone');
-        if ($user->save()){
-            $role = EntrustRole::find($makeAdmin->get('role'));
-            $user->attachRole($role);
-            return response()->json([
-                'return_code'=>'SUCCESS'
-            ]);
-        }
-    }
+
 }

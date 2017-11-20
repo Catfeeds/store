@@ -83,39 +83,34 @@ class CommodityController extends Controller
         $list = DescriptionList::where('commodity_id','=',$commodity->id)->pluck('desc_id');
         $commodity->description = Description::whereIn('id',$list)->get();
         $commodity->type = CommodityType::find($commodity->type);
-        if (!$uid){
-            $collect = 0;
+        if ($needPay->need_pay == 1){
             $need_pay = 1;
-            $msg_num = 0;
         }else{
-            $msg_num = Message::where([
-                'receive_id'=>$uid,
-                'read'=>0
-            ])->count();
-            $collect = Collect::where([
-                'user_id'=>$uid,
-                'commodity_id'=>$id
-            ])->count();
-            if ($uid == $commodity->user_id){
-                $need_pay = 0;
+            $need_pay = 0;
+        }
+            if (!$uid){
+                $collect = 0;
+                $msg_num = 0;
             }else{
-                $member = Member::where('user_id','=',$uid)->first();
-                if (empty($member)){
-                    $need_pay = 1;
+                $msg_num = Message::where([
+                    'receive_id'=>$uid,
+                    'read'=>0
+                ])->count();
+                $collect = Collect::where([
+                    'user_id'=>$uid,
+                    'commodity_id'=>$id
+                ])->count();
+                if ($uid == $commodity->user_id){
+                    $need_pay = 0;
                 }else{
-                    if ($member->level==0){
-                        $need_pay = 1;
-                    }else{
-                        if ($member->end_time<time()){
-                            $need_pay = 1;
-                        }else{
-                            $need_pay = 0;
-                        }
+                    $member = Member::where('user_id','=',$uid)->first();
+                    if (!empty($member)){
+
+                        if ($member->end_time>time()){
+                                $need_pay = 0;
                     }
                 }
-            }
-
-        }
+        }}
         $commodity->collect = $collect;
         $commodity->need_pay = $need_pay;
         $commodity->msg_num = $msg_num;
