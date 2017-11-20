@@ -15,6 +15,8 @@ class CreateShareRecordsTable extends Migration
     {
         Schema::create('share_records', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('activity_id');
+            $table->integer('time');
             $table->timestamps();
         });
     }

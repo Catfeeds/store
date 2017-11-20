@@ -883,7 +883,7 @@ class CommodityController extends Controller
                 $user = User::find($data[$i]->user_id);
                 $data[$i]->username = empty($user)?'':$user->username;
                 $pass = PassList::where('commodity_id','=',$data[$i]->id)->first();
-                $data[$i]->passName = empty($pass)?'':User::find($pass->user_id)->name;
+                $data[$i]->passName = empty($pass)?'':User::find($pass->user_id)->username;
                 $data[$i]->pictures = $data[$i]->pictures()->get();
                 $list = DescriptionList::where('commodity_id','=',$data[$i]->id)->pluck('desc_id');
                 $data[$i]->descriptions = Description::whereIn('id',$list)->pluck('title');
