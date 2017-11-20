@@ -86,5 +86,6 @@ Route::group(['middleware'=>'cross'],function (){
         Route::get('role/users/{id}','API\V1\UserController@getRoleUsers')->middleware('permission:attachRole');
         Route::get('del/user/role','API\V1\UserController@delRoleUser')->middleware('permission:attachRole');
         Route::post('add/admin','API\V1\UserController@addAdmin');
+        Route::get('user/{id}','API\V1\UserController@getUser');
     });
 });

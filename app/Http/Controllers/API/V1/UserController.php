@@ -893,4 +893,24 @@ class UserController extends Controller
             ]);
         }
     }
+    public function getUser($id)
+    {
+        $user = User::find($id);
+        if (!empty($user)){
+            $user->member = Member::where('user_id','=',$user->id)->first();
+            $user->commodity_count = Commodity::where('user_id','=',$user->id)->count();
+            $user->enable_count = Commodity::where('user_id','=',$user->id)->where([
+                'pass'=>1,
+                'enable'=>1
+            ])->count();
+            $user->disable_count = Commodity::where('user_id','=',$user->id)->where([
+                'pass'=>1,
+                'enable'=>0
+            ])->count();
+        }
+        return response()->json([
+            'return_code'=>'SUCCESS',
+            'data'=>$user
+        ]);
+    }
 }
