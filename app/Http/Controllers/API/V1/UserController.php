@@ -828,5 +828,18 @@ class UserController extends Controller
             'return_code'=>'SUCCESS'
         ]);
     }
-
+    public function addAdmin(MakeAdmin $makeAdmin)
+    {
+        $user = new User();
+        $user->username = $makeAdmin->get('username');
+        $user->password = bcrypt($makeAdmin->get('password'));
+        $user->phone = $makeAdmin->get('phone');
+        if ($user->save()){
+            $role = EntrustRole::find($makeAdmin->get('role'));
+            $user->attachRole($role);
+            return response()->json([
+                'return_code'=>'SUCCESS'
+            ]);
+        }
+    }
 }
