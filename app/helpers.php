@@ -7,7 +7,7 @@ if (!function_exists('createNonceStr')){
         for ($i = 0; $i < $length; $i++) {
             $str .= substr($chars, mt_rand(0, strlen($chars) - 1), 1);
         }
-        return $str.time();
+        return $str;
     }
 }
 if (!function_exists('setUserToken')){
@@ -179,6 +179,6 @@ if (!function_exists('getInviteCode')) {
         if (!isset($code)){
             return false;
         }
-        return $code;
+        return unserialize($code);
     }
 }

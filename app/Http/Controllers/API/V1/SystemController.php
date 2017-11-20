@@ -727,7 +727,11 @@ class SystemController extends Controller
             $code .=$uid;
             $time = $activity->end - time();
 //            setUserToken($code,$uid);
-            setInviteCode($code,$uid,$time);
+            $data = [
+                'activity'=>$activity->id,
+                'uid'=>$uid
+            ];
+            setInviteCode($code,$data,$time);
             return response()->json([
                 'return_code'=>'SUCCESS',
                 'data'=>[

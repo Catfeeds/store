@@ -18,8 +18,11 @@ use App\Models\QQBind;
 use App\Models\ScanActivity;
 use App\Models\ScanRecord;
 use App\Models\Score;
+use App\Models\ShareActivity;
+use App\Models\ShareRecord;
 use App\Models\Sign;
 use App\Models\SignActivity;
+use App\Models\TokenRecord;
 use App\Models\TypeList;
 use App\Models\WechatBind;
 use App\User;
@@ -64,13 +67,31 @@ class UserController extends Controller
         $user->avatar = Input::get('avatar','');
         $inviteCode = Input::get('');
         $inviteUid = getInviteCode($inviteCode);
-        if($inviteUid){
-            $activity =  ShareActivity::where('end','>',time())->where('state','=','1')->first();
+        if(!empty($inviteUid)){
+            $activity =  ShareActivity::find($inviteUid['activity']);
             $user->score = $activity->score;
-            $inviteUser = User::find($inviteUid);
-            if ($inviteUser){
-                $inviteUser -> score += $activity->score;
-                $inviteUser->save();
+            $inviteUser = User::find($inviteUid['uid']);
+            if (!empty($inviteUser)){
+                $count = ShareRecord::where('activity_id','=',$activity->id)->where('user_id','=',$inviteUser->id)->whereDate('created_at', '=', date('Y-m-d'))->count();
+                if ($count==0){
+                    $inviteUser -> score += $activity->score;
+                    $inviteUser->save();
+                    $record = new ShareRecord();
+                    $record->user_id = $inviteUser->id;
+                    $record->activity_id = $activity->id;
+                    $record->save();
+                }else{
+                        if ($count*$activity->score<$activity->daily_max){
+                            $inviteUser -> score += $activity->score;
+                            $inviteUser->save();
+                            $record = new ShareRecord();
+                            $record->user_id = $inviteUser->id;
+                            $record->activity_id = $activity->id;
+                            $record->save();
+                        }
+                    }
+                $user->invite = $inviteUid['uid'];
+                $user->activity = $inviteUid['activity'];
             }
         }
         if ($user->save()){
@@ -94,9 +115,12 @@ class UserController extends Controller
             $member->send_max = $level->send_max;
             $member->send_daily = $level->send_daily;
             $member->save();
-            $member->save();
             $key = createNonceStr();
             setUserToken($key,$user->id);
+            $tokenRecord = new TokenRecord();
+            $tokenRecord->token = $key;
+            $tokenRecord->user_id = $user->id;
+            $tokenRecord->save();
             return response()->json([
                 'return_code'=>"SUCCESS",
                 'data' =>[
@@ -132,8 +156,27 @@ class UserController extends Controller
                     'return_msg'=>'账号已被封禁！'
                 ]);
             }
-            $key = createNonceStr();
-            setUserToken($key,$user->id);
+            $record = TokenRecord::where('user_id','=',$user->id)->first();
+            if (empty($record)){
+                $key = createNonceStr();
+                setUserToken($key,$user->id);
+                $tokenRecord = new TokenRecord();
+                $tokenRecord->token = $key;
+                $tokenRecord->user_id = $user->id;
+                $tokenRecord->save();
+            }else{
+                $uid = getUserToken($record->token);
+                if ($uid==$user->id){
+                    $key = $record->token;
+                }else{
+                    $key = createNonceStr();
+                    setUserToken($key,$user->id);
+                    $tokenRecord = new TokenRecord();
+                    $tokenRecord->token = $key;
+                    $tokenRecord->user_id = $user->id;
+                    $tokenRecord->save();
+                }
+            }
             return response()->json([
                 'return_code'=>"SUCCESS",
                 'data' =>[
@@ -731,6 +774,14 @@ class UserController extends Controller
             for ($i=0;$i<count($data);$i++){
                 $data[$i]->member = Member::where('user_id','=',$data[$i]->id)->first();
                 $data[$i]->commodity_count = Commodity::where('user_id','=',$data[$i]->id)->count();
+                $data[$i]->enable_count = Commodity::where('user_id','=',$data[$i]->id)->where([
+                    'pass'=>1,
+                    'enable'=>1
+                ])->count();
+                $data[$i]->disable_count = Commodity::where('user_id','=',$data[$i]->id)->where([
+                    'pass'=>1,
+                    'enable'=>0
+                ])->count();
             }
         }
         return response()->json([

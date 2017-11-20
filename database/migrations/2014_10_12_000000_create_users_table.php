@@ -22,6 +22,8 @@ class CreateUsersTable extends Migration
             $table->tinyInteger('state')->default(1);
             $table->float('score')->default(0);
             $table->string('password');
+            $table->unsignedInteger('invite')->default(0);
+            $table->unsignedInteger('activity')->default(0);
             $table->rememberToken();
             $table->timestamps();
         });
