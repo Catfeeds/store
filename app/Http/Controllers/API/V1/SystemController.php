@@ -731,6 +731,7 @@ class SystemController extends Controller
                 'activity'=>$activity->id,
                 'uid'=>$uid
             ];
+            $data = serialize($data);
             setInviteCode($code,$data,$time);
             return response()->json([
                 'return_code'=>'SUCCESS',
