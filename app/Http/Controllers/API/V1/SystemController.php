@@ -18,6 +18,7 @@ use App\Models\Report;
 use App\Models\ReportReason;
 use App\Models\ScanActivity;
 use App\Models\ShareActivity;
+use App\Models\ShareRecord;
 use App\Models\Sign;
 use App\Models\SignActivity;
 use App\Models\SysConfig;
@@ -733,13 +734,14 @@ class SystemController extends Controller
             ];
             $data = serialize($data);
             setInviteCode($code,$data,$time);
+            $count = ShareRecord::where('user_id','=',$uid)->where('activity_id','=',$activity->id)->count();
             return response()->json([
                 'return_code'=>'SUCCESS',
                 'data'=>[
                     'start'=>date('m-d H:i',$activity->start),
                     'end'=>date('m-d H:i',$activity->end),
                     'rule'=>$activity->rule,
-                    'score'=>8,
+                    'score'=>$count*$activity->score,
                     'link'=>formatUrl('activity/'.$code),
                 ]
             ]);
