@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0,user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>分享</title>
+    <title>分享活动</title>
     <style>
         * {
             box-sizing: border-box;
@@ -27,7 +27,7 @@
             height: 100vh;
             justify-content: space-between;
             align-items: center;
-            padding: 20px;
+            padding: 1em;
         }
 
         .flex-column {
@@ -42,12 +42,12 @@
 
         .code-number-wrap {
             background-color: #6bd897;
-            width: 20rem;
+            width: 24rem;
             color: #fff;
         }
 
         .code-number-wrap span {
-            padding: 0 30px;
+            padding: 0 2em;
             height: 60px;
             line-height: 60px;
         }
@@ -58,11 +58,11 @@
         }
 
         .code-number-wrap span:last-child {
-            font-size: 1.5rem;
+            font-size: 1.3rem;
         }
 
         .code-image {
-            width: 70%;
+            width: 100%;
         }
 
         .code-btn {
@@ -96,6 +96,7 @@
 <section class="container flex-column">
     <div>
         {{--<h3 class="code-title">Hi 我是 xxx，邀请你来加入 xxx。</h3>--}}
+        {{--<p class="code-content">使用我的邀请码注册，即可xxx</p>--}}
         <p class="code-content">{{$activity->content}}</p>
     </div>
     <div class="code-number-wrap flex-row">
