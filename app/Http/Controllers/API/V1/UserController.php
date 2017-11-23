@@ -133,20 +133,23 @@ class UserController extends Controller
     {
         $username = $loginPost->get('username');
         $password = $loginPost->get('password');
-        $code = $loginPost->get('code');
-        $data = getCode($username);
+        $type = $loginPost->get('type');
+        if($type != 'reLogin'){
+            $code = $loginPost->get('code');
+            $data = getCode($username);
 //        dd($data);
-        if (empty($data)||$data['type']!='login'){
-            return response()->json([
-                'return_code'=>"FAIL",
-                'return_msg'=>'验证码已失效！'
-            ]);
-        }
-        if ($data['code']!=$code){
-            return response()->json([
-                'return_code'=>"FAIL",
-                'return_msg'=>'验证码错误！'
-            ]);
+            if (empty($data)||$data['type']!='login'){
+                return response()->json([
+                    'return_code'=>"FAIL",
+                    'return_msg'=>'验证码已失效！'
+                ]);
+            }
+            if ($data['code']!=$code){
+                return response()->json([
+                    'return_code'=>"FAIL",
+                    'return_msg'=>'验证码错误！'
+                ]);
+            }
         }
         if (Auth::attempt(['phone'=>$username,'password'=>$password])){
             $user = Auth::user();
