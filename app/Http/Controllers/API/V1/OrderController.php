@@ -321,17 +321,6 @@ class OrderController extends Controller
             if ($this->makeOrder($uid,$number,$price,$title,$type,1,$content,1)){
                 $user->score -= $price;
                 $user->save();
-                $buy = UserBuy::find($content);
-                switch ($type){
-                    case 2:
-                        $buy->pic = 1;
-                        $buy->save();
-                        break;
-                    case 3:
-                        $buy->phone = 1;
-                        $buy->save();
-                        break;
-                }
                 return true;
             }
         }
