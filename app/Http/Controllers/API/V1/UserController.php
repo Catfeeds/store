@@ -148,7 +148,7 @@ class UserController extends Controller
                 'return_msg'=>'验证码错误！'
             ]);
         }
-        if (Auth::attempt(['username'=>$username,'password'=>$password])){
+        if (Auth::attempt(['phone'=>$username,'password'=>$password])){
             $user = Auth::user();
             if ($user->state!=1){
                 return response()->json([
