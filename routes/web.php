@@ -81,8 +81,8 @@ Route::group(['middleware'=>'cross'],function (){
         Route::get('pass/commodities','API\V1\CommodityController@getPassCommodities')->middleware('permission:passlist');
         Route::get('unpass/commodities','API\V1\CommodityController@getUnPassCommodities')->middleware('permission:unpasslist');
         Route::get('pass/commodity/{id}','API\V1\CommodityController@passCommodity')->middleware('permission:pass');
-        Route::get('modify/user/{id}','API\V1\UserController@modifyUser')->middleware('permission:userlist');
-        Route::post('user/level','API\V1\UserController@modifyUserLevel')->middleware('permission:userlist');
+        Route::get('modify/user/{id}','API\V1\UserController@modifyUser')->middleware('permission:userenable');
+        Route::post('user/level','API\V1\UserController@modifyUserLevel')->middleware('permission:userenable');
         Route::get('role/users/{id}','API\V1\UserController@getRoleUsers')->middleware('permission:attachRole');
         Route::get('del/user/role','API\V1\UserController@delRoleUser')->middleware('permission:attachRole');
         Route::post('add/admin','API\V1\UserController@addAdmin');
