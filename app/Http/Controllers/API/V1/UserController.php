@@ -184,28 +184,10 @@ class UserController extends Controller
                 ]
             ]);
         }else{
-            if (Auth::attempt(['phone'=>$username,'password'=>$password],true)){
-                $user = Auth::user();
-                if ($user->state!=1){
-                    return response()->json([
-                        'return_code'=>"FAIL",
-                        'return_msg'=>'账号已被封禁！'
-                    ]);
-                }
-                $key = createNonceStr();
-                setUserToken($key,$user->id);
-                return response()->json([
-                    'return_code'=>"SUCCESS",
-                    'data'=>[
-                        'token'=>$key
-                    ]
-                ]);
-            }else{
                 return response()->json([
                     'return_code'=>"FAIL",
                     'return_msg'=>'用户不存在或密码错误！'
                 ]);
-            }
         }
 
     }
