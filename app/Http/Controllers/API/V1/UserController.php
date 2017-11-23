@@ -157,6 +157,7 @@ class UserController extends Controller
                 ]);
             }
             $record = TokenRecord::where('user_id','=',$user->id)->first();
+            dd($record);
             if (empty($record)){
                 $key = createNonceStr();
                 setUserToken($key,$user->id);
