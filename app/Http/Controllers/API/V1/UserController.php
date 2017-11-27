@@ -7,6 +7,7 @@ use App\Http\Requests\MakeAdmin;
 use App\Http\Requests\RegisterPost;
 use App\Http\Requests\ResetPasswordPost;
 use App\Models\Attention;
+use App\Models\Collect;
 use App\Models\Commodity;
 use App\Models\CommodityType;
 use App\Models\Description;
@@ -14,6 +15,7 @@ use App\Models\DescriptionList;
 use App\Models\Member;
 use App\Models\MemberLevel;
 use App\Models\Message;
+use App\Models\Order;
 use App\Models\QQBind;
 use App\Models\ScanActivity;
 use App\Models\ScanRecord;
@@ -22,6 +24,7 @@ use App\Models\ShareActivity;
 use App\Models\ShareRecord;
 use App\Models\Sign;
 use App\Models\SignActivity;
+use App\Models\SysConfig;
 use App\Models\TokenRecord;
 use App\Models\TypeList;
 use App\Models\WechatBind;
@@ -134,21 +137,24 @@ class UserController extends Controller
         $username = $loginPost->get('username');
         $password = $loginPost->get('password');
         $type = $loginPost->get('type');
-        if($type != 'reLogin'){
-            $code = $loginPost->get('code');
-            $data = getCode($username);
+        $config = SysConfig::first();
+        if ($config->need_msg){
+            if($type != 'reLogin'){
+                $code = $loginPost->get('code');
+                $data = getCode($username);
 //        dd($data);
-            if (empty($data)||$data['type']!='login'){
-                return response()->json([
-                    'return_code'=>"FAIL",
-                    'return_msg'=>'验证码已失效！'
-                ]);
-            }
-            if ($data['code']!=$code){
-                return response()->json([
-                    'return_code'=>"FAIL",
-                    'return_msg'=>'验证码错误！'
-                ]);
+                if (empty($data)||$data['type']!='login'){
+                    return response()->json([
+                        'return_code'=>"FAIL",
+                        'return_msg'=>'验证码已失效！'
+                    ]);
+                }
+                if ($data['code']!=$code){
+                    return response()->json([
+                        'return_code'=>"FAIL",
+                        'return_msg'=>'验证码错误！'
+                    ]);
+                }
             }
         }
         if (Auth::attempt(['phone'=>$username,'password'=>$password])){
@@ -899,4 +905,19 @@ class UserController extends Controller
             'data'=>$user
         ]);
     }
+    public function delUser($id)
+{
+    $user = User::find($id);
+    if ($user->delete()){
+        $c_id = Commodity::where('user_id','=',$id)->pluck('id');
+        Commodity::where('user_id','=',$id)->delete();
+        Order::where('user_id','=',$id)->delete();
+        Attention::where('user_id','=',$id)->delete();
+//        Attention::where('attention_id','=',$id)->delete();
+        Collect::where('user_id','=',$id)->delete();
+        return response()->json([
+            'return_code'=>'SUCCESS'
+        ]);
+    }
+}
 }
