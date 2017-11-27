@@ -915,6 +915,8 @@ class UserController extends Controller
         Attention::where('user_id','=',$id)->delete();
 //        Attention::where('attention_id','=',$id)->delete();
         Collect::where('user_id','=',$id)->delete();
+        QQBind::where('user_id','=',$id)->delete();
+        WechatBind::where('user_id','=',$id)->delete();
         return response()->json([
             'return_code'=>'SUCCESS'
         ]);

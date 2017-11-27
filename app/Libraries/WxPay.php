@@ -193,5 +193,4 @@ class WxPay
     {
         return $this->prepay_id;
     }
-
 }
