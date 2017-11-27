@@ -493,7 +493,7 @@ class SystemController extends Controller
         $config->show_qrcode = Input::get('show_qrcode');
         $config->show_share = Input::get('show_share');
         $config->apply = Input::get('apply');
-        $config->nend_msg = Input::get('need_msg',0);
+        $config->need_msg = Input::get('need_msg',0);
         $config->save();
         return response()->json([
             'return_code'=>'SUCCESS',
