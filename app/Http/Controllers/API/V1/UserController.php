@@ -117,6 +117,7 @@ class UserController extends Controller
             $member->end_time = $level->time+time();
             $member->send_max = $level->send_max;
             $member->send_daily = $level->send_daily;
+            $member->user_id = $user->id;
             $member->save();
             $key = createNonceStr();
             setUserToken($key,$user->id);
