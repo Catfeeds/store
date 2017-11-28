@@ -76,7 +76,6 @@ class UserController extends Controller
             $inviteUser = User::find($inviteUid['uid']);
             if (!empty($inviteUser)){
                 $count = ShareRecord::where('activity_id','=',$activity->id)->where('user_id','=',$inviteUser->id)->whereDate('created_at', '=', date('Y-m-d'))->count();
-                dd($count);
                 if ($count==0){
                     $inviteUser -> score += $activity->score;
                     $inviteUser->save();
