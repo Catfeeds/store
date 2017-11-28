@@ -337,6 +337,7 @@ class CommodityController extends Controller
             ]);
         }
         if ($commodity->delete()){
+            CommodityPicture::where('commodity_id','=',$id)->delete();
             return response()->json([
                 'return_code'=>'SUCCESS'
             ]);

@@ -68,7 +68,7 @@ class UserController extends Controller
         $user->phone = Input::get('phone');
         $user->password = bcrypt($request->get('password'));
         $user->avatar = Input::get('avatar','');
-        $inviteCode = Input::get('');
+        $inviteCode = Input::get('invitation');
         $inviteUid = getInviteCode($inviteCode);
         if(!empty($inviteUid)){
             $activity =  ShareActivity::find($inviteUid['activity']);
@@ -913,8 +913,9 @@ class UserController extends Controller
         Commodity::where('user_id','=',$id)->delete();
         Order::where('user_id','=',$id)->delete();
         Attention::where('user_id','=',$id)->delete();
-//        Attention::where('attention_id','=',$id)->delete();
+        Attention::where('attention_id','=',$id)->delete();
         Collect::where('user_id','=',$id)->delete();
+        Collect::whereIn('attention_id',$c_id)->delete();
         QQBind::where('user_id','=',$id)->delete();
         WechatBind::where('user_id','=',$id)->delete();
         return response()->json([
