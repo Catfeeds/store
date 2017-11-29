@@ -994,6 +994,16 @@ class CommodityController extends Controller
             $msg->save();
 //            push();
             push($user->id,'flybrid','消息审核通过','消息审核通过');
+            $list = Attention::where('attention_id','=',$commodity->user_id)->pluck('user_id');
+            if (!empty($list)){
+                for ($i=0;$i<count($list);$i++){
+                    $message = new Message();
+                    $message->receive_id = $list[$i];
+                    $message->title = '你关注的'.$user->name.'有信息更新！';
+                    $message->type = 5;
+                    $message->save();
+                }
+            }
         }else{
             $reason = Input::get('reason');
 

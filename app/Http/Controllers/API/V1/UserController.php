@@ -907,21 +907,21 @@ class UserController extends Controller
         ]);
     }
     public function delUser($id)
-{
-    $user = User::find($id);
-    if ($user->delete()){
-        $c_id = Commodity::where('user_id','=',$id)->pluck('id');
-        Commodity::where('user_id','=',$id)->delete();
-        Order::where('user_id','=',$id)->delete();
-        Attention::where('user_id','=',$id)->delete();
-        Attention::where('attention_id','=',$id)->delete();
-        Collect::where('user_id','=',$id)->delete();
-        Collect::whereIn('commodity_id',$c_id)->delete();
-        QQBind::where('user_id','=',$id)->delete();
-        WechatBind::where('user_id','=',$id)->delete();
-        return response()->json([
-            'return_code'=>'SUCCESS'
-        ]);
+    {
+        $user = User::find($id);
+        if ($user->delete()){
+            $c_id = Commodity::where('user_id','=',$id)->pluck('id');
+            Commodity::where('user_id','=',$id)->delete();
+            Order::where('user_id','=',$id)->delete();
+            Attention::where('user_id','=',$id)->delete();
+            Attention::where('attention_id','=',$id)->delete();
+            Collect::where('user_id','=',$id)->delete();
+            Collect::whereIn('commodity_id',$c_id)->delete();
+            QQBind::where('user_id','=',$id)->delete();
+            WechatBind::where('user_id','=',$id)->delete();
+            return response()->json([
+                'return_code'=>'SUCCESS'
+            ]);
+        }
     }
-}
 }
