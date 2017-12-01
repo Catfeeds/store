@@ -7,6 +7,6 @@ return [
     'gif',
     'jpeg',
     'pem',
-    'mp4'
+    'mp4',
 
 ];
