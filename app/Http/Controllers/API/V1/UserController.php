@@ -16,7 +16,10 @@ use App\Models\Member;
 use App\Models\MemberLevel;
 use App\Models\Message;
 use App\Models\Order;
+use App\Models\PassList;
 use App\Models\QQBind;
+use App\Models\RefuseList;
+use App\Models\Report;
 use App\Models\ScanActivity;
 use App\Models\ScanRecord;
 use App\Models\Score;
@@ -919,6 +922,9 @@ class UserController extends Controller
             Collect::whereIn('commodity_id',$c_id)->delete();
             QQBind::where('user_id','=',$id)->delete();
             WechatBind::where('user_id','=',$id)->delete();
+            RefuseList::whereIn('commodity_id',$c_id)->delete();
+            Report::whereIn('commodity_id',$c_id)->delete();
+            PassList::whereIn('commodity_id',$c_id)->delete();
             return response()->json([
                 'return_code'=>'SUCCESS'
             ]);
