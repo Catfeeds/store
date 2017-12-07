@@ -108,7 +108,7 @@ class CommodityController extends Controller
                     $member = Member::where('user_id','=',$uid)->first();
                     if (!empty($member)){
 
-                        if ($member->end_time>time()){
+                        if ($member->end_time>time()&&$member->member>0){
                                 $need_pay = 0;
                     }
                 }
