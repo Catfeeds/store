@@ -187,13 +187,13 @@
             background-color: #5fc187;
         }
     </style>
-    <title>{{$user->name}}的消息</title>
+    <title>扫描结果</title>
 </head>
 
 <body>
 <section class="container flex-column">
     <div class="fix-wrap">
-        <h1 class="title">{{$user->name}}的消息</h1>
+        {{--<h1 class="title">{{$user->name}}的消息</h1>--}}
 
         <!-- 第一个商品信息 -->
         <div class="commodity-item flex-row">

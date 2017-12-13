@@ -286,31 +286,6 @@ class CommodityController extends Controller
                     'commodity_id'=>$commodity->id
                 ]);
             }
-            $user = User::find($uid);
-            if ($user->invite!=0){
-                $inviteUser = User::find($user->invite);
-                $activity = ShareActivity::find($user->activity);
-                if (!empty($activity)){
-                    $count = ShareRecord::where('activity_id','=',$activity->id)->where('user_id','=',$inviteUser->id)->whereDate('created_at', '=', date('Y-m-d'))->count();
-                    if ($count==0){
-                        $inviteUser -> score += $activity->score;
-                        $inviteUser->save();
-                        $record = new ShareRecord();
-                        $record->user_id = $inviteUser->id;
-                        $record->activity_id = $activity->id;
-                        $record->save();
-                    }else{
-                        if ($count*$activity->score<$activity->daily_max){
-                            $inviteUser -> score += $activity->score;
-                            $inviteUser->save();
-                            $record = new ShareRecord();
-                            $record->user_id = $inviteUser->id;
-                            $record->activity_id = $activity->id;
-                            $record->save();
-                        }
-                    }
-                }
-            }
             return response()->json([
                 'return_code'=>'SUCCESS',
                 'data'=>[
@@ -985,6 +960,33 @@ class CommodityController extends Controller
                 'date'=>$commodity->created_at->format('Y-m-d')
             ];
             $user = User::find($commodity->user_id);
+//            $user = User::find($uid);
+            if ($user->invite!=0){
+                $inviteUser = User::find($user->invite);
+                $activity = ShareActivity::find($user->activity);
+                if (!empty($activity)){
+                    $count = ShareRecord::where('activity_id','=',$activity->id)->where('user_id','=',$inviteUser->id)->whereDate('created_at', '=', date('Y-m-d'))->count();
+                    if ($count==0){
+                        $inviteUser -> score += $activity->score;
+                        $inviteUser->save();
+                        $record = new ShareRecord();
+                        $record->user_id = $inviteUser->id;
+                        $record->activity_id = $activity->id;
+                        $record->save();
+                    }else{
+                        if ($count*$activity->score<$activity->daily_max){
+                            $inviteUser -> score += $activity->score;
+                            $inviteUser->save();
+                            $record = new ShareRecord();
+                            $record->user_id = $inviteUser->id;
+                            $record->activity_id = $activity->id;
+                            $record->save();
+                        }
+                    }
+                }
+                $user->invite = 0;
+                $user->save();
+            }
              sendSMS($user->phone,\config('alisms.Pass'),$smsContent);
             $msg = new Message();
             $msg->receive_id = $commodity->user_id;
