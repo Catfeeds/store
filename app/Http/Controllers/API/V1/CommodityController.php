@@ -7,6 +7,7 @@ use App\Http\Requests\FilterPost;
 use App\Http\Requests\PartTimePost;
 use App\Http\Requests\RejectPost;
 use App\Http\Requests\ReportPost;
+use App\Libraries\AliSms;
 use App\Models\Attention;
 use App\Models\City;
 use App\Models\Collect;
@@ -986,7 +987,7 @@ class CommodityController extends Controller
                 $user->invite = 0;
                 $user->save();
             }
-             sendSMS($user->phone,\config('alisms.Pass'),$smsContent);
+            $data =  AliSms::sendSms($user->phone,\config('alisms.Pass'),$smsContent);
             $msg = new Message();
             $msg->receive_id = $commodity->user_id;
             $msg->title =$commodity->title.'已通过';
@@ -1016,7 +1017,7 @@ class CommodityController extends Controller
             $user = User::find($commodity->user_id);
             $content = RefuseReasen::whereIn('id',$reason)->pluck('content')->toArray();
             $content = implode(',',$content);
-            sendSMS($user->phone,\config('alisms.Fail'),$smsContent);
+            AliSms::sendSms($user->phone,\config('alisms.Fail'),$smsContent);
 
             $msg = new Message();
             $msg->receive_id = $commodity->user_id;

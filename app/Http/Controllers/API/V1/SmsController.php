@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\V1;
 
 use App\Http\Requests\SendPost;
+use App\Libraries\AliSms;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -58,7 +59,8 @@ class SmsController extends Controller
                 break;
 
         }
-        if (sendSMS($number,config('alisms.VerificationCode'),$smsContent)) {
+        $data = AliSms::sendSms($number,config('alisms.VerificationCode'),$smsContent);
+        if ($data->Code =='OK') {
             $data = serialize($data);
             setCode($number,$data);
             return response()->json([
@@ -80,7 +82,8 @@ class SmsController extends Controller
         $smsContent = [
             'code'=>$code
         ];
-        if (sendSMS($user->phone,config('alisms.VerificationCode'),$smsContent)) {
+        $data = AliSms::sendSms($user->phone,config('alisms.VerificationCode'),$smsContent);
+        if ($data->Code =='OK') {
             return response()->json([
                 'return_code'=>'SUCCESS',
                 'data'=>[

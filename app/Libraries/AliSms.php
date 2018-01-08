@@ -54,24 +54,22 @@ class AliSms
         return static::$acsClient;
     }
 
-    public static function sendSms() {
+    public static function sendSms($phone,$code,$data) {
 
         // 初始化SendSmsRequest实例用于设置发送短信的参数
         $request = new SendSmsRequest();
 
         // 必填，设置短信接收号码
-        $request->setPhoneNumbers("18664894928");
+        $request->setPhoneNumbers($phone);
 
         // 必填，设置签名名称，应严格按"签名名称"填写，请参考: https://dysms.console.aliyun.com/dysms.htm#/develop/sign
         $request->setSignName("安珂看看");
 
         // 必填，设置模板CODE，应严格按"模板CODE"填写, 请参考: https://dysms.console.aliyun.com/dysms.htm#/develop/template
-        $request->setTemplateCode("SMS_120490068");
+        $request->setTemplateCode($code);
 
         // 可选，设置模板参数, 假如模板中存在变量需要替换则为必填项
-        $request->setTemplateParam(json_encode(array(  // 短信模板中字段的值
-            "date"=>"2017-10-21"
-        ), JSON_UNESCAPED_UNICODE));
+        $request->setTemplateParam(json_encode($data, JSON_UNESCAPED_UNICODE));
 
         // 可选，设置流水号
 //        $request->setOutId("yourOutId");
