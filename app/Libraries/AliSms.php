@@ -60,7 +60,7 @@ class AliSms
         $request = new SendSmsRequest();
 
         // 必填，设置短信接收号码
-        $request->setPhoneNumbers("1866489495528");
+        $request->setPhoneNumbers("18664894928");
 
         // 必填，设置签名名称，应严格按"签名名称"填写，请参考: https://dysms.console.aliyun.com/dysms.htm#/develop/sign
         $request->setSignName("安珂看看");
