@@ -59,8 +59,8 @@ class SmsController extends Controller
                 break;
 
         }
-        $data = AliSms::sendSms($number,config('alisms.VerificationCode'),$smsContent);
-        if ($data->Code =='OK') {
+        $result = AliSms::sendSms($number,config('alisms.VerificationCode'),$smsContent);
+        if ($result->Code =='OK') {
             $data = serialize($data);
             setCode($number,$data);
             return response()->json([
@@ -82,8 +82,8 @@ class SmsController extends Controller
         $smsContent = [
             'code'=>$code
         ];
-        $data = AliSms::sendSms($user->phone,config('alisms.VerificationCode'),$smsContent);
-        if ($data->Code =='OK') {
+        $result = AliSms::sendSms($user->phone,config('alisms.VerificationCode'),$smsContent);
+        if ($result->Code =='OK') {
             return response()->json([
                 'return_code'=>'SUCCESS',
                 'data'=>[
