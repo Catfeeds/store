@@ -18,7 +18,8 @@ Route::get('/', function () {
 Route::get('qrcode/{id}','API\V1\SystemController@showStore');
 Route::get('activity/{code}','API\V1\SystemController@showShareActivity');
 Route::get('test',function (){
-    \App\Libraries\AliSms::sendSms();
+    $data = \App\Libraries\AliSms::sendSms();
+    dd($data);
 });
 Route::group(['middleware'=>'cross'],function (){
     Route::any('upload','API\V1\UploadController@uploadImage');
