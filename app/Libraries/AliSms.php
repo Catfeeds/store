@@ -8,6 +8,7 @@
 
 namespace App\Libraries;
 
+require_once dirname(__DIR__).'/Libraries/aliyun-dysms-php-sdk/api_sdk/vendor/autoload.php';
 
 use Aliyun\Api\Sms\Request\V20170525\QuerySendDetailsRequest;
 use Aliyun\Api\Sms\Request\V20170525\SendSmsRequest;
