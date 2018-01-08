@@ -24,9 +24,6 @@ Route::group(['middleware'=>'cross'],function (){
     Route::any('upload','API\V1\UploadController@uploadImage');
     Route::post('login','API\V1\UserController@adminLogin');
     Route::get('logout','API\V1\UserController@adminLogout');
-    Route::get('test',function (){
-        return 'success';
-    })->middleware('permission:logo');
     Route::group(['middleware'=>'auth'],function (){
         Route::get('launcher/images','API\V1\LaunchImageController@getLaunchImages')->middleware('permission:luancher');
         Route::get('enable/launcher/image/{id}','API\V1\LaunchImageController@enableLauncherImage')->middleware('permission:luancher');
