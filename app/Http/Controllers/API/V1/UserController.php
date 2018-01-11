@@ -778,7 +778,7 @@ class UserController extends Controller
             }
         }
         if ($publish_start){
-            $uids = Commodity::where('created_at','>',$start)->where('created_at','<',$end)->pluck('user_id')->toArray();
+            $uids = Commodity::where('created_at','>',$publish_start)->where('created_at','<',$publish_end)->pluck('user_id')->toArray();
             if ($uids){
                 $userDB->whereIn('id',$uids);
                 $count = $userDB->count();
