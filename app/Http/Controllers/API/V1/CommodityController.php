@@ -886,12 +886,20 @@ class CommodityController extends Controller
                 $commodity_ids = TypeList::where('type_id','=',$type_id)->pluck('commodity_id')->toArray();
                 $commodity->whereIn('id',$commodity_ids);
                 $count = $commodity->count();
+            }else{
+                $commodity_ids = TypeList::where('type_id','=',0)->pluck('commodity_id')->toArray();
+                $commodity->whereIn('id',$commodity_ids);
+                $count = $commodity->count();
             }
         }
         if ($person){
             $uid = User::where('username','=',$person)->pluck('id')->first();
             if ($uid){
                 $ids = PassList::where('user_id','=',$uid)->pluck('commodity_id')->toArray();
+                $commodity->whereIn('id',$ids);
+                $count = $commodity->count();
+            }else{
+                $ids = PassList::where('user_id','=',0)->pluck('commodity_id')->toArray();
                 $commodity->whereIn('id',$ids);
                 $count = $commodity->count();
             }
