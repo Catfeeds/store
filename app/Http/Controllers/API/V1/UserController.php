@@ -778,6 +778,13 @@ class UserController extends Controller
                     'pass'=>1,
                     'enable'=>0
                 ])->count();
+                $data[$i]->is_publish = Commodity::where('user_id','=',$data[$i]->id)->where([
+                    'pass'=>1
+                ])->count();
+                $time = Commodity::where('user_id','=',$data[$i]->id)->where([
+                    'pass'=>1
+                ])->pluck('created_at')->first();
+                $data[$i]->first_publish = empty($time)?'':$time;
             }
         }
         return response()->json([

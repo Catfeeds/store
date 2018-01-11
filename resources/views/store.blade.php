@@ -235,7 +235,7 @@
         <a class="down-btn" href="#">
             IOS 下载
         </a>
-        <a class="down-btn" href="#">
+        <a class="down-btn" href="http://m.app.so.com/detail/index?from=qing&id=3954333">
             Android 下载
         </a>
     </div>

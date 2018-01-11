@@ -858,6 +858,9 @@ class CommodityController extends Controller
         $city_id = Input::get('city_id');
         $start = Input::get('start');
         $end = Input::get('end');
+        $type = Input::get('type');
+        $person = Input::get('person');
+        $report = Input::get('report');
         $commodity = Commodity::where('pass','=',1);
         $count = $commodity->count();
         if ($user_id){
@@ -875,6 +878,27 @@ class CommodityController extends Controller
         }
         if ($start){
             $commodity->where('created_at','>',$start)->where('created_at','<',$end);
+            $count = $commodity->count();
+        }
+        if ($type){
+            $type_id = CommodityType::where('title','=',$type)->pluck('id')->first();
+            if ($type_id){
+                $commodity_ids = TypeList::where('type_id','=',$type_id)->pluck('commodity_id')->toArray();
+                $commodity->whereIn('id',$commodity_ids);
+                $count = $commodity->count();
+            }
+        }
+        if ($person){
+            $uid = User::where('username','=',$person)->pluck('id')->first();
+            if ($uid){
+                $ids = PassList::where('user_id','=',$uid)->pluck('commodity_id')->toArray();
+                $commodity->whereIn('id',$ids);
+                $count = $commodity->count();
+            }
+        }
+        if ($report){
+            $ids = Report::pluck('commodity_id')->toArray();
+            $commodity->whereIn('id',$ids);
             $count = $commodity->count();
         }
         $data = $commodity->limit($limit)->offset(($page-1)*$limit)->orderBy('id','DESC')->get();

@@ -104,7 +104,7 @@
         <span>{{$code}}</span>
     </div>
     <img class="code-image" src="{{$activity->image}}" alt="图片">
-    <a class="code-btn" href="#">下载xxx,发现xxx</a>
+    <a class="code-btn" href="http://m.app.so.com/detail/index?from=qing&id=3954333">下载安珂看看</a>
 </section>
 </body>
 
