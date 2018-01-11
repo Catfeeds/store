@@ -883,12 +883,12 @@ class CommodityController extends Controller
         if ($type){
             $type_id = CommodityType::where('title','=',$type)->pluck('id')->first();
             if ($type_id){
-                $commodity_ids = TypeList::where('type_id','=',$type_id)->pluck('commodity_id')->toArray();
-                $commodity->whereIn('id',$commodity_ids);
+//                $commodity_ids = TypeList::where('type_id','=',$type_id)->pluck('commodity_id')->toArray();
+                $commodity->where('type','=',$type_id);
                 $count = $commodity->count();
             }else{
-                $commodity_ids = TypeList::where('type_id','=',0)->pluck('commodity_id')->toArray();
-                $commodity->whereIn('id',$commodity_ids);
+//                $commodity_ids = TypeList::where('type_id','=',0)->pluck('commodity_id')->toArray();
+                $commodity->where('type','=',0);
                 $count = $commodity->count();
             }
         }
