@@ -905,9 +905,15 @@ class CommodityController extends Controller
             }
         }
         if ($report){
-            $ids = Report::pluck('commodity_id')->toArray();
-            $commodity->whereIn('id',$ids);
-            $count = $commodity->count();
+            if ($report == 2){
+                $ids = Report::pluck('commodity_id')->toArray();
+                $commodity->whereIn('id',$ids);
+                $count = $commodity->count();
+            }else{
+                $ids = Report::pluck('commodity_id')->toArray();
+                $commodity->whereNotIn('id',$ids);
+                $count = $commodity->count();
+            }
         }
         $data = $commodity->limit($limit)->offset(($page-1)*$limit)->orderBy('id','DESC')->get();
         if (!empty($data)){
@@ -992,6 +998,7 @@ class CommodityController extends Controller
                 'date'=>$commodity->created_at->format('Y-m-d')
             ];
             $user = User::find($commodity->user_id);
+            $user->publish = 1;
 //            $user = User::find($uid);
             if ($user->invite!=0){
                 $inviteUser = User::find($user->invite);

@@ -746,6 +746,9 @@ class UserController extends Controller
         $level = Input::get('level');
         $start = Input::get('start');
         $end = Input::get('end');
+        $publish = Input::get('publish');
+        $publish_start = Input::get('publish_start');
+        $publish_end = Input::get('publish_end');
         $userDB = DB::table('users');
         $count = $userDB->count();
         if ($user_id){
@@ -765,6 +768,26 @@ class UserController extends Controller
             $userDB->where('created_at','>',$start)->where('created_at','<',$end);
             $count = $userDB->count();
         }
+        if ($publish){
+            if($publish == 2){
+                $userDB->where('publish','=',1);
+                $count = $userDB->count();
+            }else{
+                $userDB->where('publish','=',0);
+                $count = $userDB->count();
+            }
+        }
+        if ($publish_start){
+            $uids = Commodity::where('created_at','>',$start)->where('created_at','<',$end)->pluck('user_id')->toArray();
+            if ($uids){
+                $userDB->whereIn('id',$uids);
+                $count = $userDB->count();
+            }else{
+                $userDB->whereIn('id',[0]);
+                $count = $userDB->count();
+            }
+        }
+
         $data = $userDB->limit($limit)->offset(($page-1)*$limit)->get();
         if (!empty($data)){
             for ($i=0;$i<count($data);$i++){
@@ -778,13 +801,6 @@ class UserController extends Controller
                     'pass'=>1,
                     'enable'=>0
                 ])->count();
-                $data[$i]->is_publish = Commodity::where('user_id','=',$data[$i]->id)->where([
-                    'pass'=>1
-                ])->count();
-                $time = Commodity::where('user_id','=',$data[$i]->id)->where([
-                    'pass'=>1
-                ])->pluck('created_at')->first();
-                $data[$i]->first_publish = empty($time)?'':$time;
             }
         }
         return response()->json([
