@@ -69,7 +69,8 @@ class SmsController extends Controller
         }else{
             return response()->json([
                 'return_code'=>'FAIL',
-                'return_msg'=>'短信发送失败!'
+                'return_msg'=>'短信发送失败!',
+                'data'=>$result
             ]);
         }
 
