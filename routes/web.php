@@ -17,6 +17,8 @@ Route::get('/', function () {
 //Route::get('article','API\V1\SystemController@getArticle');
 Route::get('qrcode/{id}','API\V1\SystemController@showStore');
 Route::get('activity/{code}','API\V1\SystemController@showShareActivity');
+Route::get('share','API\V1\SystemController@showIntro');
+Route::get('show/commodity','API\V1\SystemController@showIntro');
 Route::get('test',function (){
     $data = \App\Libraries\AliSms::sendSms();
     dd($data);

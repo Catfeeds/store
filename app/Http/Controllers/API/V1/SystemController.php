@@ -494,6 +494,8 @@ class SystemController extends Controller
         $config->show_share = Input::get('show_share');
         $config->apply = Input::get('apply');
         $config->need_msg = Input::get('need_msg',0);
+        $config->android_url = Input::get('android_url');
+        $config->ios_url = Input::get('ios_url');
         $config->save();
         return response()->json([
             'return_code'=>'SUCCESS',
@@ -834,6 +836,13 @@ class SystemController extends Controller
         return view('share',[
             'code'=>$code,
             'activity'=>$activity
+        ]);
+    }
+    public function showIntro()
+    {
+        $config = SysConfig::first();
+        return view('intro',[
+            'config'=>$config
         ]);
     }
 }

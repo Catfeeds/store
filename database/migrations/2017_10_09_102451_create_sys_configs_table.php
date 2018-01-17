@@ -23,6 +23,8 @@ class CreateSysConfigsTable extends Migration
             $table->tinyInteger('show_sign')->default(0);
             $table->tinyInteger('show_qrcode')->default(0);
             $table->tinyInteger('show_share')->default(0);
+            $table->string('android_url')->nullable();
+            $table->string('ios_url')->nullable();
             $table->timestamps();
         });
     }
