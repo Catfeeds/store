@@ -832,10 +832,12 @@ class SystemController extends Controller
     }
     public function showShareActivity($code)
     {
+        $config = SysConfig::first();
         $activity = ShareActivity::where('state','=','1')->first();
         return view('share',[
             'code'=>$code,
-            'activity'=>$activity
+            'activity'=>$activity,
+            'config'=>$config
         ]);
     }
     public function showIntro()

@@ -104,7 +104,8 @@
         <span>{{$code}}</span>
     </div>
     <img class="code-image" src="{{$activity->image}}" alt="图片">
-    <a class="code-btn" href="http://m.app.so.com/detail/index?from=qing&id=3954333">下载安珂看看</a>
+    <a class="code-btn" href="{{$config->android_url}}">安卓版下载</a>
+    <a class="code-btn" href="{{$config->ios_url}}">IOS版下载</a>
 </section>
 </body>
 
