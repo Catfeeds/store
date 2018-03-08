@@ -232,10 +232,10 @@
     </ul>
 
     <div class="download-wrap flex-row">
-        <a class="down-btn" href="#">
+        <a class="down-btn" href="{{$config->ios_url}}">
             IOS 下载
         </a>
-        <a class="down-btn" href="http://m.app.so.com/detail/index?from=qing&id=3954333">
+        <a class="down-btn" href="{{$config->android_url}}">
             Android 下载
         </a>
     </div>

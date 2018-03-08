@@ -104,8 +104,8 @@
         <span>{{$code}}</span>
     </div>
     <img class="code-image" src="{{$activity->image}}" alt="图片">
-    <a class="code-btn" href="{{$config->android_url}}">安卓版下载</a>
-    <a class="code-btn" href="{{$config->ios_url}}">IOS版下载</a>
+    <a class="code-btn" href="{{$config->android_url}}">Android 下载</a>
+    <a class="code-btn" href="{{$config->ios_url}}">IOS 下载</a>
 </section>
 </body>
 

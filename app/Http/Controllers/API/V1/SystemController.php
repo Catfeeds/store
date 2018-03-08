@@ -824,10 +824,12 @@ class SystemController extends Controller
             'pass'=>1,
             'enable'=>1
         ])->limit(5)->get();
+        $config = SysConfig::first();
         return view('store',[
             'user'=>$user,
             'count'=>$count,
-            'commodities'=>$commodities
+            'commodities'=>$commodities,
+            'config'=>$config
         ]);
     }
     public function showShareActivity($code)
