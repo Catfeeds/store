@@ -677,7 +677,8 @@ class CommodityController extends Controller
     {
         $type = Input::get('type');
         $descs = Description::where([
-            'type_id'=>$type
+            'type_id'=>$type,
+            'state'=>1
         ])->get();
         return response()->json([
             'return_code'=>'SUCCESS',
@@ -760,7 +761,7 @@ class CommodityController extends Controller
             $type->sort = $sort;
             if ($type->save()){
                 if (!empty($desc)){
-                    Description::where('type_id','=',$type->id)->delete();
+                    Description::where('type_id','=',$type->id)->update(['state'=>0]);
                     foreach ($desc as $item){
                         $desc = new Description();
                         $desc->title = $item;
@@ -809,7 +810,7 @@ class CommodityController extends Controller
         $type = CommodityType::limit($limit)->offset(($page-1)*$limit)->orderBy('state','DESC')->orderBy('sort','DESC')->get();
         if (!empty($type)){
             for ($i=0;$i<count($type);$i++){
-                $type[$i]->descript = Description::where('type_id','=',$type[$i]->id)->get();
+                $type[$i]->descript = Description::where('type_id','=',$type[$i]->id)->where('state','=',1)->get();
             }
         }
         return response()->json([
