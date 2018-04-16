@@ -247,6 +247,7 @@ class CommodityController extends Controller
                 $commodity->latitude = $commodityPost->get('latitude');
                 $commodity->longitude = $commodityPost->get('longitude');
                 $commodity->address = $commodityPost->get('address');
+                $commodity->isShow = $commodityPost->get('isShow');
                 $commodity->city_id = $cid;
                 $commodity->pass = 0;
             }
@@ -262,6 +263,7 @@ class CommodityController extends Controller
             $commodity->latitude = $commodityPost->get('latitude');
             $commodity->longitude = $commodityPost->get('longitude');
             $commodity->address = $commodityPost->get('address');
+            $commodity->isShow = $commodityPost->get('isShow');
             $commodity->city_id = $cid;
             $commodity->user_id = $uid;
             $commodity->type = $commodityPost->get('type');
@@ -582,6 +584,8 @@ class CommodityController extends Controller
             'attention_id'=>$id,
             'user_id'=>$uid
         ])->count();
+        $latitude = Input::get('latitude');
+        $longitude = Input::get('longitude');
         $user = User::find($id);
         if (empty($user)){
             return response()->json([
@@ -606,11 +610,15 @@ class CommodityController extends Controller
             'enable'=>1,
             'pass'=>1
         ])->count();
-        $commodities = Commodity::where([
+        $commoditiesDb = Commodity::where([
             'user_id'=>$id,
             'enable'=>1,
             'pass'=>1
-        ])->limit($limit)->offset(($page-1)*$limit)->get();
+        ]);
+        if ($latitude){
+            $commoditiesDb->orderBy('abs('.$latitude.'-latitude)','ASC')->orderBy('abs('.$longitude.'-longitude)','ASC');
+        }
+        $commodities = $commoditiesDb->limit($limit)->offset(($page-1)*$limit)->get();
         if (count($commodities)>0){
             for ($i=0;$i<count($commodities);$i++){
                 $commodities[$i]->type = CommodityType::find($commodities[$i]->type)->title;
