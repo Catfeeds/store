@@ -496,6 +496,8 @@ class SystemController extends Controller
         $config->need_msg = Input::get('need_msg',0);
         $config->android_url = Input::get('android_url');
         $config->ios_url = Input::get('ios_url');
+        $config->share_title = Input::get('share_title');
+        $config->share_content = Input::get('share_content')
         $config->save();
         return response()->json([
             'return_code'=>'SUCCESS',
