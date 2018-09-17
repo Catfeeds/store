@@ -51,12 +51,17 @@ class RedPacketController extends Controller
     }
     public function addCommodityRedPacket(Request $post)
     {
-        $redpacket = CommodityRedpack::where('commodity_id','=',$post->commodity_id)->first();
-        if (empty($redpacket)){
-            $redpacket = new CommodityRedpack();
-            $redpacket->commodity_id = $post->commodity_id;
+        $id = $post->id;
+        if($id){
+            $redpacket = CommodityRedpack::find($id);
+        }else{
+            $redpacket = CommodityRedpack::where('commodity_id','=',$post->commodity_id)->first();
+            if (empty($redpacket)){
+                $redpacket = new CommodityRedpack();
+                $redpacket->commodity_id = $post->commodity_id;
+            }
         }
-        $redpacket->icon = $post->icon;
+        $redpacket->icon = $post->icon?$post->icon:'';
         $redpacket->start = strtotime($post->start);
         $redpacket->end = strtotime($post->end);
         $redpacket->cash_number = $post->number;
@@ -65,19 +70,23 @@ class RedPacketController extends Controller
         $redpacket->cash_min = $post->cash_min;
         $redpacket->cash_max = $post->cash_max;
         $redpacket->title = $post->title;
-        $redpacket->coupon_all = $post->coupon_all;
-        $redpacket->coupon_min = $post->coupon_min;
-        $redpacket->coupon_max = $post->coupon_max;
-        $redpacket->coupon_end = $post->coupon_end;
-        $redpacket->coupon_number = $post->number;
-        $redpacket->coupon_max = $post->coupon_max;
-        $redpacket->code = $post->code;
-        $redpacket->coupon_title = $post->coupon_title;
+        $redpacket->coupon_all = $post->coupon_all?$post->coupon_all:0;
+        $redpacket->coupon_min = $post->coupon_min?$post->coupon_min:0;
+        $redpacket->coupon_max = $post->coupon_max?$post->coupon_max:0;
+        $redpacket->coupon_end = $post->coupon_end?$post->coupon_end:0;
+        $redpacket->coupon_number = $post->number?$post->number:0;
+//        $redpacket->coupon_max = $post->coupon_max?$post->coupon_max:0;
+        $redpacket->code = $post->code?$post->code:'';
+        $redpacket->coupon_title = $post->coupon_title?$post->coupon_title:'';
         if ($redpacket->save()){
             return response()->json([
                 'return_code'=>'SUCCESS'
             ]);
         }
+        return response()->json([
+            'return_code'=>"FAIL",
+            'return_msg'=>'系统错误!'
+        ]);
     }
 //    public function get
 }

@@ -25,14 +25,14 @@ class CreateCommodityRedpacksTable extends Migration
             $table->float('cash_min');
             $table->float('cash_max');
             $table->string('title');
-            $table->float('coupon_all');
-            $table->float('coupon_min');
-            $table->float('coupon_max');
+            $table->float('coupon_all')->default(0);
+            $table->float('coupon_min')->default(0);
+            $table->float('coupon_max')->default(0);
             $table->integer('coupon_number')->default(0);
             //$table->integer('coupon_start');
-            $table->integer('coupon_end');
-            $table->string('code',4);
-            $table->string('coupon_title');
+            $table->integer('coupon_end')->default(0);
+            $table->string('code',4)->nullable();
+            $table->string('coupon_title')->nullable();
             $table->timestamps();
         });
     }
