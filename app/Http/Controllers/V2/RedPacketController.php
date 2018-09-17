@@ -59,7 +59,7 @@ class RedPacketController extends Controller
         $redpacket->icon = $post->icon;
         $redpacket->start = strtotime($post->start);
         $redpacket->end = strtotime($post->end);
-        $redpacket->number = $post->number;
+        $redpacket->cash_number = $post->number;
         $redpacket->distance = $post->distance;
         $redpacket->cash_all = $post->cash_all;
         $redpacket->cash_min = $post->cash_min;
@@ -69,6 +69,7 @@ class RedPacketController extends Controller
         $redpacket->coupon_min = $post->coupon_min;
         $redpacket->coupon_max = $post->coupon_max;
         $redpacket->coupon_end = $post->coupon_end;
+        $redpacket->coupon_number = $post->number;
         $redpacket->coupon_max = $post->coupon_max;
         $redpacket->code = $post->code;
         $redpacket->coupon_title = $post->coupon_title;

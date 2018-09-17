@@ -77,4 +77,5 @@ Route::group(['prefix'=>'v1','middleware'=>'cross'],function (){
     Route::get('share/activity','API\V1\SystemController@getShareActivity');
     Route::get('article','API\V1\SystemController@getArticle');
     Route::post('unbind','API\V1\UserController@unbind');
+    Route::post('commodity/redpacket','V2\RedPacketController@addCommodityRedPacket');
 });

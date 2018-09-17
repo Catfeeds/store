@@ -19,7 +19,7 @@ class CreateCommodityRedpacksTable extends Migration
             $table->string('icon');
             $table->integer('start');
             $table->integer('end');
-            $table->integer('number')->default(0);
+            $table->integer('cash_number')->default(0);
             $table->tinyInteger('distance');
             $table->float('cash_all');
             $table->float('cash_min');
@@ -28,6 +28,7 @@ class CreateCommodityRedpacksTable extends Migration
             $table->float('coupon_all');
             $table->float('coupon_min');
             $table->float('coupon_max');
+            $table->integer('coupon_number')->default(0);
             //$table->integer('coupon_start');
             $table->integer('coupon_end');
             $table->string('code',4);
