@@ -78,4 +78,5 @@ Route::group(['prefix'=>'v1','middleware'=>'cross'],function (){
     Route::get('article','API\V1\SystemController@getArticle');
     Route::post('unbind','API\V1\UserController@unbind');
     Route::post('commodity/redpacket','V2\RedPacketController@addCommodityRedPacket');
+    Route::get('commodity/redpacket','V2\RedPacketController@getCommodityRedPacket');
 });

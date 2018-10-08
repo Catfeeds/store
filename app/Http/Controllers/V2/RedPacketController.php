@@ -6,6 +6,7 @@ use App\Models\CommodityRedpack;
 use App\Models\RedpacketConfig;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Input;
 
 class RedPacketController extends Controller
 {
@@ -88,5 +89,13 @@ class RedPacketController extends Controller
             'return_msg'=>'系统错误!'
         ]);
     }
-//    public function get
+    public function getCommodityRedPacket()
+    {
+        $commodity_id = Input::get('commodity_id');
+        $config = CommodityRedpack::where('commodity_id','=',$commodity_id)->first();
+        return response()->json([
+            'return_code'=>'SUCCESS',
+            'data'=>$config
+        ]);
+    }
 }

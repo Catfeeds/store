@@ -33,6 +33,7 @@ class CreateCommodityRedpacksTable extends Migration
             $table->integer('coupon_end')->default(0);
             $table->string('code',4)->nullable();
             $table->string('coupon_title')->nullable();
+            $table->tinyInteger('state')->default(0);
             $table->timestamps();
         });
     }
