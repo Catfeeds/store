@@ -4,6 +4,7 @@ namespace App\Http\Controllers\V2;
 
 use App\Models\CommodityRedpack;
 use App\Models\RedpacketConfig;
+use App\Models\UserAmount;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
@@ -52,6 +53,16 @@ class RedPacketController extends Controller
     }
     public function addCommodityRedPacket(Request $post)
     {
+        $config = RedpacketConfig::first();
+        $uid = getUserToken($post->token);
+        $userAmount = UserAmount::where('user_id','=',$uid)->first();
+        if (empty($userAmount)){
+            return response()->json([
+                'return_code'=>'FAIL',
+                'return_msg'=>'账户余额不足!'
+            ]);
+        }
+//        $price = 0;
         $id = $post->id;
         if($id){
             $redpacket = CommodityRedpack::find($id);
@@ -79,7 +90,16 @@ class RedPacketController extends Controller
 //        $redpacket->coupon_max = $post->coupon_max?$post->coupon_max:0;
         $redpacket->code = $post->code?$post->code:'';
         $redpacket->coupon_title = $post->coupon_title?$post->coupon_title:'';
+        $price = $redpacket->cash_all +$redpacket->cash_all*($config->cash_ratio/100)  +$redpacket->coupon_all*($config->coupon_ratio/100);
+        if ($price>$userAmount->amount){
+            return response()->json([
+                'return_code'=>'FAIL',
+                'return_msg'=>'账户余额不足!'
+            ]);
+        }
         if ($redpacket->save()){
+            $userAmount->amount -= $price;
+            $userAmount->save();
             return response()->json([
                 'return_code'=>'SUCCESS'
             ]);
