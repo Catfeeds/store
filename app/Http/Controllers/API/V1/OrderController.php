@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\API\V1;
 
 use App\Libraries\WxPay;
+use App\Models\AmountOrder;
 use App\Models\Commodity;
 use App\Models\Member;
 use App\Models\MemberLevel;
 use App\Models\Order;
 use App\Models\SysConfig;
+use App\Models\UserAmount;
 use App\Models\UserBuy;
 use App\PublishRecord;
 use App\User;
@@ -166,7 +168,7 @@ class OrderController extends Controller
                 }
                 break;
             case 2:
-                if ($this->makeOrder($uid,$number,$config->phone_price,$title,2,2,$commodity_id)){
+                if ($this->makeOrder($uid,$number,$config->phone_price,$title,3,2,$commodity_id)){
                     $data = $this->aliPay($number,$title,$config->phone_price);
                 }
                 break;
@@ -401,6 +403,14 @@ class OrderController extends Controller
                         $order->state = 1;
                         break;
                     case 4:
+                        $userAmount = UserAmount::where('user_id','=',$order->user_id)->first();
+                        if (empty($userAmount)){
+                            $userAmount = new UserAmount();
+                            $userAmount->user_id = $order->user_id;
+                            $userAmount->amount = 0;
+                        }
+                        $userAmount->amount += $order->price;
+                        $userAmount->save();
                         break;
                 }
                 if ($order->save()){
@@ -520,6 +530,14 @@ class OrderController extends Controller
                                 $order->state = 1;
                                 break;
                             case 4:
+                                $userAmount = UserAmount::where('user_id','=',$order->user_id)->first();
+                                if (empty($userAmount)){
+                                    $userAmount = new UserAmount();
+                                    $userAmount->user_id = $order->user_id;
+                                    $userAmount->amount = 0;
+                                }
+                                $userAmount->amount += $order->price;
+                                $userAmount->save();
                                 break;
                         }
                         if ($order->save()){
@@ -562,6 +580,29 @@ class OrderController extends Controller
 //
 //
 //        return 'success';
+    }
+    public function addUserAmount(Request $post)
+    {
+        $amount = $post->amount;
+        $uid = getUserToken($post->token);
+        $type = $post->pay_type;
+        $number = self::makePaySn($uid);
+        switch ($type){
+            case 2:
+                if ($this->makeOrder($uid,$number,$amount,'充值余额',4,2,$amount)){
+                    $data = $this->aliPay($number,'充值余额',$amount);
+                }
+                break;
+            case 3:
+                $ip = $post->getClientIp();
+                if ($this->makeOrder($uid,$number,$amount,'充值余额',4,3,$amount)){
+                    $data = $this->wxPay($number,'充值余额',$amount,$ip);
+                }
+        }
+        return response()->json([
+            'return_code'=>'SUCCESS',
+            'data'=>$data
+        ]);
     }
 }
 

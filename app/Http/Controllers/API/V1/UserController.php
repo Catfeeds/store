@@ -30,6 +30,7 @@ use App\Models\SignActivity;
 use App\Models\SysConfig;
 use App\Models\TokenRecord;
 use App\Models\TypeList;
+use App\Models\UserAmount;
 use App\Models\WechatBind;
 use App\User;
 use function GuzzleHttp\Psr7\uri_for;
@@ -953,4 +954,16 @@ class UserController extends Controller
             ]);
         }
     }
+    public function getUserAmount()
+    {
+        $uid = getUserToken(Input::get('token'));
+        $UserAmount = UserAmount::where('user_id','=',$uid)->first();
+        $amount = empty($UserAmount)?0:$UserAmount->amount;
+        return response()->json([
+            'return_code'=>'SUCCESS',
+            'data'=>$amount
+        ]);
+    }
+//    public function
+
 }
