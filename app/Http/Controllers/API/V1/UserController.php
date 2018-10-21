@@ -9,6 +9,7 @@ use App\Http\Requests\ResetPasswordPost;
 use App\Models\Attention;
 use App\Models\Collect;
 use App\Models\Commodity;
+use App\Models\CommodityRedpack;
 use App\Models\CommodityType;
 use App\Models\Description;
 use App\Models\DescriptionList;
@@ -424,6 +425,7 @@ class UserController extends Controller
                 $desc = Description::whereIn('id',$desc)->pluck('title');
                 $commodities[$i]->description =  $desc;
                 $commodities[$i]->report_count = $commodities[$i]->report()->where('state','=',0)->count();
+                $commodities[$i]->redpacket = CommodityRedpack::where('commodity_id','=',$commodities[$i]->id)->count();
             }
         }
         return response()->json([
