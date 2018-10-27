@@ -963,7 +963,9 @@ class UserController extends Controller
         $amount = empty($UserAmount)?0:$UserAmount->amount;
         return response()->json([
             'return_code'=>'SUCCESS',
-            'data'=>$amount
+            'data'=>[
+                'amount'=>$amount
+            ]
         ]);
     }
 //    public function
