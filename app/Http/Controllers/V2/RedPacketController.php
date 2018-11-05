@@ -86,7 +86,7 @@ class RedPacketController extends Controller
         $redpacket->coupon_all = $post->coupon_all?$post->coupon_all:0;
         $redpacket->coupon_min = $post->coupon_min?$post->coupon_min:0;
         $redpacket->coupon_max = $post->coupon_max?$post->coupon_max:0;
-        $redpacket->coupon_end = $post->coupon_end?$post->coupon_end:0;
+        $redpacket->coupon_end = $post->coupon_end?strtotime($post->coupon_end):0;
         $redpacket->coupon_number = $post->number?$post->number:0;
 //        $redpacket->coupon_max = $post->coupon_max?$post->coupon_max:0;
         $redpacket->code = $post->code?$post->code:'';
