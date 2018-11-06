@@ -114,6 +114,11 @@ class RedPacketController extends Controller
     {
         $commodity_id = Input::get('commodity_id');
         $config = CommodityRedpack::where('commodity_id','=',$commodity_id)->first();
+        if ($config){
+            $config->commodity_id = intval($config->commodity_id);
+            $config->cash_number = intval($config->cash_number);
+            $config->distance = floatval($config->distance);
+        }
         return response()->json([
             'return_code'=>'SUCCESS',
             'data'=>$config
