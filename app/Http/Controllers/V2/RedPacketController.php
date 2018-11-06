@@ -98,6 +98,7 @@ class RedPacketController extends Controller
                 'return_msg'=>'账户余额不足!'
             ]);
         }
+        $redpacket->amount = $price;
         if ($redpacket->save()){
             $userAmount->amount -= $price;
             $userAmount->save();
@@ -124,5 +125,21 @@ class RedPacketController extends Controller
             'return_code'=>'SUCCESS',
             'data'=>$config
         ]);
+    }
+    public function delCommodityRedPacket()
+    {
+        $id = Input::get('id');
+        $redpacket = CommodityRedpack::find($id);
+        if ($redpacket){
+            $commodity = Commodity::find($redpacket->commodity_id);
+            $userAmount = UserAmount::where('user_id','=',$commodity->user_id)->first();
+            $userAmount->amount -= $redpacket->amount;
+            $userAmount->save();
+        }
+        if ($redpacket->delete()){
+            return response()->json([
+                'return_code'=>'SUCCESS'
+            ]);
+        }
     }
 }
