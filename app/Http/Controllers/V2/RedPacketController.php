@@ -117,6 +117,7 @@ class RedPacketController extends Controller
         if ($config){
             $config->commodity_id = intval($config->commodity_id);
             $config->cash_number = intval($config->cash_number);
+            $config->number = intval($config->cash_number);
             $config->distance = floatval($config->distance);
         }
         return response()->json([
