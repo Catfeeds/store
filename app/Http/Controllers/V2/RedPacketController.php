@@ -120,6 +120,7 @@ class RedPacketController extends Controller
             $config->number = $config->cash_number;
             $config->cash_number = intval($config->cash_number);
             $config->distance = floatval($config->distance);
+            $config->state = $config->end<time()?3:$config->state;
         }
         return response()->json([
             'return_code'=>'SUCCESS',
