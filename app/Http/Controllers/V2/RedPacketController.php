@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\V2;
 
+use App\Models\Commodity;
 use App\Models\CommodityRedpack;
 use App\Models\RedpacketConfig;
 use App\Models\UserAmount;
@@ -54,8 +55,8 @@ class RedPacketController extends Controller
     public function addCommodityRedPacket(Request $post)
     {
         $config = RedpacketConfig::first();
-        $uid = getUserToken($post->token);
-        $userAmount = UserAmount::where('user_id','=',$uid)->first();
+        $commodity = Commodity::find($post->commodity_id);
+        $userAmount = UserAmount::where('user_id','=',$commodity->user_id)->first();
         if (empty($userAmount)){
             return response()->json([
                 'return_code'=>'FAIL',
@@ -85,18 +86,19 @@ class RedPacketController extends Controller
         $redpacket->coupon_all = $post->coupon_all?$post->coupon_all:0;
         $redpacket->coupon_min = $post->coupon_min?$post->coupon_min:0;
         $redpacket->coupon_max = $post->coupon_max?$post->coupon_max:0;
-        $redpacket->coupon_end = $post->coupon_end?$post->coupon_end:0;
+        $redpacket->coupon_end = $post->coupon_end?strtotime($post->coupon_end):0;
         $redpacket->coupon_number = $post->number?$post->number:0;
 //        $redpacket->coupon_max = $post->coupon_max?$post->coupon_max:0;
         $redpacket->code = $post->code?$post->code:'';
         $redpacket->coupon_title = $post->coupon_title?$post->coupon_title:'';
-        $price = $redpacket->cash_all +$redpacket->cash_all*($config->cash_ratio/100)  +$redpacket->coupon_all*($config->coupon_ratio/100);
+        $price = $redpacket->cash_all+$redpacket->cash_all*($config->cash_ratio/100)+$redpacket->coupon_all*($config->coupon_ratio/100);
         if ($price>$userAmount->amount){
             return response()->json([
                 'return_code'=>'FAIL',
                 'return_msg'=>'账户余额不足!'
             ]);
         }
+        $redpacket->amount = $price;
         if ($redpacket->save()){
             $userAmount->amount -= $price;
             $userAmount->save();
@@ -113,9 +115,32 @@ class RedPacketController extends Controller
     {
         $commodity_id = Input::get('commodity_id');
         $config = CommodityRedpack::where('commodity_id','=',$commodity_id)->first();
+        if ($config){
+            $config->commodity_id = intval($config->commodity_id);
+            $config->number = $config->cash_number;
+            $config->cash_number = intval($config->cash_number);
+            $config->distance = floatval($config->distance);
+            $config->state = $config->end<time()?3:$config->state;
+        }
         return response()->json([
             'return_code'=>'SUCCESS',
             'data'=>$config
         ]);
+    }
+    public function delCommodityRedPacket()
+    {
+        $id = Input::get('id');
+        $redpacket = CommodityRedpack::find($id);
+        if ($redpacket){
+            $commodity = Commodity::find($redpacket->commodity_id);
+            $userAmount = UserAmount::where('user_id','=',$commodity->user_id)->first();
+            $userAmount->amount -= $redpacket->amount;
+            $userAmount->save();
+        }
+        if ($redpacket->delete()){
+            return response()->json([
+                'return_code'=>'SUCCESS'
+            ]);
+        }
     }
 }

@@ -539,6 +539,7 @@ class OrderController extends Controller
                                 }
                                 $userAmount->amount += $order->price;
                                 $userAmount->save();
+                                $order->state = 1;
                                 break;
                         }
                         if ($order->save()){

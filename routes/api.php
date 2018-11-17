@@ -78,7 +78,9 @@ Route::group(['prefix'=>'v1','middleware'=>'cross'],function (){
     Route::get('article','API\V1\SystemController@getArticle');
     Route::post('unbind','API\V1\UserController@unbind');
     Route::post('commodity/redpacket','V2\RedPacketController@addCommodityRedPacket');
-    Route::get('commodity/redpacket','V2\RedPacketController@getCommodityRedPacket');
+    Route::get('redpacket','V2\RedPacketController@getCommodityRedPacket');
+    Route::get('del/redpacket','V2\RedPacketController@delCommodityRedPacket');
+    Route::get('redpacket/config','V2\RedPacketController@getConfig');
     Route::get('user/amount','API\V1\UserController@getUserAmount');
     Route::post('user/amount','API\V1\OrderController@addUserAmount');
     Route::post('withdraw/amount','API\V1\OrderController@withdrawAmount');
