@@ -606,10 +606,10 @@ class OrderController extends Controller
             'data'=>$data
         ]);
     }
-    public function withdrawAmount()
+    public function withdrawAmount(Request $post)
     {
-        $token = Input::get('token');
-        $amount = Input::get('amount');
+        $token = $post->token;
+        $amount = $post->amount;
         $user_id = getUserToken($token);
         $bind = WechatBind::where('user_id','=',$user_id)->first();
         if (empty($bind)){
@@ -626,6 +626,7 @@ class OrderController extends Controller
             ]);
         }
         $order = [
+            'spbill_create_ip'=>$post->getClientIp(),
             'partner_trade_no' => self::makePaySn($user_id),              //商户订单号
             'openid' => $bind->open_id,                        //收款人的openid
             'check_name' => 'NO_CHECK',            //NO_CHECK：不校验真实姓名\FORCE_CHECK：强校验真实姓名
