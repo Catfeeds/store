@@ -18,6 +18,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
 use Latrell\Alipay\Facades\AlipayMobile;
+use Mockery\Exception;
 use Yansongda\Pay\Pay;
 
 class OrderController extends Controller
@@ -610,37 +611,47 @@ class OrderController extends Controller
     {
         $token = $post->token;
         $amount = $post->amount;
-        $user_id = getUserToken($token);
-        $bind = WechatBind::where('user_id','=',$user_id)->first();
-        if (empty($bind)){
+        DB::beginTransaction();
+        try{
+            $user_id = getUserToken($token);
+            $bind = WechatBind::where('user_id','=',$user_id)->first();
+            if (empty($bind)){
+                return response()->json([
+                    'return_code'=>'FAIL',
+                    'return_msg'=>'未绑定微信！'
+                ]);
+            }
+            $userAmount = UserAmount::where('user_id','=',$user_id)->first();
+            if (empty($userAmount)||$userAmount->amount<$amount){
+                return response()->json([
+                    'return_code'=>'FAIL',
+                    'return_msg'=>'余额不足！'
+                ]);
+            }
+            $order = [
+                'spbill_create_ip'=>$post->getClientIp(),
+                'partner_trade_no' => self::makePaySn($user_id),              //商户订单号
+                'openid' => $bind->open_id,                        //收款人的openid
+                'check_name' => 'NO_CHECK',            //NO_CHECK：不校验真实姓名\FORCE_CHECK：强校验真实姓名
+                // 're_user_name'=>'张三',              //check_name为 FORCE_CHECK 校验实名的时候必须提交
+                'amount' => $amount*100,                       //企业付款金额，单位为分
+                'desc' => '帐户提现',                  //付款说明
+            ];
+            $config = config('wxxcx');
+            $pay = new Pay($config);
+            $result = $pay->driver('wechat')->gateway('transfer')->pay($order);
+            DB::commit();
+            return response()->json([
+                'return_code'=>'SUCCESS',
+                'data'=>$result
+            ]);
+        }catch (Exception $exception){
+            DB::rollback();
             return response()->json([
                 'return_code'=>'FAIL',
-                'return_msg'=>'未绑定微信！'
+                'data'=>$exception->getMessage()
             ]);
         }
-        $userAmount = UserAmount::where('user_id','=',$user_id)->first();
-        if (empty($userAmount)||$userAmount->amount<$amount){
-            return response()->json([
-                'return_code'=>'FAIL',
-                'return_msg'=>'余额不足！'
-            ]);
-        }
-        $order = [
-            'spbill_create_ip'=>$post->getClientIp(),
-            'partner_trade_no' => self::makePaySn($user_id),              //商户订单号
-            'openid' => $bind->open_id,                        //收款人的openid
-            'check_name' => 'NO_CHECK',            //NO_CHECK：不校验真实姓名\FORCE_CHECK：强校验真实姓名
-            // 're_user_name'=>'张三',              //check_name为 FORCE_CHECK 校验实名的时候必须提交
-            'amount' => $amount*100,                       //企业付款金额，单位为分
-            'desc' => '帐户提现',                  //付款说明
-        ];
-        $config = config('wxxcx');
-        $pay = new Pay($config);
-        $result = $pay->driver('wechat')->gateway('transfer')->pay($order);
-        return response()->json([
-            'return_code'=>'SUCCESS',
-            'data'=>$result
-        ]);
     }
 }
 
