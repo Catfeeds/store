@@ -3,6 +3,7 @@
 return [
     'wechat' => [
         'appid' => 'wx6555199310111c30',              // APPID
+        'app_id' => 'wx6555199310111c30',              // APPID
         'mch_id' => '1511912871',             // 微信商户号
         'notify_url' => 'http://app.ankekan.com/api/v1/pay/notify',
         'key' => 'DFffffffffffddddf54354364365464D',                // 微信支付签名秘钥
