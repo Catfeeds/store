@@ -634,7 +634,8 @@ class OrderController extends Controller
             'desc' => '帐户提现',                  //付款说明
         ];
         $config = config('wxxcx');
-        $result =  Pay::wechat($config)->transfer($order);
+        $pay = new Pay($config);
+        $result = $pay->driver('wechat')->gateway('transfer')->pay($order);
         return response()->json([
             'return_code'=>'SUCCESS',
             'data'=>$result
